@@ -1,12 +1,20 @@
 package Memory;
 
-public class MemorySet {
-    FullMemory visible;
-    FullMemory calculation;
+import Actions.Control;
+import Enums.CardinalDirection;
 
-    public MemorySet(FullMemory visible, FullMemory calculation) {
+public class MemorySet {
+    private final FullMemory visible;
+    private final FullMemory calculation;
+    private final Control control;
+
+    public MemorySet(FullMemory visible, FullMemory calculation, Control control) {
         this.visible = visible;
         this.calculation = calculation;
+        this.control = control;
+    }
+    public MemorySet(FullMemory visible, FullMemory calculation) {
+        this(visible, calculation, new Control(calculation));
     }
     public MemorySet(NumberMemory realNumbers) {
         this(new FullMemory(realNumbers), new FullMemory(realNumbers.copy()));
@@ -14,6 +22,29 @@ public class MemorySet {
     public MemorySet(int xSize, int ySize) {
         this(new FullMemory(xSize, ySize), new FullMemory(xSize, ySize));
     }
+    public MemorySet copy() {
+        return new MemorySet(visible.copy(), calculation.copy());
+    }
 
+    public void autoSolve() {
+        control.autoSolve();
+    }
+    public void linesCalculationToVisible() {
+        for (int y = 0; y < calculation.getYSize() + 1; y++) {
+            for (int x = 0; x < calculation.getXSize() + 1; x++) {
+                visible.getLines().setSquare(calculation.getLines().getSquare(x, y, CardinalDirection.NORTH), x, y, CardinalDirection.NORTH);
+                visible.getLines().setSquare(calculation.getLines().getSquare(x, y, CardinalDirection.WEST), x, y, CardinalDirection.WEST);
+            }
+        }
+    }
+    public void print() {
+        visible.print();
+    }
 
+    public FullMemory getVisible() {
+        return visible;
+    }
+    public FullMemory getCalculation() {
+        return calculation;
+    }
 }

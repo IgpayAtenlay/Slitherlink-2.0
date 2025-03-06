@@ -1,4 +1,5 @@
-import Actions.*;
+package Actions;
+
 import Memory.FullMemory;
 
 public class Control {

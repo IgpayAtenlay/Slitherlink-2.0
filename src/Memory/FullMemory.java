@@ -1,55 +1,60 @@
 package Memory;
 
 import Enums.CardinalDirection;
-import Enums.Number;
+
+import java.util.ArrayList;
 
 public class FullMemory {
     private final int xSize;
     private final int ySize;
     private final LineMemory lines;
-    private final NumberMemory logicNumbers;
-    private final NumberMemory realNumbers;
+    private final NumberMemory numbers;
     private final HighlightMemory highlights;
     private final DiagonalMemory diagonals;
+    private final ArrayList<Changes> changes;
 
-    public FullMemory(int xSize, int ySize, LineMemory lines, NumberMemory realNumbers, NumberMemory logicNumbers, HighlightMemory highlights, DiagonalMemory diagonals) {
+    public FullMemory(int xSize, int ySize, LineMemory lines, NumberMemory numbers, HighlightMemory highlights, DiagonalMemory diagonals, ArrayList<Changes> changes) {
         this.xSize = xSize;
         this.ySize = ySize;
         this.lines = lines;
-        this.realNumbers = realNumbers;
-        this.logicNumbers = logicNumbers;
+        this.numbers = numbers;
         this.highlights = highlights;
         this.diagonals = diagonals;
+        this.changes = changes;
     }
-    public FullMemory(NumberMemory realNumbers) {
-        this(realNumbers.getXSize(), realNumbers.getYSize(),
-                new LineMemory(realNumbers.getXSize(), realNumbers.getYSize()),
-                realNumbers,
-                realNumbers.copy(false),
-                new HighlightMemory(realNumbers.getXSize(), realNumbers.getYSize()),
-                new DiagonalMemory(realNumbers.getXSize(), realNumbers.getYSize()));
+    public FullMemory(NumberMemory numbers) {
+        this(numbers.getXSize(), numbers.getYSize(),
+                new LineMemory(numbers.getXSize(), numbers.getYSize()),
+                numbers.copy(),
+                new HighlightMemory(numbers.getXSize(), numbers.getYSize()),
+                new DiagonalMemory(numbers.getXSize(), numbers.getYSize()),
+                new ArrayList<>());
     }
     public FullMemory(int xSize, int ySize) {
         this(xSize,
                 ySize,
                 new LineMemory(xSize, ySize),
                 new NumberMemory(xSize, ySize),
-                new NumberMemory(xSize, ySize),
                 new HighlightMemory(xSize, ySize),
-                new DiagonalMemory(xSize, ySize));
+                new DiagonalMemory(xSize, ySize),
+                new ArrayList<>());
     }
     public FullMemory() {
         this(20,20);
     }
     public FullMemory copy() {
+        ArrayList<Changes> changes = new ArrayList<>();
+        for (Changes change : this.changes) {
+            changes.add(change.copy());
+        }
         return new FullMemory(
                 xSize,
                 ySize,
                 lines.copy(),
-                realNumbers.copy(),
-                logicNumbers.copy(),
+                numbers.copy(),
                 highlights.copy(),
-                diagonals.copy()
+                diagonals.copy(),
+                changes
         );
     }
 
@@ -63,12 +68,7 @@ public class FullMemory {
         return lines;
     }
     public NumberMemory getNumbers() {
-        return logicNumbers;
-    }
-    public boolean setNumber(Number number, int x, int y, boolean override) {
-        boolean realNumberChanged = realNumbers.set(number, x, y, override);
-        boolean logicNumberChanged = logicNumbers.set(number, x, y, override);
-        return realNumberChanged || logicNumberChanged;
+        return numbers;
     }
     public HighlightMemory getHighlights() {
         return highlights;
@@ -105,7 +105,7 @@ public class FullMemory {
     public void printNumbers() {
         for (int y = 0; y < ySize; y++) {
             for (int x = 0; x < xSize; x++) {
-                System.out.print(realNumbers.get(x, y) + " ");
+                System.out.print(numbers.get(x, y) + " ");
             }
             System.out.println();
         }
