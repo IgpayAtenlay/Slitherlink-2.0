@@ -9,51 +9,40 @@ public class Changes {
     public final Line line;
     public final Highlight highlight;
     public final Diagonal diagonal;
-    public final int x;
-    public final int y;
-    public final CardinalDirection cardinalDirection;
-    public final DiagonalDirection diagonalDirection;
+    public final int index;
 
     private Changes(DataType type,
             Number number, Line line, Highlight highlight, Diagonal diagonal,
-            int x, int y,
-            CardinalDirection cardinalDirection, DiagonalDirection diagonalDirection
+            int index
     ) {
         this.type = type;
         this.number = number;
         this.line = line;
         this.highlight = highlight;
         this.diagonal = diagonal;
-        this.x = x;
-        this.y = y;
-        this.cardinalDirection = cardinalDirection;
-        this.diagonalDirection = diagonalDirection;
+        this.index = index;
     }
-    public Changes(Number number, int x, int y) {
+    public Changes(Number number, int index) {
         this(DataType.NUMBER,
                 number, null, null, null,
-                x, y,
-                null, null);
+                index);
     }
-    public Changes(Line line, int x, int y, CardinalDirection direction) {
+    public Changes(Line line, int index) {
         this(DataType.LINE,
                 null, line, null, null,
-                x, y,
-                direction, null);
+                index);
     }
-    public Changes(Highlight highlight, int x, int y) {
+    public Changes(Highlight highlight, int index) {
         this(DataType.HIGHLIGHT,
                 null, null, highlight, null,
-                x, y,
-                null, null);
+                index);
     }
-    public Changes(Diagonal diagonal, int x, int y, DiagonalDirection direction) {
+    public Changes(Diagonal diagonal, int index) {
         this(DataType.DIAGONAL,
                 null, null, null, diagonal,
-                x, y,
-                null, direction);
+                index);
     }
     public Changes copy() {
-        return new Changes(type, number, line, highlight, diagonal, x, y, cardinalDirection, diagonalDirection);
+        return new Changes(type, number, line, highlight, diagonal, index);
     }
 }

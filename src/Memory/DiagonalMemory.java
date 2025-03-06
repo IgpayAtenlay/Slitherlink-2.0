@@ -40,14 +40,14 @@ public class DiagonalMemory {
         }
         return Diagonal.BOTH_OR_NEITHER;
     }
-    public boolean setSquare(Diagonal diagonal, int x, int y, DiagonalDirection direction, boolean override) {
+    public Changes setSquare(Diagonal diagonal, int x, int y, DiagonalDirection direction, boolean override) {
         return setPoint(diagonal,
                 ConvertCoordinates.squareToPointX(x, direction),
                 ConvertCoordinates.squareToPointY(y, direction),
                 direction.getOpposite(),
                 override);
     }
-    public boolean setPoint(Diagonal diagonal, int x, int y, DiagonalDirection direction, boolean override) {
+    public Changes setPoint(Diagonal diagonal, int x, int y, DiagonalDirection direction, boolean override) {
         if (x < xSize + 1 && y < ySize + 1 && x >= 0 && y >= 0) {
             return switch (direction) {
                 case NORTHEAST -> set(diagonal, 2 * x + 1 + 2 * y * getLengthRow(), override);
@@ -56,15 +56,15 @@ public class DiagonalMemory {
                 case NORTHWEST -> set(diagonal, 2 * x + 2 * y * getLengthRow(), override);
             };
         }
-        return false;
+        return null;
     }
-    private boolean set(Diagonal diagonal, int i, boolean override) {
+    private Changes set(Diagonal diagonal, int i, boolean override) {
         if (memory[i] != diagonal && (memory[i] == Diagonal.EMPTY || override)) {
             System.out.println("changing diagonal " + i + " to " + diagonal);
             memory[i] = diagonal;
-            return true;
+            return new Changes(diagonal, i);
         }
-        return false;
+        return null;
     }
     
     private int getLengthRow() {

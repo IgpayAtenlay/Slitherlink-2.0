@@ -23,14 +23,15 @@ public class HighlightMemory {
         return new HighlightMemory(xSize, ySize, Arrays.copyOf(memory, memory.length));
     }
 
-    public boolean set(Highlight highlight, int x, int y, boolean override) {
+    public Changes set(Highlight highlight, int x, int y, boolean override) {
         if (x < xSize && y < ySize && x >= 0 && y >= 0 &&
                 (memory[x + y * xSize] != highlight && (memory[x + y * xSize] == Highlight.EMPTY || override))
         ) {
-            memory[x + y * xSize] = highlight;
-            return true;
+            int i = x + y * xSize;
+            memory[i] = highlight;
+            return new Changes(highlight, i);
         }
-        return false;
+        return null;
     }
     public Highlight get(int x, int y) {
         if (x < xSize && y < ySize && x >= 0 && y >= 0) {

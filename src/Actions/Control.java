@@ -17,24 +17,26 @@ public class Control {
 
     public void autoSolve() {
         System.out.println("starting autoSolve");
-        int changes = 1;
         int roundNum = 0;
-        while (changes != 0) {
-            changes = autoSolve(roundNum++);
-        }
+        int startingChanges;
+        do {
+            startingChanges = memory.getChanges().size();
+            autoSolve(roundNum++);
+        } while (startingChanges != memory.getChanges().size());
         System.out.println("autoSolve finished");
     }
-    public int autoSolve(int roundNum) {
+    public void autoSolve(int roundNum) {
         System.out.println("starting autoSolve round " + roundNum);
-        int changes = 0;
-        changes += SingleBlock.run(memory);
-        changes += PointActions.run(memory);
-        changes += AdjacentBlocks.run(memory);
-        changes += AdjacentDiagonalBlocks.run(memory);
-        changes += LineIntoBlock.run(memory);
+        int startingChanges = memory.getChanges().size();
+
+        SingleBlock.run(memory);
+        PointActions.run(memory);
+        AdjacentBlocks.run(memory);
+        AdjacentDiagonalBlocks.run(memory);
+        LineIntoBlock.run(memory);
+
         System.out.println("autoSolve round " + roundNum + " finished");
-        System.out.println("changes: " + changes);
-        return changes;
+        System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
     }
 
     public FullMemory getMemory() {

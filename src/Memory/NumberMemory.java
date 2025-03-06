@@ -33,13 +33,14 @@ public class NumberMemory {
         this.locked = true;
     }
 
-    public boolean set(Number number, int x, int y, boolean override) {
+    public Changes set(Number number, int x, int y, boolean override) {
         if (!locked && x < xSize && y < ySize && x >= 0 && y >= 0 &&
                 memory[x + y * xSize] != number && (memory[x + y * xSize] == Number.EMPTY || override)) {
-            memory[x + y * xSize] = number;
-            return true;
+            int i = x + y * xSize;
+            memory[i] = number;
+            return new Changes(number, i);
         } else {
-            return false;
+            return null;
         }
     }
     public Number get(int x, int y) {

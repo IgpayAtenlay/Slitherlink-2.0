@@ -71,7 +71,7 @@ public class LineMemory {
             case WEST -> getSquare(x - 1, y, CardinalDirection.NORTH);
         };
     }
-    public boolean setSquare(Line line, int x, int y, CardinalDirection direction, boolean override) {
+    public Changes setSquare(Line line, int x, int y, CardinalDirection direction, boolean override) {
         if (x < xSize && y < ySize && x >= 0 && y >= 0) {
             return switch (direction) {
                 case NORTH -> set(line, x + y * xSize, override);
@@ -96,12 +96,12 @@ public class LineMemory {
                 return set(line, x + y * xSize, override);
             }
         }
-        return false;
+        return null;
     }
-    public boolean setSquare(Line line, int x, int y, CardinalDirection direction) {
+    public Changes setSquare(Line line, int x, int y, CardinalDirection direction) {
         return setSquare(line, x, y, direction, false);
     }
-    public boolean setPoint(Line line, int x, int y, CardinalDirection direction, boolean override) {
+    public Changes setPoint(Line line, int x, int y, CardinalDirection direction, boolean override) {
         return switch (direction) {
             case NORTH -> setSquare(line, x, y - 1, CardinalDirection.WEST, override);
             case EAST -> setSquare(line, x, y, CardinalDirection.NORTH, override);
@@ -109,15 +109,15 @@ public class LineMemory {
             case WEST -> setSquare(line, x - 1, y, CardinalDirection.NORTH, override);
         };
     }
-    public boolean setPoint(Line line, int x, int y, CardinalDirection direction) {
+    public Changes setPoint(Line line, int x, int y, CardinalDirection direction) {
         return setPoint(line, x, y, direction, false);
     }
-    private boolean set(Line line, int i, boolean override) {
+    private Changes set(Line line, int i, boolean override) {
         if (memory[i] != line && (memory[i] == Line.EMPTY || override)) {
             memory[i] = line;
             System.out.println("changing line " + i + " to " + line);
-            return true;
+            return new Changes(line, i);
         }
-        return false;
+        return null;
     }
 }

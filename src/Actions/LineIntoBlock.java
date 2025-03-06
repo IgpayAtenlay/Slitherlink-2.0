@@ -8,27 +8,23 @@ import Memory.FullMemory;
 import Util.ConvertCoordinates;
 
 public class LineIntoBlock {
-    static public int run(FullMemory memory) {
+    static public void run(FullMemory memory) {
         System.out.println("starting " + LineIntoBlock.class.getSimpleName());
-
-        int changes = 0;
+        int startingChanges = memory.getChanges().size();
 
         for (int x = 0; x < memory.getXSize(); x++) {
             for (int y = 0; y < memory.getYSize(); y++) {
-                Number num = memory.getNumbers().get(x, y);
-                if (num == Number.THREE) {
-                    changes += lineIntoThree(memory, x, y);
+                if (memory.getNumbers().get(x, y) == Number.THREE) {
+                    lineIntoThree(memory, x, y);
                 }
             }
         }
 
         System.out.println(LineIntoBlock.class.getSimpleName() + " finished");
-        System.out.println("changes: " + changes);
-        return changes;
+        System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
     }
 
-    static public int lineIntoThree(FullMemory memory, int x, int y) {
-        int changes = 0;
+    static public void lineIntoThree(FullMemory memory, int x, int y) {
         for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
             // if there is a line entering the THREE
             CardinalDirection[] cardinalDirections = diagonalDirection.getCardinalDirections();
@@ -41,10 +37,9 @@ public class LineIntoBlock {
                         cardinalDirections[1]) == Line.LINE
             ) {
                 // set opposite sides to LINE
-                changes += memory.getLines().setSquare(Line.LINE, x, y, cardinalDirections[0].getOpposite(), false) ? 1 : 0;
-                changes += memory.getLines().setSquare(Line.LINE, x, y, cardinalDirections[1].getOpposite(), false) ? 1 : 0;
+                memory.change(memory.getLines().setSquare(Line.LINE, x, y, cardinalDirections[0].getOpposite(), false));
+                memory.change(memory.getLines().setSquare(Line.LINE, x, y, cardinalDirections[1].getOpposite(), false));
             }
         }
-        return changes;
     }
 }

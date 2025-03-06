@@ -77,6 +77,15 @@ public class FullMemory {
         return diagonals;
     }
 
+    public void change(Changes change) {
+        if (change != null) {
+            changes.add(change);
+        }
+    }
+    public ArrayList<Changes> getChanges() {
+        return changes;
+    }
+
     public void print() {
         for (int y = 0; y < ySize; y++) {
             System.out.print(". ");
