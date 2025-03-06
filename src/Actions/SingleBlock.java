@@ -17,7 +17,7 @@ public class SingleBlock {
             for (int y = 0; y < memory.getYSize(); y++) {
                 changes += fillSidesUsingNumbers(memory, x, y);
                 changes += fillDiagonals(memory, x, y);
-                switch (memory.getLogicNumber(x, y)) {
+                switch (memory.getNumbers().get(x, y)) {
                     case EMPTY -> {
                         changes += addLogicZero(memory, x, y);
                         changes += addLogicOne(memory, x, y);
@@ -49,11 +49,11 @@ public class SingleBlock {
             }
         }
 
-        if (lines == memory.getLogicNumber(x, y).value) {
+        if (lines == memory.getNumbers().get(x, y).value) {
             for (CardinalDirection direction : CardinalDirection.values()) {
                 changes += memory.getLines().setSquare(Line.X, x, y, direction, false) ? 1 : 0;
             }
-        } else if (xs == 4 - memory.getLogicNumber(x, y).value) {
+        } else if (xs == 4 - memory.getNumbers().get(x, y).value) {
             for (CardinalDirection direction : CardinalDirection.values()) {
                 changes += memory.getLines().setSquare(Line.LINE, x, y, direction, false) ? 1 : 0;
             }
@@ -146,7 +146,7 @@ public class SingleBlock {
                 memory.getDiagonals().getSquare(x, y, DiagonalDirection.SOUTHWEST) == Diagonal.BOTH_OR_NEITHER &&
                 memory.getDiagonals().getSquare(x, y, DiagonalDirection.NORTHWEST) == Diagonal.BOTH_OR_NEITHER
         ) {
-            changes += memory.setLogicNumber(Number.ZERO, x, y, false) ? 1 : 0 ;
+            changes += memory.getNumbers().set(Number.ZERO, x, y, false) ? 1 : 0 ;
         }
 
         return changes;
@@ -159,7 +159,7 @@ public class SingleBlock {
                     memory.getLines().getSquare(x, y, direction.getCardinalDirections()[0].getOpposite()) == Line.X &&
                     memory.getLines().getSquare(x, y, direction.getCardinalDirections()[1].getOpposite()) == Line.X
             ) {
-                changes += memory.setLogicNumber(Number.ONE, x, y, false) ? 1 : 0;
+                changes += memory.getNumbers().set(Number.ONE, x, y, false) ? 1 : 0;
             }
         }
 
@@ -172,7 +172,7 @@ public class SingleBlock {
             if (memory.getDiagonals().getSquare(x, y, direction) == Diagonal.EITHER_OR &&
                     memory.getDiagonals().getSquare(x, y, direction.getOpposite()) == Diagonal.EITHER_OR
             ) {
-                changes += memory.setLogicNumber(Number.TWO, x, y, false) ? 1 : 0;
+                changes += memory.getNumbers().set(Number.TWO, x, y, false) ? 1 : 0;
             }
         }
 
@@ -189,14 +189,14 @@ public class SingleBlock {
         }
 
         if (lines == 3) {
-            changes += memory.setLogicNumber(Number.THREE, x, y, false) ? 1 : 0;
+            changes += memory.getNumbers().set(Number.THREE, x, y, false) ? 1 : 0;
         } else {
             for (DiagonalDirection direction : DiagonalDirection.values()) {
                 if (memory.getDiagonals().getSquare(x, y, direction) == Diagonal.EITHER_OR &&
                         memory.getLines().getSquare(x, y, direction.getCardinalDirections()[0].getOpposite()) == Line.LINE &&
                         memory.getLines().getSquare(x, y, direction.getCardinalDirections()[1].getOpposite()) == Line.LINE
                 ) {
-                    changes += memory.setLogicNumber(Number.THREE, x, y, false) ? 1 : 0;
+                    changes += memory.getNumbers().set(Number.THREE, x, y, false) ? 1 : 0;
                 }
             }
         }

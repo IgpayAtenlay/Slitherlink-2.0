@@ -62,19 +62,13 @@ public class FullMemory {
     public LineMemory getLines() {
         return lines;
     }
-    public Number getNumber(int x, int y) {
-        return realNumbers.get(x, y);
-    }
-    public Number getLogicNumber(int x, int y) {
-        return logicNumbers.get(x, y);
+    public NumberMemory getNumbers() {
+        return logicNumbers;
     }
     public boolean setNumber(Number number, int x, int y, boolean override) {
         boolean realNumberChanged = realNumbers.set(number, x, y, override);
         boolean logicNumberChanged = logicNumbers.set(number, x, y, override);
         return realNumberChanged || logicNumberChanged;
-    }
-    public boolean setLogicNumber(Number number, int x, int y, boolean override) {
-        return logicNumbers.set(number, x, y, override);
     }
     public HighlightMemory getHighlights() {
         return highlights;
@@ -94,10 +88,10 @@ public class FullMemory {
 
             for (int x = 0; x < xSize; x++) {
                 System.out.print(getLines().getSquare(x, y, CardinalDirection.WEST).toString(true) + " ");
-                System.out.print(getNumber(x, y).toString(true) + " ");
+                System.out.print(getNumbers().get(x, y).toString(true) + " ");
             }
 
-            System.out.print(getLines().getSquare(xSize - 1, y, CardinalDirection.EAST).toString(false));
+            System.out.print(getLines().getSquare(xSize - 1, y, CardinalDirection.EAST).toString(true));
             System.out.println();
 
         }

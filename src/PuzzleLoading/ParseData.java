@@ -3,29 +3,28 @@ package PuzzleLoading;
 import Enums.Number;
 import Memory.NumberMemory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class ParseData {
     public static ArrayList<ArrayList<TextData>> splitLists(List<TextData> data) {
         ArrayList<ArrayList<TextData>> puzzles = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            puzzles.add(new ArrayList<>());
-        }
+        int currentPuzzleStart = 0;
 
+        boolean puzzleStarted = false;
         for (int i = 0; i < data.size(); i++) {
-            if (Objects.equals(data.get(i).text, "#")) {
-                i++;
-                int puzzleNum = Integer.parseInt(data.get(i).text);
-                i++;
-                if (Objects.equals(data.get(i).text, "©")) {
-                    i += 18;
-                    // puzzle starts here
-                    while(!Objects.equals(data.get(i).text, "S")) {
-                        puzzles.get(puzzleNum - 1).add(data.get(i));
-                        i++;
+            if (!puzzleStarted && "0123".contains(data.get(i).text)) {
+                puzzleStarted = true;
+                currentPuzzleStart = i;
+                puzzles.add(new ArrayList<>());
+            }
+            if (puzzleStarted) {
+                if ("0123".contains(data.get(i).text)) {
+                    puzzles.get(puzzles.size() - 1).add(data.get(i));
+                } else {
+                    if (i - currentPuzzleStart < 5) {
+                        puzzles.remove(puzzles.size() - 1);
                     }
+                    puzzleStarted = false;
                 }
             }
         }
@@ -33,14 +32,44 @@ public class ParseData {
         return puzzles;
     }
     public static NumberMemory parsePuzzle(ArrayList<TextData> puzzleList) {
-        NumberMemory memory = new NumberMemory(20, 20);
+        TreeSet<Float> xValues = new TreeSet<>();
+        TreeSet<Float> yValues = new TreeSet<>();
 
         for(TextData data : puzzleList) {
-            float xLoc = data.x;
-            float yLoc = data.y;
+            xValues.add(data.x);
+            yValues.add(data.y);
+        }
+
+        double inbetweenSpace = Double.MAX_VALUE;
+        double previousValue;
+        double currentValue;
+
+        Iterator<Float> iterator = xValues.iterator();
+        previousValue = iterator.next();
+
+        while (iterator.hasNext()) {
+            currentValue = iterator.next();
+            inbetweenSpace = Math.min(inbetweenSpace, currentValue - previousValue);
+            previousValue = currentValue;
+        }
+
+        iterator = yValues.iterator();
+        previousValue = iterator.next();
+
+        while (iterator.hasNext()) {
+            currentValue = iterator.next();
+            inbetweenSpace = Math.min(inbetweenSpace, currentValue - previousValue);
+            previousValue = currentValue;
+        }
+
+        int xSize = (int) ((xValues.last() - xValues.first()) / inbetweenSpace) + 1;
+        int ySize = (int) ((yValues.last() - yValues.first()) / inbetweenSpace) + 1;
+
+        NumberMemory memory = new NumberMemory(xSize, ySize);
+        for(TextData data : puzzleList) {
             Number number = Number.getNumber(Integer.parseInt(data.text));
-            int xPos = (int) (xLoc / 23.3333 - 3);
-            int yPos = (int) (yLoc / 23.3333 - 5.9);
+            int xPos = (int) (data.x / inbetweenSpace - xValues.first() / inbetweenSpace);
+            int yPos = (int) (data.y / inbetweenSpace - yValues.first() / inbetweenSpace);
             memory.set(number, xPos, yPos, true);
         }
 

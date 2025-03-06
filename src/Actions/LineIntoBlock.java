@@ -15,7 +15,7 @@ public class LineIntoBlock {
 
         for (int x = 0; x < memory.getXSize(); x++) {
             for (int y = 0; y < memory.getYSize(); y++) {
-                Number num = memory.getLogicNumber(x, y);
+                Number num = memory.getNumbers().get(x, y);
                 if (num == Number.THREE) {
                     changes += lineIntoThree(memory, x, y);
                 }

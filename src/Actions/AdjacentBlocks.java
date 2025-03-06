@@ -14,7 +14,7 @@ public class AdjacentBlocks {
 
         for (int x = 0; x < memory.getXSize(); x++) {
             for (int y = 0; y < memory.getYSize(); y++) {
-                Number num = memory.getLogicNumber(x, y);
+                Number num = memory.getNumbers().get(x, y);
                 if (num == Number.THREE) {
                     changes += doubleThrees(memory, x, y);
                 }
@@ -35,12 +35,12 @@ public class AdjacentBlocks {
 
     static public int doubleThrees(FullMemory memory, int x, int y) {
         int changes = 0;
-        if (memory.getLogicNumber(x + 1, y) == Number.THREE) {
+        if (memory.getNumbers().get(x + 1, y) == Number.THREE) {
             changes += memory.getLines().setSquare(Line.LINE, x, y, CardinalDirection.WEST, false) ? 1 : 0;
             changes += memory.getLines().setSquare(Line.LINE, x, y, CardinalDirection.EAST, false) ? 1 : 0;
             changes += memory.getLines().setSquare(Line.LINE, x + 1, y, CardinalDirection.EAST, false) ? 1 : 0;
         }
-        if (memory.getLogicNumber(x, y + 1) == Number.THREE) {
+        if (memory.getNumbers().get(x, y + 1) == Number.THREE) {
             changes += memory.getLines().setSquare(Line.LINE, x, y, CardinalDirection.NORTH, false) ? 1 : 0;
             changes += memory.getLines().setSquare(Line.LINE, x, y, CardinalDirection.SOUTH, false) ? 1 : 0;
             changes += memory.getLines().setSquare(Line.LINE, x, y + 1, CardinalDirection.SOUTH, false) ? 1 : 0;

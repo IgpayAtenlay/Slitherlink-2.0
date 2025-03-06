@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<ArrayList<TextData>> puzzles = ParseData.splitLists(ExtractDataToVariable.extract(Difficulty.TOUGH, 20, 1, 1));
-        FullMemory memory = new FullMemory(ParseData.parsePuzzle(puzzles.get(0)));
+        ArrayList<ArrayList<TextData>> puzzles = ParseData.splitLists(ExtractDataToVariable.extract(Difficulty.EASY, 7, 1, 1));
+        FullMemory memory = new FullMemory(ParseData.parsePuzzle(puzzles.get(5)));
         Control control = new Control(memory);
         control.autoSolve();
         control.getMemory().print();
