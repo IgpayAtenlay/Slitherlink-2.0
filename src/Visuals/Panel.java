@@ -1,7 +1,6 @@
 package Visuals;
 
-import Enums.CardinalDirection;
-import Enums.Line;
+import Enums.*;
 import Memory.MemorySet;
 
 import javax.swing.*;
@@ -30,9 +29,11 @@ public class Panel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
         g2d.setStroke(new BasicStroke(lineWidth));
 
+        drawHighlights(g2d);
         drawDots(g2d);
         drawNumbers(g2d);
         drawLines(g2d);
+        drawDiagonals(g2d);
     }
 
     public void drawDots(Graphics g) {
@@ -85,6 +86,63 @@ public class Panel extends JPanel {
                     g.drawString(text,
                             startingX + x * lineSize - textWidth / 2,
                             (int) (startingY + lineSize / 2 + y * lineSize +  + getFont().getSize() / heightOffsetThing));
+                }
+            }
+        }
+    }
+    public void drawHighlights(Graphics g) {
+        Color startingColor = g.getColor();
+        for (int y = 0; y < memorySet.getVisible().getYSize(); y++) {
+            for (int x = 0; x < memorySet.getVisible().getXSize(); x++) {
+                Highlight highlight = memorySet.getVisible().getHighlights().get(x, y);
+                if (highlight != Highlight.EMPTY) {
+                    if (highlight == Highlight.INSIDE) {
+                        g.setColor(new Color(193, 255, 176));
+                    } else if (highlight == Highlight.OUTSIDE) {
+                        g.setColor(new Color(198, 255, 255));
+                    }
+                    g.fillRect(startingX + lineSize * x,
+                            startingY + lineSize * y,
+                            lineSize,
+                            lineSize);
+                }
+            }
+        }
+        g.setColor(startingColor);
+    }
+    public void drawDiagonals(Graphics g) {
+        for (int y = 0; y < memorySet.getVisible().getYSize(); y++) {
+            for (int x = 0; x < memorySet.getVisible().getXSize(); x++) {
+                for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
+                    Diagonal diagonal = memorySet.getVisible().getDiagonals().getSquare(x, y, diagonalDirection);
+                    int[] start = new int[0];
+                    int[] end = new int[0];
+                    switch (diagonalDirection) {
+                        case NORTHEAST -> {
+                            start = new int[]{startingX + x * lineSize + lineSize * 3 / 4, startingY + y * lineSize};
+                            end = new int[]{startingX + (x + 1) * lineSize, startingY + y * lineSize + lineSize / 4};
+
+                        }
+                        case SOUTHEAST -> {
+                            start = new int[]{startingX + x * lineSize + lineSize * 3 / 4, startingY + (y + 1) * lineSize};
+                            end = new int[]{startingX + (x + 1) * lineSize, startingY + y * lineSize + lineSize * 3 / 4};
+                        }
+                        case SOUTHWEST -> {
+                            start = new int[]{startingX + x * lineSize + lineSize / 4, startingY + (y + 1) * lineSize};
+                            end = new int[]{startingX + x * lineSize, startingY + y * lineSize + lineSize * 3 / 4};
+                        }
+                        case NORTHWEST -> {
+                            start = new int[]{startingX + x * lineSize + lineSize / 4, startingY + y * lineSize};
+                            end = new int[]{startingX + x * lineSize, startingY + y * lineSize + lineSize / 4};
+                        }
+                    }
+
+                    if (diagonal == Diagonal.EITHER_OR) {
+                        g.drawLine(start[0], start[1], end[0], end[1]);
+                    } else if (diagonal == Diagonal.BOTH_OR_NEITHER) {
+                        g.drawLine(start[0], start[1], start[0], end[1]);
+                        g.drawLine(start[0], end[1], end[0], end[1]);
+                    }
                 }
             }
         }
