@@ -115,7 +115,7 @@ public class LineMemory {
     private Changes set(Line line, int i, boolean override) {
         if (memory[i] != line && (memory[i] == Line.EMPTY || override)) {
             memory[i] = line;
-            System.out.println("changing line " + i + " to " + line);
+//            System.out.println("changing line " + i + " to " + line);
             return new Changes(line, i);
         }
         return null;

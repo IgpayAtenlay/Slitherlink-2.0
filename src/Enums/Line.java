@@ -14,6 +14,13 @@ public enum Line {
             case X -> LINE;
         };
     }
+    public Line cycle() {
+        return switch (this) {
+            case EMPTY -> LINE;
+            case LINE -> X;
+            case X -> EMPTY;
+        };
+    }
 
     public String toString() {
         return switch (this) {

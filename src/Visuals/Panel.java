@@ -5,21 +5,32 @@ import Memory.MemorySet;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Panel extends JPanel {
-    MemorySet memorySet;
-    JFrame jFrame;
-    int dotDiameter = 5;
-    int startingX = 20;
-    int startingY = 20;
-    int lineSize = 30;
-    int lineWidth = 2;
-    double heightOffsetThing = 2.3;
+    private final MemorySet memorySet;
+    private Interaction interaction;
+    private final JFrame jFrame;
+    private static final int DOT_DIAMETER = 6;
+    private static final int STARTING_X = 20;
+    private static final int STARTING_Y = 20;
+    private static final int LINE_SIZE = 30;
+    private static final int LINE_WIDTH = 2;
+    private static final double HEIGHT_OFFSET = 2.3;
 
     public Panel(MemorySet memorySet, JFrame jFrame) {
         this.memorySet = memorySet;
         this.jFrame = jFrame;
+        this.interaction = new Interaction(memorySet, this);
         setFont(getFont().deriveFont(Font.BOLD, 14f));
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                interaction.click(e);
+                repaint();
+            }
+        });
     }
 
     @Override
@@ -27,70 +38,71 @@ public class Panel extends JPanel {
         super.paintComponent(g);
 
         Graphics2D g2d = (Graphics2D) g;
-        g2d.setStroke(new BasicStroke(lineWidth));
+        g2d.setStroke(new BasicStroke(LINE_WIDTH));
 
         drawHighlights(g2d);
         drawDots(g2d);
         drawNumbers(g2d);
         drawLines(g2d);
         drawDiagonals(g2d);
+
     }
 
-    public void drawDots(Graphics g) {
+    private void drawDots(Graphics g) {
         for (int y = 0; y < memorySet.getVisible().getYSize() + 1; y++) {
             for (int x = 0; x < memorySet.getVisible().getXSize() + 1; x++) {
-                g.fillOval(startingX + lineSize * x - dotDiameter / 2,
-                        startingY + lineSize * y - dotDiameter / 2,
-                        dotDiameter,
-                        dotDiameter);
+                g.fillOval(getDotCoords(x, y)[0] - DOT_DIAMETER / 2,
+                        getDotCoords(x, y)[1] - DOT_DIAMETER / 2,
+                        DOT_DIAMETER,
+                        DOT_DIAMETER);
             }
         }
     }
-    public void drawNumbers(Graphics g) {
+    private void drawNumbers(Graphics g) {
         for (int y = 0; y < memorySet.getVisible().getYSize(); y++) {
             for (int x = 0; x < memorySet.getVisible().getXSize(); x++) {
                 String text = memorySet.getVisible().getNumbers().get(x, y).toString(true);
                 int textWidth = g.getFontMetrics().stringWidth(text);
                 g.drawString(text,
-                        startingX + lineSize / 2 + x * lineSize - textWidth / 2,
-                        (int) (startingY + lineSize / 2 + y * lineSize + getFont().getSize() / heightOffsetThing));
+                        getSquareCenterCoords(x, y)[0] - textWidth / 2,
+                        getSquareCenterCoords(x, y)[1] + (int) (getFont().getSize() / HEIGHT_OFFSET));
             }
         }
     }
-    public void drawLines(Graphics g) {
+    private void drawLines(Graphics g) {
         for (int y = 0; y < memorySet.getVisible().getYSize() + 1; y++) {
             for (int x = 0; x < memorySet.getVisible().getXSize() + 1; x++) {
                 Line eastLine = memorySet.getVisible().getLines().getPoint(x, y, CardinalDirection.EAST);
                 Line southLine = memorySet.getVisible().getLines().getPoint(x, y, CardinalDirection.SOUTH);
                 if (eastLine == Line.LINE && x != memorySet.getVisible().getXSize()) {
-                    g.drawLine(startingX + lineSize * x,
-                            startingY + lineSize * y,
-                            startingX + lineSize * (x + 1),
-                            startingY + lineSize * y);
+                    g.drawLine(getDotCoords(x, y)[0],
+                            getDotCoords(x, y)[1],
+                            getDotCoords(x + 1, y)[0],
+                            getDotCoords(x + 1, y)[1]);
                 } else if (eastLine == Line.X && x != memorySet.getVisible().getXSize()) {
                     String text = Line.X.toString();
                     int textWidth = g.getFontMetrics().stringWidth(text);
                     g.drawString(text,
-                            startingX + lineSize / 2 + x * lineSize - textWidth / 2,
-                            (int) (startingY + y * lineSize + getFont().getSize() / heightOffsetThing));
+                            getSquareCenterCoords(x, y)[0] - textWidth / 2,
+                            getDotCoords(x, y)[1] + (int) (getFont().getSize() / HEIGHT_OFFSET));
                 }
 
                 if (southLine == Line.LINE && y != memorySet.getVisible().getYSize()) {
-                    g.drawLine(startingX + lineSize * x,
-                            startingY + lineSize * y,
-                            startingX + lineSize * x,
-                            startingY + lineSize * (y + 1));
+                    g.drawLine(getDotCoords(x, y)[0],
+                            getDotCoords(x, y)[1],
+                            getDotCoords(x, y + 1)[0],
+                            getDotCoords(x, y + 1)[1]);
                 } else if (southLine == Line.X && y != memorySet.getVisible().getYSize()) {
                     String text = Line.X.toString();
                     int textWidth = g.getFontMetrics().stringWidth(text);
                     g.drawString(text,
-                            startingX + x * lineSize - textWidth / 2,
-                            (int) (startingY + lineSize / 2 + y * lineSize +  + getFont().getSize() / heightOffsetThing));
+                            getDotCoords(x, y)[0] - textWidth / 2,
+                            getSquareCenterCoords(x, y)[1] + (int) (getFont().getSize() / HEIGHT_OFFSET));
                 }
             }
         }
     }
-    public void drawHighlights(Graphics g) {
+    private void drawHighlights(Graphics g) {
         Color startingColor = g.getColor();
         for (int y = 0; y < memorySet.getVisible().getYSize(); y++) {
             for (int x = 0; x < memorySet.getVisible().getXSize(); x++) {
@@ -101,16 +113,16 @@ public class Panel extends JPanel {
                     } else if (highlight == Highlight.OUTSIDE) {
                         g.setColor(new Color(198, 255, 255));
                     }
-                    g.fillRect(startingX + lineSize * x,
-                            startingY + lineSize * y,
-                            lineSize,
-                            lineSize);
+                    g.fillRect(getDotCoords(x, y)[0],
+                            getDotCoords(x, y)[1],
+                            LINE_SIZE,
+                            LINE_SIZE);
                 }
             }
         }
         g.setColor(startingColor);
     }
-    public void drawDiagonals(Graphics g) {
+    private void drawDiagonals(Graphics g) {
         for (int y = 0; y < memorySet.getVisible().getYSize(); y++) {
             for (int x = 0; x < memorySet.getVisible().getXSize(); x++) {
                 for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
@@ -119,21 +131,21 @@ public class Panel extends JPanel {
                     int[] end = new int[0];
                     switch (diagonalDirection) {
                         case NORTHEAST -> {
-                            start = new int[]{startingX + x * lineSize + lineSize * 3 / 4, startingY + y * lineSize};
-                            end = new int[]{startingX + (x + 1) * lineSize, startingY + y * lineSize + lineSize / 4};
+                            start = new int[]{getDotCoords(x + 1, y)[0] - LINE_SIZE / 4, getDotCoords(x + 1, y)[1]};
+                            end = new int[]{getDotCoords(x + 1, y)[0], getDotCoords(x + 1, y)[1] + LINE_SIZE / 4};
 
                         }
                         case SOUTHEAST -> {
-                            start = new int[]{startingX + x * lineSize + lineSize * 3 / 4, startingY + (y + 1) * lineSize};
-                            end = new int[]{startingX + (x + 1) * lineSize, startingY + y * lineSize + lineSize * 3 / 4};
+                            start = new int[]{getDotCoords(x + 1, y + 1)[0] - LINE_SIZE / 4, getDotCoords(x + 1, y + 1)[1]};
+                            end = new int[]{getDotCoords(x + 1, y + 1)[0], getDotCoords(x + 1, y + 1)[1] - LINE_SIZE / 4};
                         }
                         case SOUTHWEST -> {
-                            start = new int[]{startingX + x * lineSize + lineSize / 4, startingY + (y + 1) * lineSize};
-                            end = new int[]{startingX + x * lineSize, startingY + y * lineSize + lineSize * 3 / 4};
+                            start = new int[]{getDotCoords(x, y + 1)[0] + LINE_SIZE / 4, getDotCoords(x, y + 1)[1]};
+                            end = new int[]{getDotCoords(x, y + 1)[0], getDotCoords(x, y + 1)[1] - LINE_SIZE / 4};
                         }
                         case NORTHWEST -> {
-                            start = new int[]{startingX + x * lineSize + lineSize / 4, startingY + y * lineSize};
-                            end = new int[]{startingX + x * lineSize, startingY + y * lineSize + lineSize / 4};
+                            start = new int[]{getDotCoords(x, y)[0] + LINE_SIZE / 4, getDotCoords(x, y)[1]};
+                            end = new int[]{getDotCoords(x, y)[0], getDotCoords(x, y)[1] + LINE_SIZE / 4};
                         }
                     }
 
@@ -146,5 +158,18 @@ public class Panel extends JPanel {
                 }
             }
         }
+    }
+
+    public int[] getDotCoords(int x, int y) {
+        return new int[]{STARTING_X + LINE_SIZE * x, STARTING_Y + LINE_SIZE * y};
+    }
+    public int[] getSquareCenterCoords(int x, int y) {
+        return new int[]{STARTING_X + LINE_SIZE / 2 + x * LINE_SIZE, STARTING_Y + LINE_SIZE / 2 + y * LINE_SIZE};
+    }
+    public int[] getSquareIndex(int xCoord, int yCoord) {
+        return new int[]{(xCoord - STARTING_X) / LINE_SIZE, (yCoord - STARTING_Y) / LINE_SIZE};
+    }
+    public int getLineSize() {
+        return LINE_SIZE;
     }
 }

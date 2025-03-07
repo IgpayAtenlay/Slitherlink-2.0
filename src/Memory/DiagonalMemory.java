@@ -60,7 +60,7 @@ public class DiagonalMemory {
     }
     private Changes set(Diagonal diagonal, int i, boolean override) {
         if (memory[i] != diagonal && (memory[i] == Diagonal.EMPTY || override)) {
-            System.out.println("changing diagonal " + i + " to " + diagonal);
+//            System.out.println("changing diagonal " + i + " to " + diagonal);
             memory[i] = diagonal;
             return new Changes(diagonal, i);
         }
