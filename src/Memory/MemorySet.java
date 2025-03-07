@@ -17,7 +17,7 @@ public class MemorySet {
         this(visible, calculation, new Control(calculation));
     }
     public MemorySet(NumberMemory realNumbers) {
-        this(new FullMemory(realNumbers), new FullMemory(realNumbers.copy()));
+        this(new FullMemory(realNumbers), new FullMemory(realNumbers.copy(false)));
     }
     public MemorySet(int xSize, int ySize) {
         this(new FullMemory(xSize, ySize), new FullMemory(xSize, ySize));

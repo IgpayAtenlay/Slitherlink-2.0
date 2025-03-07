@@ -94,7 +94,7 @@ public class Panel extends JPanel {
         Color startingColor = g.getColor();
         for (int y = 0; y < memorySet.getVisible().getYSize(); y++) {
             for (int x = 0; x < memorySet.getVisible().getXSize(); x++) {
-                Highlight highlight = memorySet.getVisible().getHighlights().get(x, y);
+                Highlight highlight = memorySet.getCalculation().getHighlights().get(x, y);
                 if (highlight != Highlight.EMPTY) {
                     if (highlight == Highlight.INSIDE) {
                         g.setColor(new Color(193, 255, 176));
