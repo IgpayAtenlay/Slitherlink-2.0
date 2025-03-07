@@ -5,32 +5,44 @@ import Memory.MemorySet;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Panel extends JPanel {
     private final MemorySet memorySet;
-    private Interaction interaction;
+    public Interaction interaction;
     private final JFrame jFrame;
+    private boolean checkAccuracy;
     private static final int DOT_DIAMETER = 6;
     private static final int STARTING_X = 20;
     private static final int STARTING_Y = 20;
     private static final int LINE_SIZE = 30;
     private static final int LINE_WIDTH = 2;
     private static final double HEIGHT_OFFSET = 2.3;
+    private static final Color CORRECT_COLOR = Color.GREEN;
+    private static final Color INCORRECT_COLOR = Color.RED;
+    private static final int BUTTON_GAP = 5;
+
+    int buttonX;
+    int buttonY;
 
     public Panel(MemorySet memorySet, JFrame jFrame) {
         this.memorySet = memorySet;
         this.jFrame = jFrame;
         this.interaction = new Interaction(memorySet, this);
+        buttonX = STARTING_X * 2 + memorySet.getVisible().getXSize() * LINE_SIZE;
+        buttonY = STARTING_Y;
+        setLayout(null);
         setFont(getFont().deriveFont(Font.BOLD, 14f));
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 interaction.click(e);
-                repaint();
             }
         });
+        createButton("Check Accuracy", e -> interaction.checkAccuracy());
+        createButton("Hint", e -> repaint());
     }
 
     @Override
@@ -41,10 +53,10 @@ public class Panel extends JPanel {
         g2d.setStroke(new BasicStroke(LINE_WIDTH));
 
         drawHighlights(g2d);
-        drawDots(g2d);
         drawNumbers(g2d);
         drawLines(g2d);
         drawDiagonals(g2d);
+        drawDots(g2d);
 
     }
 
@@ -70,10 +82,24 @@ public class Panel extends JPanel {
         }
     }
     private void drawLines(Graphics g) {
+        Color startingColor = g.getColor();
         for (int y = 0; y < memorySet.getVisible().getYSize() + 1; y++) {
             for (int x = 0; x < memorySet.getVisible().getXSize() + 1; x++) {
                 Line eastLine = memorySet.getVisible().getLines().getPoint(x, y, CardinalDirection.EAST);
+                Line eastLineAnswer = memorySet.getCalculation().getLines().getPoint(x, y, CardinalDirection.EAST);
                 Line southLine = memorySet.getVisible().getLines().getPoint(x, y, CardinalDirection.SOUTH);
+                Line southLineAnswer = memorySet.getCalculation().getLines().getPoint(x, y, CardinalDirection.SOUTH);
+
+                if (checkAccuracy) {
+                    if (eastLineAnswer == Line.EMPTY) {
+                        g.setColor(startingColor);
+                    } else if (eastLine == eastLineAnswer) {
+                        g.setColor(CORRECT_COLOR);
+                    } else {
+                        g.setColor(INCORRECT_COLOR);
+                    }
+                }
+
                 if (eastLine == Line.LINE && x != memorySet.getVisible().getXSize()) {
                     g.drawLine(getDotCoords(x, y)[0],
                             getDotCoords(x, y)[1],
@@ -85,6 +111,16 @@ public class Panel extends JPanel {
                     g.drawString(text,
                             getSquareCenterCoords(x, y)[0] - textWidth / 2,
                             getDotCoords(x, y)[1] + (int) (getFont().getSize() / HEIGHT_OFFSET));
+                }
+
+                if (checkAccuracy) {
+                    if (southLineAnswer == Line.EMPTY) {
+                        g.setColor(startingColor);
+                    } else if (southLine == southLineAnswer) {
+                        g.setColor(CORRECT_COLOR);
+                    } else {
+                        g.setColor(INCORRECT_COLOR);
+                    }
                 }
 
                 if (southLine == Line.LINE && y != memorySet.getVisible().getYSize()) {
@@ -101,12 +137,13 @@ public class Panel extends JPanel {
                 }
             }
         }
+        g.setColor(startingColor);
     }
     private void drawHighlights(Graphics g) {
         Color startingColor = g.getColor();
         for (int y = 0; y < memorySet.getVisible().getYSize(); y++) {
             for (int x = 0; x < memorySet.getVisible().getXSize(); x++) {
-                Highlight highlight = memorySet.getCalculation().getHighlights().get(x, y);
+                Highlight highlight = memorySet.getVisible().getHighlights().get(x, y);
                 if (highlight != Highlight.EMPTY) {
                     if (highlight == Highlight.INSIDE) {
                         g.setColor(new Color(193, 255, 176));
@@ -171,5 +208,19 @@ public class Panel extends JPanel {
     }
     public int getLineSize() {
         return LINE_SIZE;
+    }
+
+    public void toggleCheckAccuracy() {
+        checkAccuracy = !checkAccuracy;
+    }
+
+    public void createButton(String text, ActionListener l) {
+        JButton checkAccuracy = new JButton(text);
+        int buttonHeight = getFont().getSize() + 2;
+        int buttonWidth = getFontMetrics(getFont()).stringWidth(text) + 50;
+        checkAccuracy.setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
+        checkAccuracy.addActionListener(l);
+        add(checkAccuracy);
+        buttonY += buttonHeight + BUTTON_GAP;
     }
 }

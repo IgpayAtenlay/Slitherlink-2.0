@@ -37,5 +37,11 @@ public class Interaction {
         }
         Line currentLine = memorySet.getVisible().getLines().getSquare(squareIndex[0], squareIndex[1], direction);
         memorySet.getVisible().getLines().setSquare(currentLine.cycle(), squareIndex[0], squareIndex[1], direction, true);
+        panel.repaint();
+    }
+
+    public void checkAccuracy() {
+        panel.toggleCheckAccuracy();
+        panel.repaint();
     }
 }
