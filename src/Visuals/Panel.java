@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
 public class Panel extends JPanel {
     private final MemorySet memorySet;
     public Interaction interaction;
-    private final JFrame jFrame;
+    private final Frame frame;
     private boolean checkAccuracy;
     private static final int DOT_DIAMETER = 6;
     private static final int STARTING_X = 20;
@@ -27,20 +27,22 @@ public class Panel extends JPanel {
     int buttonX;
     int buttonY;
 
-    public Panel(MemorySet memorySet, JFrame jFrame) {
+    public Panel(MemorySet memorySet, Frame frame) {
         this.memorySet = memorySet;
-        this.jFrame = jFrame;
+        this.frame = frame;
         this.interaction = new Interaction(memorySet, this);
         buttonX = STARTING_X * 2 + memorySet.getVisible().getXSize() * LINE_SIZE;
         buttonY = STARTING_Y;
         setLayout(null);
         setFont(getFont().deriveFont(Font.BOLD, 14f));
+
         addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 interaction.click(e);
             }
         });
+
         createButton("Check Accuracy", e -> interaction.checkAccuracy());
         createButton("Hint", e -> repaint());
     }
