@@ -1,27 +1,29 @@
-package Actions;
+package ErrorChecking;
 
 import Enums.CardinalDirection;
 import Enums.Line;
 import Memory.FullMemory;
 import Util.ConvertCoordinates;
 
-public class Loop {
-    static public void run(FullMemory memory) {
-        System.out.println("starting " + Loop.class.getSimpleName());
-        int startingChanges = memory.getChanges().size();
+public class LoopErrors {
+    static public boolean run(FullMemory memory) {
+        System.out.println("starting " + LoopErrors.class.getSimpleName());
 
         int totalLines = memory.getLines().getTotalLines();
 
         for (int x = 0; x < memory.getXSize() + 1; x++) {
             for (int y = 0; y < memory.getYSize() + 1; y++) {
-                checkLoop(memory, x, y, totalLines);
+                if (isThisLoopProblem(memory, x, y, totalLines)) {
+                    System.out.println(LoopErrors.class.getSimpleName() + " finished");
+                    return true;
+                }
             }
         }
 
-        System.out.println(Loop.class.getSimpleName() + " finished");
-        System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
+        System.out.println(LoopErrors.class.getSimpleName() + " finished");
+        return false;
     }
-    public static void checkLoop(FullMemory memory, int startingX, int startingY, int totalLines) {
+    public static boolean isThisLoopProblem(FullMemory memory, int startingX, int startingY, int totalLines) {
         int linesInLoop = 0;
         CardinalDirection exit = CardinalDirection.NORTH;
         for (CardinalDirection direction : CardinalDirection.values()) {
@@ -42,9 +44,7 @@ public class Loop {
             boolean newLine = true;
 
             while(newLine) {
-                System.out.println("x " + currentX + " y " + currentY);
                 newLine = false;
-                int linesAtThisPoint = 0;
                 for (CardinalDirection direction : CardinalDirection.values()) {
                     if (memory.getLines().getPoint(currentX, currentY, direction) == Line.LINE) {
                         if (enterence != direction) {
@@ -52,38 +52,21 @@ public class Loop {
                             newLine = true;
                             linesInLoop++;
                         }
-                        linesAtThisPoint++;
                     }
                 }
-                if (linesAtThisPoint > 2) {
-                    return;
-                }
-
-                System.out.println("exit " + exit);
 
                 if (newLine) {
                     currentX = ConvertCoordinates.addDirection(currentX, currentY, exit)[0];
                     currentY = ConvertCoordinates.addDirection(currentX, currentY, exit)[1];
+                    enterence = exit.getOpposite();
                 }
-                enterence = exit.getOpposite();
 
                 if (startingX == currentX && startingY == currentY) {
-                    System.out.println("Error: endless loop. Exiting");
-                    break;
-                }
-            }
-
-            if (linesInLoop != totalLines) {
-                if (startingX == currentX && startingY == currentY - 1) {
-                    memory.getLines().setPoint(Line.X, startingX, startingY, CardinalDirection.SOUTH, false);
-                } else if (startingX == currentX && startingY == currentY + 1) {
-                    memory.getLines().setPoint(Line.X, startingX, startingY, CardinalDirection.NORTH, false);
-                } else if (startingX == currentX - 1 && startingY == currentY) {
-                    memory.getLines().setPoint(Line.X, startingX, startingY, CardinalDirection.EAST, false);
-                } else if (startingX == currentX + 1 && startingY == currentY) {
-                    memory.getLines().setPoint(Line.X, startingX, startingY, CardinalDirection.WEST, false);
+                    return linesInLoop != totalLines;
                 }
             }
         }
+
+        return false;
     }
 }

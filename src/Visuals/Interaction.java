@@ -44,4 +44,23 @@ public class Interaction {
         panel.toggleCheckAccuracy();
         panel.repaint();
     }
+    public void autoSolve() {
+        // testing only!!!
+        for (int y = 0; y < memorySet.getCalculation().getYSize() + 1; y++) {
+            for (int x = 0; x < memorySet.getCalculation().getXSize() + 1; x++) {
+                memorySet.getCalculation().change(memorySet.getCalculation().getLines().setSquare(memorySet.getVisible().getLines().getSquare(x, y, CardinalDirection.NORTH), x, y, CardinalDirection.NORTH, true));
+                memorySet.getCalculation().change(memorySet.getCalculation().getLines().setSquare(memorySet.getVisible().getLines().getSquare(x, y, CardinalDirection.WEST), x, y, CardinalDirection.WEST, true));
+            }
+        }
+        memorySet.autoSolve(true);
+        memorySet.linesCalculationToVisible();
+        panel.repaint();
+    }
+    public void checkForErrors() {
+        if (memorySet.getControl().hasErrors()) {
+            System.out.println("Error");
+        } else {
+            System.out.println("No errors");
+        }
+    }
 }

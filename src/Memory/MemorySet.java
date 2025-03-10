@@ -2,6 +2,7 @@ package Memory;
 
 import Actions.Control;
 import Enums.CardinalDirection;
+import Enums.Number;
 
 public class MemorySet {
     private final FullMemory visible;
@@ -26,8 +27,11 @@ public class MemorySet {
         return new MemorySet(visible.copy(), calculation.copy());
     }
 
+    public void autoSolve(boolean guessAndCheck) {
+        control.autoSolve(guessAndCheck);
+    }
     public void autoSolve() {
-        control.autoSolve();
+        autoSolve(true);
     }
     public void linesCalculationToVisible() {
         for (int y = 0; y < calculation.getYSize() + 1; y++) {
@@ -46,5 +50,12 @@ public class MemorySet {
     }
     public FullMemory getCalculation() {
         return calculation;
+    }
+    public Control getControl() {
+        return control;
+    }
+    public void setNumber(Number number, int x, int y) {
+        visible.getNumbers().set(number, x, y, true);
+        calculation.getNumbers().set(number, x, y, true);
     }
 }
