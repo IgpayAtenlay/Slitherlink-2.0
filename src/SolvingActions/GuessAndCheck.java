@@ -37,9 +37,9 @@ public class GuessAndCheck {
         workingMemory.getLines().setSquare(line, x, y, direction);
         control.autoSolve(false);
         if (control.hasErrors()) {
-            memory.getLines().setSquare(line.getOpposite(), x, y, direction);
+            memory.change(memory.getLines().setSquare(line.getOpposite(), x, y, direction));
         } else if (control.isComplete()) {
-            memory.getLines().setSquare(line, x, y, direction);
+            memory.change(memory.getLines().setSquare(line, x, y, direction));
         }
     }
 }

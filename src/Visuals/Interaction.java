@@ -45,6 +45,7 @@ public class Interaction {
         panel.repaint();
     }
     public void autoSolve() {
+        System.out.println("autosolve button");
         // testing only!!!
         for (int y = 0; y < memorySet.getCalculation().getYSize() + 1; y++) {
             for (int x = 0; x < memorySet.getCalculation().getXSize() + 1; x++) {
