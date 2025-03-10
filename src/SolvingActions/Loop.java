@@ -72,13 +72,13 @@ public class Loop {
 
         if (linesInLoop != totalLines) {
             if (startingX == currentX && startingY == currentY - 1) {
-                memory.getLines().setPoint(Line.X, startingX, startingY, CardinalDirection.SOUTH, false);
+                memory.change(memory.getLines().setPoint(Line.X, startingX, startingY, CardinalDirection.SOUTH, false));
             } else if (startingX == currentX && startingY == currentY + 1) {
-                memory.getLines().setPoint(Line.X, startingX, startingY, CardinalDirection.NORTH, false);
+                memory.change(memory.getLines().setPoint(Line.X, startingX, startingY, CardinalDirection.NORTH, false));
             } else if (startingX == currentX - 1 && startingY == currentY) {
-                memory.getLines().setPoint(Line.X, startingX, startingY, CardinalDirection.EAST, false);
+                memory.change(memory.getLines().setPoint(Line.X, startingX, startingY, CardinalDirection.EAST, false));
             } else if (startingX == currentX + 1 && startingY == currentY) {
-                memory.getLines().setPoint(Line.X, startingX, startingY, CardinalDirection.WEST, false);
+                memory.change(memory.getLines().setPoint(Line.X, startingX, startingY, CardinalDirection.WEST, false));
             }
         }
     }

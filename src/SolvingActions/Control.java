@@ -36,11 +36,11 @@ public class Control {
             AdjacentBlocks.run(memory);
             AdjacentDiagonalBlocks.run(memory);
             LineIntoBlock.run(memory);
-            if (roundChanges != memory.getChanges().size()) {
+            if (roundChanges == memory.getChanges().size()) {
                 Loop.run(memory);
             }
             if (guessAndCheck) {
-                if (roundChanges != memory.getChanges().size()) {
+                if (roundChanges == memory.getChanges().size()) {
                     GuessAndCheck.run(memory);
                 }
             }
@@ -52,9 +52,6 @@ public class Control {
 
         System.out.println("autoSolve finished");
         System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
-    }
-    public void autoSolve() {
-        autoSolve(true);
     }
     public boolean hasErrors() {
         if (NumberErrors.run(memory)) {

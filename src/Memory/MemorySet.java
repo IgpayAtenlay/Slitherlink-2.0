@@ -30,9 +30,6 @@ public class MemorySet {
     public void autoSolve(boolean guessAndCheck) {
         control.autoSolve(guessAndCheck);
     }
-    public void autoSolve() {
-        autoSolve(true);
-    }
     public void linesCalculationToVisible() {
         for (int y = 0; y < calculation.getYSize() + 1; y++) {
             for (int x = 0; x < calculation.getXSize() + 1; x++) {
