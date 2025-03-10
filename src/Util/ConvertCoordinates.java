@@ -1,5 +1,6 @@
 package Util;
 
+import Enums.CardinalDirection;
 import Enums.DiagonalDirection;
 
 public class ConvertCoordinates {
@@ -30,5 +31,13 @@ public class ConvertCoordinates {
         } else {
             return y;
         }
+    }
+    public static int[] addDirection(int x, int y, CardinalDirection direction) {
+        return switch (direction) {
+            case NORTH -> new int[] {x, y - 1};
+            case EAST -> new int[] {x + 1, y};
+            case SOUTH -> new int[] {x, y + 1};
+            case WEST -> new int[] {x - 1, y};
+        };
     }
 }

@@ -34,6 +34,7 @@ public class Control {
         AdjacentBlocks.run(memory);
         AdjacentDiagonalBlocks.run(memory);
         LineIntoBlock.run(memory);
+        Loop.run(memory);
 
         System.out.println("autoSolve round " + roundNum + " finished");
         System.out.println("changes: " + (memory.getChanges().size() - startingChanges));

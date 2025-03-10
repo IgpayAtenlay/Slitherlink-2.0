@@ -12,7 +12,7 @@ public class Main {
         ArrayList<ArrayList<TextData>> puzzles = ParseData.splitLists(ExtractDataToVariable.extract(Difficulty.TOUGH, 20, 1, 1));
         MemorySet memory = new MemorySet(ParseData.parsePuzzle(puzzles.get(0)));
         memory.autoSolve();
-//        memory.linesCalculationToVisible();
+        memory.linesCalculationToVisible();
 //        memory.print();
         Frame frame = new Frame(memory);
     }

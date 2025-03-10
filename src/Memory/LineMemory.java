@@ -71,6 +71,16 @@ public class LineMemory {
             case WEST -> getSquare(x - 1, y, CardinalDirection.NORTH);
         };
     }
+    public int getTotalLines() {
+        int totalLines = 0;
+        for (Line line : memory) {
+            if (line == Line.LINE) {
+                totalLines++;
+            }
+        }
+
+        return totalLines;
+    }
     public Changes setSquare(Line line, int x, int y, CardinalDirection direction, boolean override) {
         if (x < xSize && y < ySize && x >= 0 && y >= 0) {
             return switch (direction) {
