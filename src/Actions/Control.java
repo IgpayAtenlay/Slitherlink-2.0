@@ -35,8 +35,13 @@ public class Control {
             if (startingChanges != memory.getChanges().size()) {
                 Loop.run(memory);
             }
-            if (startingChanges != memory.getChanges().size() && guessAndCheck) {
-                GuessAndCheck.run(memory);
+            if (guessAndCheck) {
+                if (startingChanges != memory.getChanges().size()) {
+                    GuessAndCheck.run(memory, false);
+                }
+//                if (startingChanges != memory.getChanges().size()) {
+//                    GuessAndCheck.run(memory, true);
+//                }
             }
 
             System.out.println("autoSolve round " + roundNum + " finished");
@@ -48,9 +53,6 @@ public class Control {
     }
     public void autoSolve() {
         autoSolve(true);
-    }
-    public void autoSolve(int roundNum) {
-
     }
     public boolean hasErrors() {
         if (NumberErrors.run(memory)) {
