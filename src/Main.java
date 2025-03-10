@@ -15,14 +15,14 @@ public class Main {
 
     public static void testingEnviroment() {
         MemorySet memory = new MemorySet(2, 2);
-        Frame frame = new Frame(memory);
+        new Frame(memory);
     }
 
     public static void solvePuzzle(Difficulty difficulty, int size, int volume, int book) {
         ArrayList<ArrayList<TextData>> puzzles = ParseData.splitLists(ExtractDataToVariable.extract(difficulty, size, volume, book));
         MemorySet memory = new MemorySet(ParseData.parsePuzzle(puzzles.get(0)));
-        memory.autoSolve(true);
+        memory.autoSolve(false);
         memory.linesCalculationToVisible();
-        Frame frame = new Frame(memory);
+        new Frame(memory);
     }
 }

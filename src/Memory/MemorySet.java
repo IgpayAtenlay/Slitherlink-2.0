@@ -1,6 +1,6 @@
 package Memory;
 
-import Actions.Control;
+import SolvingActions.Control;
 import Enums.CardinalDirection;
 import Enums.Number;
 

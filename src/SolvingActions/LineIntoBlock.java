@@ -1,4 +1,4 @@
-package Actions;
+package SolvingActions;
 
 import Enums.CardinalDirection;
 import Enums.DiagonalDirection;
@@ -14,8 +14,10 @@ public class LineIntoBlock {
 
         for (int x = 0; x < memory.getXSize(); x++) {
             for (int y = 0; y < memory.getYSize(); y++) {
-                if (memory.getNumbers().get(x, y) == Number.THREE) {
-                    lineIntoThree(memory, x, y);
+                Number number = memory.getNumbers().get(x, y);
+                switch (number) {
+                    case TWO -> lineIntoTwo(memory, x, y);
+                    case THREE -> lineIntoThree(memory, x, y);
                 }
             }
         }
@@ -24,6 +26,29 @@ public class LineIntoBlock {
         System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
     }
 
+    static public void lineIntoTwo(FullMemory memory, int x, int y) {
+        for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
+
+            // if there is a line entering the TWO
+            CardinalDirection[] cardinalDirections = diagonalDirection.getCardinalDirections();
+            if (memory.getLines().getPoint(ConvertCoordinates.squareToPointX(x, diagonalDirection),
+                    ConvertCoordinates.squareToPointY(y, diagonalDirection),
+                    cardinalDirections[0]) == Line.LINE ||
+                    memory.getLines().getPoint(ConvertCoordinates.squareToPointX(x, diagonalDirection),
+                            ConvertCoordinates.squareToPointY(y, diagonalDirection),
+                            cardinalDirections[1]) == Line.LINE
+            ) {
+                // and there is an X opposite the line
+                if (memory.getLines().getSquare(x, y, cardinalDirections[0].getOpposite()) == Line.X ||
+                        memory.getLines().getSquare(x, y, cardinalDirections[1].getOpposite()) == Line.X
+                ) {
+                    // set opposite sides to LINE
+                    memory.change(memory.getLines().setSquare(Line.LINE, x, y, cardinalDirections[0].getOpposite(), false));
+                    memory.change(memory.getLines().setSquare(Line.LINE, x, y, cardinalDirections[1].getOpposite(), false));
+                }
+            }
+        }
+    }
     static public void lineIntoThree(FullMemory memory, int x, int y) {
         for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
             // if there is a line entering the THREE

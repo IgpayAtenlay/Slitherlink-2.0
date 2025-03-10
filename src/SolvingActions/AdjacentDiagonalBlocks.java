@@ -1,4 +1,4 @@
-package Actions;
+package SolvingActions;
 
 import Enums.CardinalDirection;
 import Enums.Line;

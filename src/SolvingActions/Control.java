@@ -1,4 +1,4 @@
-package Actions;
+package SolvingActions;
 
 import CompletetionChecking.LoopCompletetion;
 import CompletetionChecking.NumberCompletetion;
