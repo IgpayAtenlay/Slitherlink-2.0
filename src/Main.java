@@ -14,7 +14,7 @@ public class Main {
     }
 
     public static void testingEnviroment() {
-        MemorySet memory = new MemorySet(3, 3);
+        MemorySet memory = new MemorySet(2, 2);
         Frame frame = new Frame(memory);
     }
 

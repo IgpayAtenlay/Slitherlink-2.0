@@ -52,7 +52,7 @@ public class Interaction {
                 memorySet.getCalculation().change(memorySet.getCalculation().getLines().setSquare(memorySet.getVisible().getLines().getSquare(x, y, CardinalDirection.WEST), x, y, CardinalDirection.WEST, true));
             }
         }
-        memorySet.autoSolve(false);
+        memorySet.autoSolve(true);
         memorySet.linesCalculationToVisible();
         panel.repaint();
     }
@@ -61,6 +61,13 @@ public class Interaction {
             System.out.println("Error");
         } else {
             System.out.println("No errors");
+        }
+    }
+    public void checkForCompletetion() {
+        if (memorySet.getControl().isComplete()) {
+            System.out.println("Complete");
+        } else {
+            System.out.println("Not Complete");
         }
     }
     public void fillInHighlight() {

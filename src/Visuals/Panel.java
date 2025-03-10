@@ -45,8 +45,9 @@ public class Panel extends JPanel {
 
         createButton("Check Accuracy", e -> interaction.checkAccuracy());
         createButton("Autosolve - testing only!", e -> interaction.autoSolve());
-        createButton("Check for Errors - testing only!", e-> interaction.checkForErrors());
-        createButton("Fill in Highlight", e -> interaction.fillInHighlight());
+        createButton("Check for Errors - testing only!", e -> interaction.checkForErrors());
+        createButton("Check for Completetion - testing only!", e -> interaction.checkForCompletetion());
+        createButton("Fill in Highlight - not implimented", e -> interaction.fillInHighlight());
     }
 
     @Override

@@ -42,7 +42,6 @@ public class Loop {
         boolean newLine = true;
 
         while(newLine) {
-            System.out.println("x " + currentX + " y " + currentY);
             newLine = false;
             int linesAtThisPoint = 0;
             for (CardinalDirection direction : CardinalDirection.values()) {
@@ -58,8 +57,6 @@ public class Loop {
             if (linesAtThisPoint > 2) {
                 return;
             }
-
-            System.out.println("exit " + exit);
 
             if (newLine) {
                 currentX = ConvertCoordinates.addDirection(currentX, currentY, exit)[0];
