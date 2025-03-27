@@ -53,7 +53,7 @@ public class Interaction {
                 memorySet.getCalculation().change(memorySet.getCalculation().getLines().setSquare(memorySet.getVisible().getLines().getSquare(x, y, CardinalDirection.WEST), x, y, CardinalDirection.WEST, true));
             }
         }
-        memorySet.autoSolve(true);
+        memorySet.autoSolve(false);
         memorySet.linesCalculationToVisible();
         panel.repaint();
     }

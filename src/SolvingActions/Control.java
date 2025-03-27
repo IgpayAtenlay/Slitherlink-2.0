@@ -66,7 +66,7 @@ public class Control {
             System.out.println("loop error");
             return true;
         }
-        System.out.println("no errors");
+        System.out.println("No errors");
         return false;
     }
     public boolean isComplete() {

@@ -7,6 +7,7 @@ import Util.ConvertCoordinates;
 
 public class LoopErrors {
     static public boolean run(FullMemory memory) {
+        // this doesn't work
         System.out.println("starting " + LoopErrors.class.getSimpleName());
 
         int totalLines = memory.getLines().getTotalLines();
