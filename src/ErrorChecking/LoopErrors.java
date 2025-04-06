@@ -11,12 +11,16 @@ public class LoopErrors {
         System.out.println("starting " + LoopErrors.class.getSimpleName());
 
         int totalLines = memory.getLines().getTotalLines();
+        boolean[][] visited = new boolean[memory.getXSize() + 1][memory.getYSize() + 1];
 
         for (int x = 0; x < memory.getXSize() + 1; x++) {
             for (int y = 0; y < memory.getYSize() + 1; y++) {
-                if (isThisLoopProblem(memory, x, y, totalLines)) {
-                    System.out.println(LoopErrors.class.getSimpleName() + " finished");
-                    return true;
+                if (!visited[x][y]) {
+                    visited[x][y] = true;
+                    if (isThisLoopProblem(memory, x, y, totalLines, visited)) {
+                        System.out.println(LoopErrors.class.getSimpleName() + " finished");
+                        return true;
+                    }
                 }
             }
         }
@@ -24,7 +28,7 @@ public class LoopErrors {
         System.out.println(LoopErrors.class.getSimpleName() + " finished");
         return false;
     }
-    public static boolean isThisLoopProblem(FullMemory memory, int startingX, int startingY, int totalLines) {
+    public static boolean isThisLoopProblem(FullMemory memory, int startingX, int startingY, int totalLines, boolean[][] visited) {
         int linesInLoop = 0;
         CardinalDirection exit = CardinalDirection.NORTH;
         for (CardinalDirection direction : CardinalDirection.values()) {
@@ -40,7 +44,8 @@ public class LoopErrors {
         currentY = ConvertCoordinates.addDirection(currentX, currentY, exit)[1];
 
         // loop start
-        if (linesInLoop == 1) {
+        if (linesInLoop == 2) {
+            visited[currentX][currentY] = true;
             CardinalDirection enterence = exit.getOpposite();
             boolean newLine = true;
 
