@@ -11,10 +11,10 @@ public class LoopErrors {
         System.out.println("starting " + LoopErrors.class.getSimpleName());
 
         int totalLines = memory.getLines().getTotalLines();
-        boolean[][] visited = new boolean[memory.getXSize() + 1][memory.getYSize() + 1];
+        boolean[][] visited = new boolean[memory.getDimentions().xSize + 1][memory.getDimentions().ySize + 1];
 
-        for (int x = 0; x < memory.getXSize() + 1; x++) {
-            for (int y = 0; y < memory.getYSize() + 1; y++) {
+        for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
+            for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
                 if (!visited[x][y]) {
                     visited[x][y] = true;
                     if (isThisLoopProblem(memory, x, y, totalLines, visited)) {

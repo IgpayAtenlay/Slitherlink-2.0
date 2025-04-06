@@ -6,6 +6,7 @@ import CompletetionChecking.PointCompletetion;
 import ErrorChecking.LineErrors;
 import ErrorChecking.LoopErrors;
 import ErrorChecking.NumberErrors;
+import Memory.Dimentions;
 import Memory.FullMemory;
 
 public class Control {
@@ -18,7 +19,7 @@ public class Control {
         this(new FullMemory());
     }
     public Control(int xSize, int ySize) {
-        this(new FullMemory(xSize, ySize));
+        this(new FullMemory(new Dimentions(xSize, ySize)));
     }
 
     public void autoSolve(boolean guessAndCheck) {

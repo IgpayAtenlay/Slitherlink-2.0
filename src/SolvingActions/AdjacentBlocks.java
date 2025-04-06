@@ -11,8 +11,8 @@ public class AdjacentBlocks {
         System.out.println("starting " + AdjacentBlocks.class.getSimpleName());
         int startingChanges = memory.getChanges().size();
 
-        for (int x = 0; x < memory.getXSize(); x++) {
-            for (int y = 0; y < memory.getYSize(); y++) {
+        for (int x = 0; x < memory.getDimentions().xSize; x++) {
+            for (int y = 0; y < memory.getDimentions().ySize; y++) {
                 if (memory.getNumbers().get(x, y) == Number.THREE) {
                     doubleThrees(memory, x, y);
                 }

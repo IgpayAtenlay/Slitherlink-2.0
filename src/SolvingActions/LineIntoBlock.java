@@ -12,8 +12,8 @@ public class LineIntoBlock {
         System.out.println("starting " + LineIntoBlock.class.getSimpleName());
         int startingChanges = memory.getChanges().size();
 
-        for (int x = 0; x < memory.getXSize(); x++) {
-            for (int y = 0; y < memory.getYSize(); y++) {
+        for (int x = 0; x < memory.getDimentions().xSize; x++) {
+            for (int y = 0; y < memory.getDimentions().ySize; y++) {
                 Number number = memory.getNumbers().get(x, y);
                 switch (number) {
                     case TWO -> lineIntoTwo(memory, x, y);

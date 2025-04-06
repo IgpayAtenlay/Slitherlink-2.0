@@ -47,8 +47,8 @@ public class Interaction {
     public void autoSolve() {
         System.out.println("autosolve button");
         // testing only!!!
-        for (int y = 0; y < memorySet.getCalculation().getYSize() + 1; y++) {
-            for (int x = 0; x < memorySet.getCalculation().getXSize() + 1; x++) {
+        for (int y = 0; y < memorySet.getCalculation().getDimentions().ySize + 1; y++) {
+            for (int x = 0; x < memorySet.getCalculation().getDimentions().xSize + 1; x++) {
                 memorySet.getCalculation().change(memorySet.getCalculation().getLines().setSquare(memorySet.getVisible().getLines().getSquare(x, y, CardinalDirection.NORTH), x, y, CardinalDirection.NORTH, true));
                 memorySet.getCalculation().change(memorySet.getCalculation().getLines().setSquare(memorySet.getVisible().getLines().getSquare(x, y, CardinalDirection.WEST), x, y, CardinalDirection.WEST, true));
             }

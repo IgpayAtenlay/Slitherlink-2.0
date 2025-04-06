@@ -5,6 +5,7 @@ import Enums.CardinalDirection;
 import java.util.ArrayList;
 
 public class FullMemory {
+    private final Dimentions dimentions;
     private final int xSize;
     private final int ySize;
     private final LineMemory lines;
@@ -13,9 +14,10 @@ public class FullMemory {
     private final DiagonalMemory diagonals;
     private final ArrayList<Changes> changes;
 
-    public FullMemory(int xSize, int ySize, LineMemory lines, NumberMemory numbers, HighlightMemory highlights, DiagonalMemory diagonals, ArrayList<Changes> changes) {
-        this.xSize = xSize;
-        this.ySize = ySize;
+    public FullMemory(Dimentions dimentions, LineMemory lines, NumberMemory numbers, HighlightMemory highlights, DiagonalMemory diagonals, ArrayList<Changes> changes) {
+        this.xSize = dimentions.xSize;
+        this.ySize = dimentions.ySize;
+        this.dimentions = dimentions;
         this.lines = lines;
         this.numbers = numbers;
         this.highlights = highlights;
@@ -23,24 +25,23 @@ public class FullMemory {
         this.changes = changes;
     }
     public FullMemory(NumberMemory numbers) {
-        this(numbers.getXSize(), numbers.getYSize(),
+        this(new Dimentions(numbers.getXSize(), numbers.getYSize()),
                 new LineMemory(numbers.getXSize(), numbers.getYSize()),
                 numbers.copy(),
                 new HighlightMemory(numbers.getXSize(), numbers.getYSize()),
                 new DiagonalMemory(numbers.getXSize(), numbers.getYSize()),
                 new ArrayList<>());
     }
-    public FullMemory(int xSize, int ySize) {
-        this(xSize,
-                ySize,
-                new LineMemory(xSize, ySize),
-                new NumberMemory(xSize, ySize),
-                new HighlightMemory(xSize, ySize),
-                new DiagonalMemory(xSize, ySize),
+    public FullMemory(Dimentions dimentions) {
+        this(dimentions,
+                new LineMemory(dimentions.xSize, dimentions.ySize),
+                new NumberMemory(dimentions.xSize, dimentions.ySize),
+                new HighlightMemory(dimentions.xSize, dimentions.ySize),
+                new DiagonalMemory(dimentions.xSize, dimentions.ySize),
                 new ArrayList<>());
     }
     public FullMemory() {
-        this(20,20);
+        this(new Dimentions(20, 20));
     }
     public FullMemory copy() {
         ArrayList<Changes> changes = new ArrayList<>();
@@ -48,8 +49,7 @@ public class FullMemory {
             changes.add(change.copy());
         }
         return new FullMemory(
-                xSize,
-                ySize,
+                dimentions.copy(),
                 lines.copy(),
                 numbers.copy(),
                 highlights.copy(),
@@ -58,11 +58,8 @@ public class FullMemory {
         );
     }
 
-    public int getXSize() {
-        return xSize;
-    }
-    public int getYSize() {
-        return ySize;
+    public Dimentions getDimentions() {
+        return dimentions;
     }
     public LineMemory getLines() {
         return lines;

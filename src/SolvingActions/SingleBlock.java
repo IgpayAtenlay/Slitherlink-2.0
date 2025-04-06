@@ -11,8 +11,8 @@ public class SingleBlock {
         
         int startingChanges = memory.getChanges().size();
 
-        for (int x = 0; x < memory.getXSize(); x++) {
-            for (int y = 0; y < memory.getYSize(); y++) {
+        for (int x = 0; x < memory.getDimentions().xSize; x++) {
+            for (int y = 0; y < memory.getDimentions().ySize; y++) {
                 fillSidesUsingNumbers(memory, x, y);
                 fillDiagonals(memory, x, y);
                 switch (memory.getNumbers().get(x, y)) {

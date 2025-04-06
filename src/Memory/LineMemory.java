@@ -82,47 +82,62 @@ public class LineMemory {
         return totalLines;
     }
     public Changes setSquare(Line line, int x, int y, CardinalDirection direction, boolean override) {
-        if (x < xSize && y < ySize && x >= 0 && y >= 0) {
-            return switch (direction) {
-                case NORTH -> set(line, x + y * xSize, override);
-                case EAST -> set(line, numHorzLines() + (x + 1) + y * (xSize + 1), override);
-                case SOUTH -> set(line, x + (y + 1) * xSize, override);
-                case WEST -> set(line, numHorzLines() + x + y * (xSize + 1), override);
-            };
-        } else if (x == -1 && y < ySize && y >= 0) {
-            if (direction == CardinalDirection.EAST) {
-                return set(line, numHorzLines() + y * (xSize + 1), override);
-            }
-        } else if (x == xSize && y < ySize && y >= 0) {
-            if (direction == CardinalDirection.WEST) {
-                return set(line, numHorzLines() + x + y * (xSize + 1), override);
-            }
-        } else if (y == -1 && x < xSize && x >= 0) {
-            if (direction == CardinalDirection.SOUTH) {
-                return set(line, x, override);
-            }
-        } else if (y == ySize && x < xSize && x >= 0) {
-            if (direction == CardinalDirection.NORTH) {
-                return set(line, x + y * xSize, override);
-            }
-        }
-        return null;
+        return set(line, getIndex(true, new Coords(x, y), direction, new Dimentions(xSize, ySize)), override);
     }
     public Changes setSquare(Line line, int x, int y, CardinalDirection direction) {
         return setSquare(line, x, y, direction, false);
     }
     public Changes setPoint(Line line, int x, int y, CardinalDirection direction, boolean override) {
-        return switch (direction) {
-            case NORTH -> setSquare(line, x, y - 1, CardinalDirection.WEST, override);
-            case EAST -> setSquare(line, x, y, CardinalDirection.NORTH, override);
-            case SOUTH -> setSquare(line, x, y, CardinalDirection.WEST, override);
-            case WEST -> setSquare(line, x - 1, y, CardinalDirection.NORTH, override);
-        };
+        return set(line, getIndex(false, new Coords(x, y), direction, new Dimentions(xSize, ySize)), override);
+    }
+    public static int getIndex(boolean square, Coords coords, CardinalDirection direction, Dimentions dimention) {
+        int x = coords.x;
+        int y = coords.y;
+        int xSize = dimention.xSize;
+        int ySize = dimention.ySize;
+        int numHorzLines = xSize * (ySize + 1);
+        if (square) {
+            if (x < xSize && y < ySize && x >= 0 && y >= 0) {
+                return switch (direction) {
+                    case NORTH -> x + y * xSize;
+                    case EAST -> numHorzLines + (x + 1) + y * (xSize + 1);
+                    case SOUTH -> x + (y + 1) * xSize;
+                    case WEST -> numHorzLines + x + y * (xSize + 1);
+                };
+            } else if (x == -1 && y < ySize && y >= 0) {
+                if (direction == CardinalDirection.EAST) {
+                    return numHorzLines + y * (xSize + 1);
+                }
+            } else if (x == xSize && y < ySize && y >= 0) {
+                if (direction == CardinalDirection.WEST) {
+                    return numHorzLines + x + y * (xSize + 1);
+                }
+            } else if (y == -1 && x < xSize && x >= 0) {
+                if (direction == CardinalDirection.SOUTH) {
+                    return x;
+                }
+            } else if (y == ySize && x < xSize && x >= 0) {
+                if (direction == CardinalDirection.NORTH) {
+                    return x + y * xSize;
+                }
+            }
+            return -1;
+        } else {
+            return switch (direction) {
+                case NORTH -> getIndex(true, new Coords(x, y - 1), CardinalDirection.WEST, dimention);
+                case EAST -> getIndex(true, coords, CardinalDirection.NORTH, dimention);
+                case SOUTH -> getIndex(true, coords, CardinalDirection.WEST, dimention);
+                case WEST -> getIndex(true, new Coords(x - 1, y), CardinalDirection.NORTH, dimention);
+            };
+        }
     }
     public Changes setPoint(Line line, int x, int y, CardinalDirection direction) {
         return setPoint(line, x, y, direction, false);
     }
     private Changes set(Line line, int i, boolean override) {
+        if (i < 0 || i > memory.length) {
+            return null;
+        }
         if (memory[i] != line && (memory[i] == Line.EMPTY || override)) {
             memory[i] = line;
 //            System.out.println("changing line " + i + " to " + line);

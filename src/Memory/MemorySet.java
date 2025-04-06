@@ -21,7 +21,7 @@ public class MemorySet {
         this(new FullMemory(realNumbers), new FullMemory(realNumbers.copy(false)));
     }
     public MemorySet(int xSize, int ySize) {
-        this(new FullMemory(xSize, ySize), new FullMemory(xSize, ySize));
+        this(new FullMemory(new Dimentions(xSize, ySize)), new FullMemory(new Dimentions(xSize, ySize)));
     }
     public MemorySet copy() {
         return new MemorySet(visible.copy(), calculation.copy());
@@ -31,8 +31,8 @@ public class MemorySet {
         control.autoSolve(guessAndCheck);
     }
     public void linesCalculationToVisible() {
-        for (int y = 0; y < calculation.getYSize() + 1; y++) {
-            for (int x = 0; x < calculation.getXSize() + 1; x++) {
+        for (int y = 0; y < calculation.getDimentions().ySize + 1; y++) {
+            for (int x = 0; x < calculation.getDimentions().xSize + 1; x++) {
                 visible.change(visible.getLines().setSquare(calculation.getLines().getSquare(x, y, CardinalDirection.NORTH), x, y, CardinalDirection.NORTH));
                 visible.change(visible.getLines().setSquare(calculation.getLines().getSquare(x, y, CardinalDirection.WEST), x, y, CardinalDirection.WEST));
             }

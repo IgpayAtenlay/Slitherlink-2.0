@@ -12,8 +12,8 @@ public class Loop {
 
         int totalLines = memory.getLines().getTotalLines();
 
-        for (int x = 0; x < memory.getXSize() + 1; x++) {
-            for (int y = 0; y < memory.getYSize() + 1; y++) {
+        for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
+            for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
                 checkLoop(memory, x, y, totalLines);
             }
         }

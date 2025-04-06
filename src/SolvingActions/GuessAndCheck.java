@@ -9,8 +9,8 @@ public class GuessAndCheck {
         System.out.println("starting " + GuessAndCheck.class.getSimpleName());
         int startingChanges = memory.getChanges().size();
 
-        for (int x = 0; x < memory.getXSize() + 1; x++) {
-            for (int y = 0; y < memory.getYSize() + 1; y++) {
+        for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
+            for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
                 for (CardinalDirection direction : new CardinalDirection[]{CardinalDirection.EAST, CardinalDirection.SOUTH}) {
                     if (memory.getLines().getSquare(x, y, direction) == Line.EMPTY) {
                         for (Line line : new Line[] {Line.LINE, Line.X}) {

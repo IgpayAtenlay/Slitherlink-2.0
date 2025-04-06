@@ -11,8 +11,8 @@ public class PointActions {
         System.out.println("starting " + PointActions.class.getSimpleName());
         int startingChanges = memory.getChanges().size();
 
-        for (int y = 0; y < memory.getYSize() + 1; y++) {
-            for (int x = 0; x < memory.getXSize() + 1; x++) {
+        for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
+            for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
                 fillSides(memory, x, y);
                 fillDiagonals(memory, x, y);
                 copyDiagonals(memory, x, y);

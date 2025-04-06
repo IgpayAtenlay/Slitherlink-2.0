@@ -31,7 +31,7 @@ public class Panel extends JPanel {
         this.memorySet = memorySet;
         this.frame = frame;
         this.interaction = new Interaction(memorySet, this);
-        buttonX = STARTING_X * 2 + memorySet.getVisible().getXSize() * LINE_SIZE;
+        buttonX = STARTING_X * 2 + memorySet.getVisible().getDimentions().xSize * LINE_SIZE;
         buttonY = STARTING_Y;
         setLayout(null);
         setFont(getFont().deriveFont(Font.BOLD, 14f));
@@ -66,8 +66,8 @@ public class Panel extends JPanel {
     }
 
     private void drawDots(Graphics g) {
-        for (int y = 0; y < memorySet.getVisible().getYSize() + 1; y++) {
-            for (int x = 0; x < memorySet.getVisible().getXSize() + 1; x++) {
+        for (int y = 0; y < memorySet.getVisible().getDimentions().ySize + 1; y++) {
+            for (int x = 0; x < memorySet.getVisible().getDimentions().xSize + 1; x++) {
                 g.fillOval(getDotCoords(x, y)[0] - DOT_DIAMETER / 2,
                         getDotCoords(x, y)[1] - DOT_DIAMETER / 2,
                         DOT_DIAMETER,
@@ -76,8 +76,8 @@ public class Panel extends JPanel {
         }
     }
     private void drawNumbers(Graphics g) {
-        for (int y = 0; y < memorySet.getVisible().getYSize(); y++) {
-            for (int x = 0; x < memorySet.getVisible().getXSize(); x++) {
+        for (int y = 0; y < memorySet.getVisible().getDimentions().ySize; y++) {
+            for (int x = 0; x < memorySet.getVisible().getDimentions().xSize; x++) {
                 String text = memorySet.getVisible().getNumbers().get(x, y).toString(true);
                 int textWidth = g.getFontMetrics().stringWidth(text);
                 g.drawString(text,
@@ -88,8 +88,8 @@ public class Panel extends JPanel {
     }
     private void drawLines(Graphics g) {
         Color startingColor = g.getColor();
-        for (int y = 0; y < memorySet.getVisible().getYSize() + 1; y++) {
-            for (int x = 0; x < memorySet.getVisible().getXSize() + 1; x++) {
+        for (int y = 0; y < memorySet.getVisible().getDimentions().ySize + 1; y++) {
+            for (int x = 0; x < memorySet.getVisible().getDimentions().xSize + 1; x++) {
                 Line eastLine = memorySet.getVisible().getLines().getPoint(x, y, CardinalDirection.EAST);
                 Line eastLineAnswer = memorySet.getCalculation().getLines().getPoint(x, y, CardinalDirection.EAST);
                 Line southLine = memorySet.getVisible().getLines().getPoint(x, y, CardinalDirection.SOUTH);
@@ -105,12 +105,12 @@ public class Panel extends JPanel {
                     }
                 }
 
-                if (eastLine == Line.LINE && x != memorySet.getVisible().getXSize()) {
+                if (eastLine == Line.LINE && x != memorySet.getVisible().getDimentions().xSize) {
                     g.drawLine(getDotCoords(x, y)[0],
                             getDotCoords(x, y)[1],
                             getDotCoords(x + 1, y)[0],
                             getDotCoords(x + 1, y)[1]);
-                } else if (eastLine == Line.X && x != memorySet.getVisible().getXSize()) {
+                } else if (eastLine == Line.X && x != memorySet.getVisible().getDimentions().xSize) {
                     String text = Line.X.toString();
                     int textWidth = g.getFontMetrics().stringWidth(text);
                     g.drawString(text,
@@ -128,12 +128,12 @@ public class Panel extends JPanel {
                     }
                 }
 
-                if (southLine == Line.LINE && y != memorySet.getVisible().getYSize()) {
+                if (southLine == Line.LINE && y != memorySet.getVisible().getDimentions().ySize) {
                     g.drawLine(getDotCoords(x, y)[0],
                             getDotCoords(x, y)[1],
                             getDotCoords(x, y + 1)[0],
                             getDotCoords(x, y + 1)[1]);
-                } else if (southLine == Line.X && y != memorySet.getVisible().getYSize()) {
+                } else if (southLine == Line.X && y != memorySet.getVisible().getDimentions().ySize) {
                     String text = Line.X.toString();
                     int textWidth = g.getFontMetrics().stringWidth(text);
                     g.drawString(text,
@@ -146,8 +146,8 @@ public class Panel extends JPanel {
     }
     private void drawHighlights(Graphics g) {
         Color startingColor = g.getColor();
-        for (int y = 0; y < memorySet.getVisible().getYSize(); y++) {
-            for (int x = 0; x < memorySet.getVisible().getXSize(); x++) {
+        for (int y = 0; y < memorySet.getVisible().getDimentions().ySize; y++) {
+            for (int x = 0; x < memorySet.getVisible().getDimentions().xSize; x++) {
                 Highlight highlight = memorySet.getVisible().getHighlights().get(x, y);
                 if (highlight != Highlight.EMPTY) {
                     if (highlight == Highlight.INSIDE) {
@@ -165,8 +165,8 @@ public class Panel extends JPanel {
         g.setColor(startingColor);
     }
     private void drawDiagonals(Graphics g) {
-        for (int y = 0; y < memorySet.getVisible().getYSize(); y++) {
-            for (int x = 0; x < memorySet.getVisible().getXSize(); x++) {
+        for (int y = 0; y < memorySet.getVisible().getDimentions().ySize; y++) {
+            for (int x = 0; x < memorySet.getVisible().getDimentions().xSize; x++) {
                 for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
                     Diagonal diagonal = memorySet.getVisible().getDiagonals().getSquare(x, y, diagonalDirection);
                     int[] start = new int[0];
