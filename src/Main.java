@@ -1,4 +1,5 @@
 import Enums.Difficulty;
+import Memory.Dimentions;
 import Memory.MemorySet;
 import PuzzleLoading.ExtractDataToVariable;
 import PuzzleLoading.ParseData;
@@ -14,7 +15,7 @@ public class Main {
     }
 
     public static void testingEnviroment() {
-        MemorySet memory = new MemorySet(2, 2);
+        MemorySet memory = new MemorySet(new Dimentions(2, 2));
         new Frame(memory);
     }
 

@@ -1,6 +1,7 @@
 package PuzzleLoading;
 
 import Enums.Number;
+import Memory.Dimentions;
 import Memory.NumberMemory;
 
 import java.util.*;
@@ -62,10 +63,12 @@ public class ParseData {
             previousValue = currentValue;
         }
 
-        int xSize = (int) ((xValues.last() - xValues.first()) / inbetweenSpace) + 1;
-        int ySize = (int) ((yValues.last() - yValues.first()) / inbetweenSpace) + 1;
+        Dimentions dimentions = new Dimentions(
+                (int) ((xValues.last() - xValues.first()) / inbetweenSpace) + 1,
+                (int) ((yValues.last() - yValues.first()) / inbetweenSpace) + 1
+        );
 
-        NumberMemory memory = new NumberMemory(xSize, ySize);
+        NumberMemory memory = new NumberMemory(dimentions);
         for(TextData data : puzzleList) {
             Number number = Number.getNumber(Integer.parseInt(data.text));
             int xPos = (int) (data.x / inbetweenSpace - xValues.first() / inbetweenSpace);

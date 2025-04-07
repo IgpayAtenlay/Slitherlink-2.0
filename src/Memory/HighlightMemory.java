@@ -6,36 +6,34 @@ import Enums.Highlight;
 import java.util.Arrays;
 
 public class HighlightMemory {
-    private final int xSize;
-    private final int ySize;
+    private final Dimentions dimentions;
     private final Highlight[] memory;
 
-    public HighlightMemory(int xSize, int ySize, Highlight[] memory) {
-        this.xSize = xSize;
-        this.ySize = ySize;
+    public HighlightMemory(Dimentions dimentions, Highlight[] memory) {
+        this.dimentions = dimentions;
         this.memory = memory;
     }
-    public HighlightMemory(int xSize, int ySize) {
-        this(xSize, ySize, new Highlight[xSize * ySize]);
+    public HighlightMemory(Dimentions dimentions) {
+        this(dimentions, new Highlight[dimentions.xSize * dimentions.ySize]);
         Arrays.fill(memory, Highlight.EMPTY);
     }
     public HighlightMemory copy() {
-        return new HighlightMemory(xSize, ySize, Arrays.copyOf(memory, memory.length));
+        return new HighlightMemory(dimentions.copy(), Arrays.copyOf(memory, memory.length));
     }
 
     public Changes set(Highlight highlight, int x, int y, boolean override) {
-        if (x < xSize && y < ySize && x >= 0 && y >= 0 &&
-                (memory[x + y * xSize] != highlight && (memory[x + y * xSize] == Highlight.EMPTY || override))
+        if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0 &&
+                (memory[x + y * dimentions.xSize] != highlight && (memory[x + y * dimentions.xSize] == Highlight.EMPTY || override))
         ) {
-            int i = x + y * xSize;
+            int i = x + y * dimentions.xSize;
             memory[i] = highlight;
             return new Changes(highlight, i);
         }
         return null;
     }
     public Highlight get(int x, int y) {
-        if (x < xSize && y < ySize && x >= 0 && y >= 0) {
-            return memory[x + y * xSize];
+        if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0) {
+            return memory[x + y * dimentions.xSize];
         } else {
             return Highlight.OUTSIDE;
         }

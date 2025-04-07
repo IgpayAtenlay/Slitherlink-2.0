@@ -20,8 +20,8 @@ public class MemorySet {
     public MemorySet(NumberMemory realNumbers) {
         this(new FullMemory(realNumbers), new FullMemory(realNumbers.copy(false)));
     }
-    public MemorySet(int xSize, int ySize) {
-        this(new FullMemory(new Dimentions(xSize, ySize)), new FullMemory(new Dimentions(xSize, ySize)));
+    public MemorySet(Dimentions dimentions) {
+        this(new FullMemory(dimentions), new FullMemory(dimentions.copy()));
     }
     public MemorySet copy() {
         return new MemorySet(visible.copy(), calculation.copy());

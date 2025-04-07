@@ -7,21 +7,19 @@ import Util.ConvertCoordinates;
 import java.util.Arrays;
 
 public class DiagonalMemory {
-    private final int xSize;
-    private final int ySize;
+    private final Dimentions dimentions;
     private final Diagonal[] memory;
 
-    public DiagonalMemory(int xSize, int ySize, Diagonal[] memory) {
-        this.xSize = xSize;
-        this.ySize = ySize;
+    public DiagonalMemory(Dimentions dimentions, Diagonal[] memory) {
+        this.dimentions = dimentions;
         this.memory = memory;
     }
-    public DiagonalMemory(int xSize, int ySize) {
-        this(xSize, ySize, new Diagonal[(xSize + 1) * (ySize + 1) * 4]);
+    public DiagonalMemory(Dimentions dimentions) {
+        this(dimentions, new Diagonal[(dimentions.xSize + 1) * (dimentions.ySize + 1) * 4]);
         Arrays.fill(memory, Diagonal.EMPTY);
     }
     public DiagonalMemory copy() {
-        return new DiagonalMemory(xSize, ySize, Arrays.copyOf(memory, memory.length));
+        return new DiagonalMemory(dimentions.copy(), Arrays.copyOf(memory, memory.length));
     }
     
     public Diagonal getSquare(int x, int y, DiagonalDirection direction) {
@@ -30,7 +28,7 @@ public class DiagonalMemory {
                 direction.getOpposite());
     }
     public Diagonal getPoint(int x, int y, DiagonalDirection direction) {
-        if (x < xSize + 1 && y < ySize + 1 && x >= 0 && y >= 0) {
+        if (x < dimentions.xSize + 1 && y < dimentions.ySize + 1 && x >= 0 && y >= 0) {
             return switch (direction) {
                 case NORTHEAST -> memory[2 * x + 1 + 2 * y * getLengthRow()];
                 case SOUTHEAST -> memory[2 * x + 1 + (2 * y + 1) * getLengthRow()];
@@ -48,7 +46,7 @@ public class DiagonalMemory {
                 override);
     }
     public Changes setPoint(Diagonal diagonal, int x, int y, DiagonalDirection direction, boolean override) {
-        if (x < xSize + 1 && y < ySize + 1 && x >= 0 && y >= 0) {
+        if (x < dimentions.xSize + 1 && y < dimentions.ySize + 1 && x >= 0 && y >= 0) {
             return switch (direction) {
                 case NORTHEAST -> set(diagonal, 2 * x + 1 + 2 * y * getLengthRow(), override);
                 case SOUTHEAST -> set(diagonal, 2 * x + 1 + (2 * y + 1) * getLengthRow(), override);
@@ -68,6 +66,6 @@ public class DiagonalMemory {
     }
     
     private int getLengthRow() {
-        return xSize * 2 + 2;
+        return dimentions.xSize * 2 + 2;
     }
 }

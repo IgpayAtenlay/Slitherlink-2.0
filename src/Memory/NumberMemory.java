@@ -7,26 +7,24 @@ import Enums.Number;
 import java.util.Arrays;
 
 public class NumberMemory {
-    private final int xSize;
-    private final int ySize;
+    private final Dimentions dimentions;
     private final Number[] memory;
     private boolean locked;
 
-    public NumberMemory(int xSize, int ySize, Number[] memory, boolean locked) {
-        this.xSize = xSize;
-        this.ySize = ySize;
+    public NumberMemory(Dimentions dimentions, Number[] memory, boolean locked) {
+        this.dimentions = dimentions;
         this.memory = memory;
         this.locked = locked;
     }
-    public NumberMemory(int xSize, int ySize) {
-        this(xSize, ySize, new Number[xSize * ySize], false);
+    public NumberMemory(Dimentions dimentions) {
+        this(dimentions, new Number[dimentions.xSize * dimentions.ySize], false);
         Arrays.fill(memory, Number.EMPTY);
     }
     public NumberMemory copy(boolean locked) {
-        return new NumberMemory(xSize, ySize, Arrays.copyOf(memory, memory.length), locked);
+        return new NumberMemory(dimentions.copy(), Arrays.copyOf(memory, memory.length), locked);
     }
     public NumberMemory copy() {
-        return new NumberMemory(xSize, ySize, Arrays.copyOf(memory, memory.length), locked);
+        return new NumberMemory(dimentions.copy(), Arrays.copyOf(memory, memory.length), locked);
     }
 
     public void lock() {
@@ -34,9 +32,9 @@ public class NumberMemory {
     }
 
     public Changes set(Number number, int x, int y, boolean override) {
-        if (!locked && x < xSize && y < ySize && x >= 0 && y >= 0 &&
-                memory[x + y * xSize] != number && (memory[x + y * xSize] == Number.EMPTY || override)) {
-            int i = x + y * xSize;
+        if (!locked && x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0 &&
+                memory[x + y * dimentions.xSize] != number && (memory[x + y * dimentions.xSize] == Number.EMPTY || override)) {
+            int i = x + y * dimentions.xSize;
             memory[i] = number;
             return new Changes(number, i);
         } else {
@@ -44,8 +42,8 @@ public class NumberMemory {
         }
     }
     public Number get(int x, int y) {
-        if (x < xSize && y < ySize && x >= 0 && y >= 0) {
-            return memory[x + y * xSize];
+        if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0) {
+            return memory[x + y * dimentions.xSize];
         } else {
             return Number.EMPTY;
         }
@@ -66,10 +64,7 @@ public class NumberMemory {
             case NORTHWEST -> get(x - 1, y - 1);
         };
     }
-    public int getXSize() {
-        return xSize;
-    }
-    public int getYSize() {
-        return ySize;
+    public Dimentions getDimentions() {
+        return dimentions.copy();
     }
 }
