@@ -30,28 +30,28 @@ public class PointActions {
         int xs = 0;
         int lines = 0;
         for (CardinalDirection direction : CardinalDirection.values()) {
-            if (memory.getLines().getPoint(coords, direction) == Line.LINE) {
+            if (memory.getLine(false, coords, direction) == Line.LINE) {
                 lines += 1;
-            } else if (memory.getLines().getPoint(coords, direction) == Line.X) {
+            } else if (memory.getLine(false, coords, direction) == Line.X) {
                 xs += 1;
             }
         }
 
         if (lines == 2 || xs == 3) {
             for (CardinalDirection direction : CardinalDirection.values()) {
-                memory.change(memory.getLines().setPoint(Line.X, coords, direction, false));
+                memory.change(memory.setLine(false, Line.X, coords, direction, false));
             }
         } else if (xs == 2 && lines == 1) {
             for (CardinalDirection direction : CardinalDirection.values()) {
-                memory.change(memory.getLines().setPoint(Line.LINE, coords, direction, false));
+                memory.change(memory.setLine(false, Line.LINE, coords, direction, false));
             }
         }
     }
     public static void fillDiagonals(FullMemory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
             // something is SSSSUUUUPPPPER broken here, but also not just here
-            Line lineOne = memory.getLines().getPoint(coords, direction.getCardinalDirections()[0]);
-            Line lineTwo = memory.getLines().getPoint(coords, direction.getCardinalDirections()[1]);
+            Line lineOne = memory.getLine(false, coords, direction.getCardinalDirections()[0]);
+            Line lineTwo = memory.getLine(false, coords, direction.getCardinalDirections()[1]);
             if (lineOne != Line.EMPTY && lineTwo != Line.EMPTY) {
                 if (lineOne == lineTwo) {
                     memory.change(memory.getDiagonals().setPoint(Diagonal.BOTH_OR_NEITHER, coords, direction, false));
@@ -64,16 +64,16 @@ public class PointActions {
     public static void useDiagonals(FullMemory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
             Diagonal diagonal = memory.getDiagonals().getPoint(coords, direction);
-            Line lineOne = memory.getLines().getPoint(coords, direction.getCardinalDirections()[0]);
-            Line lineTwo = memory.getLines().getPoint(coords, direction.getCardinalDirections()[1]);
+            Line lineOne = memory.getLine(false, coords, direction.getCardinalDirections()[0]);
+            Line lineTwo = memory.getLine(false, coords, direction.getCardinalDirections()[1]);
 
             if (diagonal != Diagonal.EMPTY) {
                 if (diagonal == Diagonal.EITHER_OR) {
-                    memory.change(memory.getLines().setPoint(lineOne.getOpposite(), coords, direction.getCardinalDirections()[1], false));
-                    memory.change(memory.getLines().setPoint(lineTwo.getOpposite(), coords, direction.getCardinalDirections()[0], false));
+                    memory.change(memory.setLine(false, lineOne.getOpposite(), coords, direction.getCardinalDirections()[1], false));
+                    memory.change(memory.setLine(false, lineTwo.getOpposite(), coords, direction.getCardinalDirections()[0], false));
                 } else if (diagonal == Diagonal.BOTH_OR_NEITHER) {
-                    memory.change(memory.getLines().setPoint(lineOne, coords, direction.getCardinalDirections()[1], false));
-                    memory.change(memory.getLines().setPoint(lineTwo, coords, direction.getCardinalDirections()[0], false));
+                    memory.change(memory.setLine(false, lineOne, coords, direction.getCardinalDirections()[1], false));
+                    memory.change(memory.setLine(false, lineTwo, coords, direction.getCardinalDirections()[0], false));
                 }
             }
         }

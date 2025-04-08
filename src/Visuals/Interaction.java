@@ -36,8 +36,8 @@ public class Interaction {
                 direction = CardinalDirection.WEST;
             }
         }
-        Line currentLine = memorySet.getVisible().getLines().getSquare(squareIndex, direction);
-        memorySet.getVisible().getLines().setSquare(currentLine.cycle(), squareIndex, direction, true);
+        Line currentLine = memorySet.getVisible().getLine(true, squareIndex, direction);
+        memorySet.getVisible().setLine(true, currentLine.cycle(), squareIndex, direction, true);
         panel.repaint();
     }
 
@@ -51,8 +51,8 @@ public class Interaction {
         for (int y = 0; y < memorySet.getCalculation().getDimentions().ySize + 1; y++) {
             for (int x = 0; x < memorySet.getCalculation().getDimentions().xSize + 1; x++) {
                 Coords coords = new Coords(x, y);
-                memorySet.getCalculation().change(memorySet.getCalculation().getLines().setSquare(memorySet.getVisible().getLines().getSquare(coords, CardinalDirection.NORTH), coords, CardinalDirection.NORTH, true));
-                memorySet.getCalculation().change(memorySet.getCalculation().getLines().setSquare(memorySet.getVisible().getLines().getSquare(coords, CardinalDirection.WEST), coords, CardinalDirection.WEST, true));
+                memorySet.getCalculation().change(memorySet.getCalculation().setLine(true, memorySet.getVisible().getLine(true, coords, CardinalDirection.NORTH), coords, CardinalDirection.NORTH, true));
+                memorySet.getCalculation().change(memorySet.getCalculation().setLine(true, memorySet.getVisible().getLine(true, coords, CardinalDirection.WEST), coords, CardinalDirection.WEST, true));
             }
         }
         memorySet.autoSolve(false);

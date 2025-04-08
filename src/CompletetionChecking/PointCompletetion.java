@@ -14,7 +14,7 @@ public class PointCompletetion {
                 Coords coords = new Coords(x, y);
                 int lines = 0;
                 for (CardinalDirection direction : CardinalDirection.values()) {
-                    if (memory.getLines().getPoint(coords, direction) == Line.LINE) {
+                    if (memory.getLine(false, coords, direction) == Line.LINE) {
                         lines++;
                     }
                 }

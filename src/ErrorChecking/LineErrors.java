@@ -15,9 +15,9 @@ public class LineErrors {
                 int lines = 0;
                 int xs = 0;
                 for (CardinalDirection direction : CardinalDirection.values()) {
-                    if (memory.getLines().getPoint(coords, direction) == Line.LINE) {
+                    if (memory.getLine(false, coords, direction) == Line.LINE) {
                         lines++;
-                    } else if (memory.getLines().getPoint(coords, direction) == Line.X) {
+                    } else if (memory.getLine(false, coords, direction) == Line.X) {
                         xs++;
                     }
                 }

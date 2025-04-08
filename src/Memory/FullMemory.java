@@ -1,44 +1,47 @@
 package Memory;
 
 import Enums.CardinalDirection;
+import Enums.Line;
+import Util.Indexes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FullMemory {
     private final Dimentions dimentions;
-    private final LineMemory lines;
+    private final Line[] memory;
     private final NumberMemory numbers;
     private final HighlightMemory highlights;
     private final DiagonalMemory diagonals;
     private final LoopMemory loops;
     private final ArrayList<Changes> changes;
 
-    public FullMemory(Dimentions dimentions, LineMemory lines, NumberMemory numbers, HighlightMemory highlights, DiagonalMemory diagonals, LoopMemory loops, ArrayList<Changes> changes) {
+    public FullMemory(Dimentions dimentions, Line[] lines, NumberMemory numbers, HighlightMemory highlights, DiagonalMemory diagonals, LoopMemory loops, ArrayList<Changes> changes) {
         this.dimentions = dimentions;
-        this.lines = lines;
+        this.memory = lines;
         this.numbers = numbers;
         this.highlights = highlights;
         this.diagonals = diagonals;
         this.loops = loops;
         this.changes = changes;
     }
+    private FullMemory(Dimentions dimentions, NumberMemory numbers) {
+        this(
+                dimentions,
+                new Line[dimentions.xSize * (dimentions.ySize + 1) + dimentions.ySize * (dimentions.xSize + 1)],
+                numbers,
+                new HighlightMemory(dimentions),
+                new DiagonalMemory(dimentions),
+                new LoopMemory(dimentions),
+                new ArrayList<>()
+        );
+        Arrays.fill(memory, Line.EMPTY);
+    }
     public FullMemory(NumberMemory numbers) {
-        this(numbers.getDimentions(),
-                new LineMemory(numbers.getDimentions()),
-                numbers.copy(),
-                new HighlightMemory(numbers.getDimentions()),
-                new DiagonalMemory(numbers.getDimentions()),
-                new LoopMemory(numbers.getDimentions()),
-                new ArrayList<>());
+        this(numbers.getDimentions(), numbers.copy());
     }
     public FullMemory(Dimentions dimentions) {
-        this(dimentions,
-                new LineMemory(dimentions.copy()),
-                new NumberMemory(dimentions.copy()),
-                new HighlightMemory(dimentions.copy()),
-                new DiagonalMemory(dimentions.copy()),
-                new LoopMemory(dimentions.copy()),
-                new ArrayList<>());
+        this(dimentions, new NumberMemory(dimentions.copy()));
     }
     public FullMemory() {
         this(new Dimentions(20, 20));
@@ -50,7 +53,7 @@ public class FullMemory {
         }
         return new FullMemory(
                 dimentions.copy(),
-                lines.copy(),
+                memory.clone(),
                 numbers.copy(),
                 highlights.copy(),
                 diagonals.copy(),
@@ -61,9 +64,6 @@ public class FullMemory {
 
     public Dimentions getDimentions() {
         return dimentions;
-    }
-    public LineMemory getLines() {
-        return lines;
     }
     public NumberMemory getNumbers() {
         return numbers;
@@ -91,24 +91,24 @@ public class FullMemory {
         for (int y = 0; y < dimentions.ySize; y++) {
             System.out.print(". ");
             for (int x = 0; x < dimentions.xSize; x++) {
-                System.out.print(getLines().getSquare(new Coords(x, y), CardinalDirection.NORTH).toString(false));
+                System.out.print(getLine(true, new Coords(x, y), CardinalDirection.NORTH).toString(false));
                 System.out.print(" . ");
             }
             System.out.println();
 
             for (int x = 0; x < dimentions.xSize; x++) {
                 Coords coords = new Coords(x, y);
-                System.out.print(getLines().getSquare(coords, CardinalDirection.WEST).toString(true) + " ");
+                System.out.print(getLine(true, coords, CardinalDirection.WEST).toString(true) + " ");
                 System.out.print(getNumbers().get(coords).toString(true) + " ");
             }
 
-            System.out.print(getLines().getSquare(new Coords(dimentions.xSize - 1, y), CardinalDirection.EAST).toString(true));
+            System.out.print(getLine(true, new Coords(dimentions.xSize - 1, y), CardinalDirection.EAST).toString(true));
             System.out.println();
 
         }
         System.out.print(". ");
         for (int x = 0; x < dimentions.xSize; x++) {
-            System.out.print(getLines().getSquare(new Coords(x, dimentions.ySize - 1), CardinalDirection.SOUTH).toString(false));
+            System.out.print(getLine(true, new Coords(x, dimentions.ySize - 1), CardinalDirection.SOUTH).toString(false));
             System.out.print(" . ");
         }
         System.out.println();
@@ -125,27 +125,66 @@ public class FullMemory {
         for (int y = 0; y < dimentions.ySize; y++) {
             System.out.print("     ");
             for (int x = 0; x < dimentions.xSize; x++) {
-                System.out.print(getLines().getSquare(new Coords(x, y), CardinalDirection.NORTH));
+                System.out.print(getLine(true, new Coords(x, y), CardinalDirection.NORTH));
                 System.out.print("      ");
             }
             System.out.println();
 
             for (int x = 0; x < dimentions.xSize; x++) {
                 Coords coords = new Coords(x, y);
-                System.out.print(getLines().getSquare(coords, CardinalDirection.WEST));
+                System.out.print(getLine(true, coords, CardinalDirection.WEST));
                 System.out.print(getHighlights().get(coords));
                 System.out.print(" ");
             }
 
-            System.out.print(getLines().getSquare(new Coords(dimentions.xSize - 1, y), CardinalDirection.EAST));
+            System.out.print(getLine(true, new Coords(dimentions.xSize - 1, y), CardinalDirection.EAST));
             System.out.println();
 
         }
         System.out.print("     ");
         for (int x = 0; x < dimentions.xSize; x++) {
-            System.out.print(getLines().getSquare(new Coords(x, dimentions.ySize - 1), CardinalDirection.SOUTH));
+            System.out.print(getLine(true, new Coords(x, dimentions.ySize - 1), CardinalDirection.SOUTH));
             System.out.print("      ");
         }
         System.out.println();
+    }
+    
+    // setters and getters
+    public Changes setLine(boolean square, Line line, Coords coords, CardinalDirection direction, boolean override) {
+        if (square) {
+            return setLine(line, Indexes.line(true, coords, direction, new Dimentions(dimentions.xSize, dimentions.ySize)), override);
+        } else {
+            return setLine(line, Indexes.line(false, coords, direction, new Dimentions(dimentions.xSize, dimentions.ySize)), override);
+        }
+        
+    }
+    private Changes setLine(Line line, int i, boolean override) {
+        if (i < 0 || i > memory.length) {
+            return null;
+        }
+        if (memory[i] != line && (memory[i] == Line.EMPTY || override)) {
+            memory[i] = line;
+//            System.out.println("changing line " + i + " to " + line);
+            return new Changes(line, i);
+        }
+        return null;
+    }
+    public Line getLine(boolean square, Coords coords, CardinalDirection direction) {
+        int index = Indexes.line(square, coords, direction, dimentions);
+        if (index < 0 || index >= memory.length) {
+            return Line.X;
+        } else {
+            return memory[index];
+        }
+    }
+    public int getNumLines() {
+        int totalLines = 0;
+        for (Line line : memory) {
+            if (line == Line.LINE) {
+                totalLines++;
+            }
+        }
+
+        return totalLines;
     }
 }

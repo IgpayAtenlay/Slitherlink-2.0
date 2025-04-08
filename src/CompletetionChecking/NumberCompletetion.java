@@ -17,7 +17,7 @@ public class NumberCompletetion {
                 if (number != Number.EMPTY) {
                     int lines = 0;
                     for (CardinalDirection direction : CardinalDirection.values()) {
-                        if (memory.getLines().getSquare(coords, direction) == Line.LINE) {
+                        if (memory.getLine(true, coords, direction) == Line.LINE) {
                             lines++;
                         }
                     }

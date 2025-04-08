@@ -35,16 +35,16 @@ public class AdjacentBlocks {
     static public void doubleThrees(FullMemory memory, Coords coords) {
         for (CardinalDirection direction : new CardinalDirection[] {CardinalDirection.EAST, CardinalDirection.SOUTH}) {
             if (memory.getNumbers().get(coords.addDirection(direction)) == Number.THREE) {
-                memory.change(memory.getLines().setSquare(Line.LINE, coords, direction.getOpposite(), false));
-                memory.change(memory.getLines().setSquare(Line.LINE, coords, direction, false));
-                memory.change(memory.getLines().setSquare(Line.LINE, coords.addDirection(direction), direction, false));
+                memory.change(memory.setLine(true, Line.LINE, coords, direction.getOpposite(), false));
+                memory.change(memory.setLine(true, Line.LINE, coords, direction, false));
+                memory.change(memory.setLine(true, Line.LINE, coords.addDirection(direction), direction, false));
             }
         }
     }
     static public void createHighlight(FullMemory memory, Coords coords) {
         for (CardinalDirection direction : CardinalDirection.values()) {
             Highlight adjacentHighlight = memory.getHighlights().get(coords.addDirection(direction));
-            Line line = memory.getLines().getSquare(coords, direction);
+            Line line = memory.getLine(true, coords, direction);
             if (line == Line.LINE) {
                 memory.change(memory.getHighlights().set(adjacentHighlight.getOpposite(), coords, false));
             } else if (line == Line.X) {
@@ -57,9 +57,9 @@ public class AdjacentBlocks {
         for (CardinalDirection direction : CardinalDirection.values()) {
             Highlight adjacentHighlight = memory.getHighlights().get(coords.addDirection(direction));
             if (currentHighlight == adjacentHighlight) {
-                memory.change(memory.getLines().setSquare(Line.X, coords, direction, false));
+                memory.change(memory.setLine(true, Line.X, coords, direction, false));
             } else if (currentHighlight != Highlight.EMPTY && adjacentHighlight != Highlight.EMPTY) {
-                memory.change(memory.getLines().setSquare(Line.LINE, coords, direction, false));
+                memory.change(memory.setLine(true, Line.LINE, coords, direction, false));
             }
         }
     }

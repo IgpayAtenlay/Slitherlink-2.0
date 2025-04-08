@@ -4,14 +4,13 @@ import Enums.CardinalDirection;
 import Enums.Line;
 import Memory.Coords;
 import Memory.FullMemory;
-import Util.ConvertCoordinates;
 
 public class LoopErrors {
     static public boolean run(FullMemory memory) {
         // this doesn't work
         System.out.println("starting " + LoopErrors.class.getSimpleName());
 
-        int totalLines = memory.getLines().getTotalLines();
+        int totalLines = memory.getNumLines();
         boolean[][] visited = new boolean[memory.getDimentions().xSize + 1][memory.getDimentions().ySize + 1];
 
         for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
@@ -33,7 +32,7 @@ public class LoopErrors {
         int linesInLoop = 0;
         CardinalDirection exit = CardinalDirection.NORTH;
         for (CardinalDirection direction : CardinalDirection.values()) {
-            if (memory.getLines().getPoint(start, direction) == Line.LINE) {
+            if (memory.getLine(false, start, direction) == Line.LINE) {
                 exit = direction;
                 linesInLoop++;
             }
@@ -50,7 +49,7 @@ public class LoopErrors {
             while(newLine) {
                 newLine = false;
                 for (CardinalDirection direction : CardinalDirection.values()) {
-                    if (memory.getLines().getPoint(currentCoord, direction) == Line.LINE) {
+                    if (memory.getLine(false, currentCoord, direction) == Line.LINE) {
                         if (enterence != direction) {
                             exit = direction;
                             newLine = true;

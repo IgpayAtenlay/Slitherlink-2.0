@@ -10,7 +10,7 @@ public class Loop {
         System.out.println("starting " + Loop.class.getSimpleName());
         int startingChanges = memory.getChanges().size();
 
-        int totalLines = memory.getLines().getTotalLines();
+        int totalLines = memory.getNumLines();
 
         for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
             for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
@@ -44,7 +44,7 @@ public class Loop {
             newLine = false;
             int linesAtThisPoint = 0;
             for (CardinalDirection direction : CardinalDirection.values()) {
-                if (memory.getLines().getPoint(currentCoord, direction) == Line.LINE) {
+                if (memory.getLine(false, currentCoord, direction) == Line.LINE) {
                     if (enterence != direction) {
                         exit = direction;
                         newLine = true;
@@ -70,13 +70,13 @@ public class Loop {
 
         if (linesInLoop != totalLines) {
             if (start.x == currentCoord.x && start.y == currentCoord.y - 1) {
-                memory.change(memory.getLines().setPoint(Line.X, start, CardinalDirection.SOUTH, false));
+                memory.change(memory.setLine(false, Line.X, start, CardinalDirection.SOUTH, false));
             } else if (start.x == currentCoord.x && start.y == currentCoord.y + 1) {
-                memory.change(memory.getLines().setPoint(Line.X, start, CardinalDirection.NORTH, false));
+                memory.change(memory.setLine(false, Line.X, start, CardinalDirection.NORTH, false));
             } else if (start.x == currentCoord.x - 1 && start.y == currentCoord.y) {
-                memory.change(memory.getLines().setPoint(Line.X, start, CardinalDirection.EAST, false));
+                memory.change(memory.setLine(false, Line.X, start, CardinalDirection.EAST, false));
             } else if (start.x == currentCoord.x + 1 && start.y == currentCoord.y) {
-                memory.change(memory.getLines().setPoint(Line.X, start, CardinalDirection.WEST, false));
+                memory.change(memory.setLine(false, Line.X, start, CardinalDirection.WEST, false));
             }
         }
     }
@@ -85,7 +85,7 @@ public class Loop {
         int linesInLoop = 0;
         CardinalDirection exit = CardinalDirection.NORTH;
         for (CardinalDirection direction : CardinalDirection.values()) {
-            if (memory.getLines().getPoint(coords, direction) == Line.LINE) {
+            if (memory.getLine(false, coords, direction) == Line.LINE) {
                 exit = direction;
                 linesInLoop++;
             }
@@ -100,7 +100,7 @@ public class Loop {
 
     public static boolean isNearOtherLoop(FullMemory memory, Coords coords) {
         for (CardinalDirection direction : CardinalDirection.values()) {
-            if (memory.getLines().getPoint(coords, direction) == Line.EMPTY) {
+            if (memory.getLine(false, coords, direction) == Line.EMPTY) {
                 if (isStartOfLoop(memory, coords.addDirection(direction)) != null) {
                     return true;
                 }

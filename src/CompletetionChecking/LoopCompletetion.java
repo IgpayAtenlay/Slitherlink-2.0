@@ -5,13 +5,12 @@ import Enums.Line;
 import ErrorChecking.LoopErrors;
 import Memory.Coords;
 import Memory.FullMemory;
-import Util.ConvertCoordinates;
 
 public class LoopCompletetion {
     static public boolean run(FullMemory memory) {
         System.out.println("starting " + LoopErrors.class.getSimpleName());
 
-        int totalLines = memory.getLines().getTotalLines();
+        int totalLines = memory.getNumLines();
 
         for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
             for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
@@ -30,7 +29,7 @@ public class LoopCompletetion {
 
     public static boolean hasLine(FullMemory memory, Coords coords) {
         for (CardinalDirection direction : CardinalDirection.values()) {
-            if (memory.getLines().getPoint(coords, direction) == Line.LINE) {
+            if (memory.getLine(false, coords, direction) == Line.LINE) {
                 return true;
             }
         }
@@ -39,7 +38,7 @@ public class LoopCompletetion {
     public static boolean isGoodLoop(FullMemory memory, Coords start, int totalLines) {
         CardinalDirection exit = CardinalDirection.NORTH;
         for (CardinalDirection direction : CardinalDirection.values()) {
-            if (memory.getLines().getPoint(start, direction) == Line.LINE) {
+            if (memory.getLine(false, start, direction) == Line.LINE) {
                 exit = direction;
             }
         }
@@ -54,7 +53,7 @@ public class LoopCompletetion {
         while(newLine) {
             newLine = false;
             for (CardinalDirection direction : CardinalDirection.values()) {
-                if (memory.getLines().getPoint(currentCoord, direction) == Line.LINE) {
+                if (memory.getLine(false, currentCoord, direction) == Line.LINE) {
                     if (enterence != direction) {
                         exit = direction;
                         newLine = true;

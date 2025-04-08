@@ -18,9 +18,9 @@ public class NumberErrors {
                     int lines = 0;
                     int xs = 0;
                     for (CardinalDirection direction : CardinalDirection.values()) {
-                        if (memory.getLines().getSquare(coords, direction) == Line.LINE) {
+                        if (memory.getLine(true, coords, direction) == Line.LINE) {
                             lines++;
-                        } else if (memory.getLines().getSquare(coords, direction) == Line.X) {
+                        } else if (memory.getLine(true, coords, direction) == Line.X) {
                             xs++;
                         }
                     }

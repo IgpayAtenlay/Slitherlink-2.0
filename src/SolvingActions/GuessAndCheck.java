@@ -14,7 +14,7 @@ public class GuessAndCheck {
             for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
                 Coords coords = new Coords(x, y);
                 for (CardinalDirection direction : new CardinalDirection[]{CardinalDirection.EAST, CardinalDirection.SOUTH}) {
-                    if (memory.getLines().getSquare(coords, direction) == Line.EMPTY) {
+                    if (memory.getLine(true, coords, direction) == Line.EMPTY) {
                         for (Line line : new Line[] {Line.LINE, Line.X}) {
                             guess(memory, coords, direction, line);
                             if (memory.getChanges().size() - startingChanges > 0) {
@@ -36,12 +36,12 @@ public class GuessAndCheck {
         System.out.println("guessing (" + coords.x + ", " + coords.y + ") " + direction + " " + line);
         FullMemory workingMemory = memory.copy();
         Control control = new Control(workingMemory);
-        workingMemory.getLines().setSquare(line, coords, direction);
+        workingMemory.setLine(true, line, coords, direction, false);
         control.autoSolve(false);
         if (control.hasErrors()) {
-            memory.change(memory.getLines().setSquare(line.getOpposite(), coords, direction));
+            memory.change(memory.setLine(true, line.getOpposite(), coords, direction, false));
         } else if (control.isComplete()) {
-            memory.change(memory.getLines().setSquare(line, coords, direction));
+            memory.change(memory.setLine(true, line, coords, direction, false));
         }
     }
 }

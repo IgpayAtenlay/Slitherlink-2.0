@@ -14,7 +14,11 @@ public class LoopMemory {
     public LoopMemory copy() {
         Loop[] memory = new Loop[this.memory.length];
         for (int i = 0; i < memory.length; i++) {
-            memory[i] = this.memory[i].copy();
+            if (this.memory[i] == null) {
+                memory[i] = null;
+            } else {
+                memory[i] = this.memory[i].copy();
+            }
         }
         return new LoopMemory(memory, dimentions);
     }

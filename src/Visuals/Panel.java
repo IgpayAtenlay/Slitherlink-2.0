@@ -94,10 +94,10 @@ public class Panel extends JPanel {
         for (int y = 0; y < memorySet.getVisible().getDimentions().ySize + 1; y++) {
             for (int x = 0; x < memorySet.getVisible().getDimentions().xSize + 1; x++) {
                 Coords coords = new Coords(x, y);
-                Line eastLine = memorySet.getVisible().getLines().getPoint(coords, CardinalDirection.EAST);
-                Line eastLineAnswer = memorySet.getCalculation().getLines().getPoint(coords, CardinalDirection.EAST);
-                Line southLine = memorySet.getVisible().getLines().getPoint(coords, CardinalDirection.SOUTH);
-                Line southLineAnswer = memorySet.getCalculation().getLines().getPoint(coords, CardinalDirection.SOUTH);
+                Line eastLine = memorySet.getVisible().getLine(false, coords, CardinalDirection.EAST);
+                Line eastLineAnswer = memorySet.getCalculation().getLine(false, coords, CardinalDirection.EAST);
+                Line southLine = memorySet.getVisible().getLine(false, coords, CardinalDirection.SOUTH);
+                Line southLineAnswer = memorySet.getCalculation().getLine(false, coords, CardinalDirection.SOUTH);
 
                 if (checkAccuracy) {
                     if (eastLineAnswer == Line.EMPTY) {
