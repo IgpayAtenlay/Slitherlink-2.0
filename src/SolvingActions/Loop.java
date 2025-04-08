@@ -4,7 +4,6 @@ import Enums.CardinalDirection;
 import Enums.Line;
 import Memory.Coords;
 import Memory.FullMemory;
-import Util.ConvertCoordinates;
 
 public class Loop {
     static public void run(FullMemory memory) {
@@ -37,7 +36,7 @@ public class Loop {
 
         // loop start
         int linesInLoop = 1;
-        Coords currentCoord = ConvertCoordinates.addDirection(start, exit);
+        Coords currentCoord = start.addDirection(exit);
         CardinalDirection enterence = exit.getOpposite();
         boolean newLine = true;
 
@@ -59,7 +58,7 @@ public class Loop {
             }
 
             if (newLine) {
-                currentCoord = ConvertCoordinates.addDirection(currentCoord, exit);
+                currentCoord = currentCoord.addDirection(exit);
             }
             enterence = exit.getOpposite();
 
@@ -102,7 +101,7 @@ public class Loop {
     public static boolean isNearOtherLoop(FullMemory memory, Coords coords) {
         for (CardinalDirection direction : CardinalDirection.values()) {
             if (memory.getLines().getPoint(coords, direction) == Line.EMPTY) {
-                if (isStartOfLoop(memory, ConvertCoordinates.addDirection(coords, direction)) != null) {
+                if (isStartOfLoop(memory, coords.addDirection(direction)) != null) {
                     return true;
                 }
             }

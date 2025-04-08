@@ -2,7 +2,6 @@ package Memory;
 
 import Enums.Diagonal;
 import Enums.DiagonalDirection;
-import Util.ConvertCoordinates;
 
 import java.util.Arrays;
 
@@ -23,7 +22,7 @@ public class DiagonalMemory {
     }
     
     public Diagonal getSquare(Coords coords, DiagonalDirection direction) {
-        return getPoint(ConvertCoordinates.squareToPoint(coords, direction), direction.getOpposite());
+        return getPoint(coords.squareToPoint(direction), direction.getOpposite());
     }
     public Diagonal getPoint(Coords coords, DiagonalDirection direction) {
         int x = coords.x;
@@ -40,7 +39,7 @@ public class DiagonalMemory {
     }
     public Changes setSquare(Diagonal diagonal, Coords coords, DiagonalDirection direction, boolean override) {
         return setPoint(diagonal,
-                ConvertCoordinates.squareToPoint(coords, direction),
+                coords.squareToPoint(direction),
                 direction.getOpposite(),
                 override);
     }

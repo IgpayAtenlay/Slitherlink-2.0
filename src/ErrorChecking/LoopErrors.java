@@ -39,7 +39,7 @@ public class LoopErrors {
             }
         }
 
-        Coords currentCoord = ConvertCoordinates.addDirection(start, exit);
+        Coords currentCoord = start.addDirection(exit);
 
         // loop start
         if (linesInLoop == 2) {
@@ -60,7 +60,7 @@ public class LoopErrors {
                 }
 
                 if (newLine) {
-                    currentCoord = ConvertCoordinates.addDirection(currentCoord, exit);
+                    currentCoord = currentCoord.addDirection(exit);
                     enterence = exit.getOpposite();
                 }
 

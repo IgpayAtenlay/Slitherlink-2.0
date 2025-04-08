@@ -5,7 +5,6 @@ import Enums.DiagonalDirection;
 import Enums.Line;
 import Memory.Coords;
 import Memory.FullMemory;
-import Util.ConvertCoordinates;
 
 public class LineIntoBlock {
     static public void run(FullMemory memory) {
@@ -33,10 +32,10 @@ public class LineIntoBlock {
             CardinalDirection[] cardinalDirections = diagonalDirection.getCardinalDirections();
             if (
                     memory.getLines().getPoint(
-                        ConvertCoordinates.squareToPoint(coords, diagonalDirection),
+                            coords.squareToPoint(diagonalDirection),
                         cardinalDirections[0]
                     ) == Line.LINE || memory.getLines().getPoint(
-                            ConvertCoordinates.squareToPoint(coords, diagonalDirection),
+                            coords.squareToPoint(diagonalDirection),
                             cardinalDirections[1]
                     ) == Line.LINE
             ) {
@@ -58,10 +57,10 @@ public class LineIntoBlock {
 
             if (
                     memory.getLines().getPoint(
-                        ConvertCoordinates.squareToPoint(coords, diagonalDirection),
+                        coords.squareToPoint(diagonalDirection),
                         cardinalDirections[0]
                     ) == Line.LINE || memory.getLines().getPoint(
-                        ConvertCoordinates.squareToPoint(coords, diagonalDirection),
+                        coords.squareToPoint(diagonalDirection),
                         cardinalDirections[1]
                     ) == Line.LINE
             ) {

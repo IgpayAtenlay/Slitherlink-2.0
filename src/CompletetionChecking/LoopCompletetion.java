@@ -45,7 +45,7 @@ public class LoopCompletetion {
         }
 
         int linesInLoop = 1;
-        Coords currentCoord = ConvertCoordinates.addDirection(start, exit);
+        Coords currentCoord = start.addDirection(exit);
 
         // loop start
         CardinalDirection enterence = exit.getOpposite();
@@ -64,7 +64,7 @@ public class LoopCompletetion {
             }
 
             if (newLine) {
-                currentCoord = ConvertCoordinates.addDirection(currentCoord, exit);
+                currentCoord = currentCoord.addDirection(exit);
                 enterence = exit.getOpposite();
             }
 

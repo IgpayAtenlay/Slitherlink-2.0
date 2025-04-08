@@ -112,8 +112,8 @@ public class Panel extends JPanel {
                 if (eastLine == Line.LINE && x != memorySet.getVisible().getDimentions().xSize) {
                     g.drawLine(getDotCoords(coords).x,
                             getDotCoords(coords).y,
-                            getDotCoords(new Coords(coords.x + 1, coords.y)).x,
-                            getDotCoords(new Coords(x + 1, y)).y);
+                            getDotCoords(coords.addDirection(CardinalDirection.EAST)).x,
+                            getDotCoords(coords.addDirection(CardinalDirection.EAST)).y);
                 } else if (eastLine == Line.X && x != memorySet.getVisible().getDimentions().xSize) {
                     String text = Line.X.toString();
                     int textWidth = g.getFontMetrics().stringWidth(text);
@@ -135,8 +135,8 @@ public class Panel extends JPanel {
                 if (southLine == Line.LINE && y != memorySet.getVisible().getDimentions().ySize) {
                     g.drawLine(getDotCoords(coords).x,
                             getDotCoords(coords).y,
-                            getDotCoords(new Coords(coords.x, coords.y + 1)).x,
-                            getDotCoords(new Coords(coords.x, coords.y + 1)).y);
+                            getDotCoords(coords.addDirection(CardinalDirection.SOUTH)).x,
+                            getDotCoords(coords.addDirection(CardinalDirection.SOUTH)).y);
                 } else if (southLine == Line.X && y != memorySet.getVisible().getDimentions().ySize) {
                     String text = Line.X.toString();
                     int textWidth = g.getFontMetrics().stringWidth(text);
@@ -179,21 +179,25 @@ public class Panel extends JPanel {
                     Coords end = null;
                     switch (diagonalDirection) {
                         case NORTHEAST -> {
-                            start = new Coords(getDotCoords(new Coords(coords.x + 1, coords.y)).x - LINE_SIZE / 4, getDotCoords(new Coords(coords.x + 1, coords.y)).y);
-                            end = new Coords(getDotCoords(new Coords(coords.x + 1, coords.y)).x, getDotCoords(new Coords(coords.x + 1, coords.y)).y + LINE_SIZE / 4);
+                            Coords dotCoords = getDotCoords(coords.addDirection(CardinalDirection.EAST));
+                            start = new Coords(dotCoords.x - LINE_SIZE / 4, dotCoords.y);
+                            end = new Coords(dotCoords.x, dotCoords.y + LINE_SIZE / 4);
 
                         }
                         case SOUTHEAST -> {
-                            start = new Coords(getDotCoords(new Coords(coords.x + 1, coords.y + 1)).x - LINE_SIZE / 4, getDotCoords(new Coords(coords.x + 1, coords.y + 1)).y);
-                            end = new Coords(getDotCoords(new Coords(coords.x + 1, coords.y + 1)).x, getDotCoords(new Coords(coords.x + 1, coords.y + 1)).y - LINE_SIZE / 4);
+                            Coords dotCoords = getDotCoords(coords.addDirection(DiagonalDirection.SOUTHEAST));
+                            start = new Coords(dotCoords.x - LINE_SIZE / 4, dotCoords.y);
+                            end = new Coords(dotCoords.x, dotCoords.y - LINE_SIZE / 4);
                         }
                         case SOUTHWEST -> {
-                            start = new Coords(getDotCoords(new Coords(coords.x, coords.y + 1)).x + LINE_SIZE / 4, getDotCoords(new Coords(coords.x, coords.y + 1)).y);
-                            end = new Coords(getDotCoords(new Coords(coords.x, coords.y + 1)).x, getDotCoords(new Coords(coords.x, coords.y + 1)).y - LINE_SIZE / 4);
+                            Coords dotCoords = getDotCoords(coords.addDirection(CardinalDirection.SOUTH));
+                            start = new Coords(dotCoords.x + LINE_SIZE / 4, dotCoords.y);
+                            end = new Coords(dotCoords.x, dotCoords.y - LINE_SIZE / 4);
                         }
                         case NORTHWEST -> {
-                            start = new Coords(getDotCoords(coords).x + LINE_SIZE / 4, getDotCoords(coords).y);
-                            end = new Coords(getDotCoords(coords).x, getDotCoords(coords).y + LINE_SIZE / 4);
+                            Coords dotCoords = getDotCoords(coords);
+                            start = new Coords(dotCoords.x + LINE_SIZE / 4, dotCoords.y);
+                            end = new Coords(dotCoords.x, dotCoords.y + LINE_SIZE / 4);
                         }
                     }
 

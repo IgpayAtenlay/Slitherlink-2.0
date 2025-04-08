@@ -1,7 +1,5 @@
 package Memory;
 
-import Enums.CardinalDirection;
-import Enums.DiagonalDirection;
 import Enums.Number;
 
 import java.util.Arrays;
@@ -52,24 +50,7 @@ public class NumberMemory {
             return Number.EMPTY;
         }
     }
-    public Number get(Coords oldCoords, CardinalDirection direction) {
-        Coords newCoords = switch (direction) {
-            case NORTH -> new Coords(oldCoords.x, oldCoords.y - 1);
-            case EAST -> new Coords(oldCoords.x + 1, oldCoords.y);
-            case SOUTH -> new Coords(oldCoords.x, oldCoords.y + 1);
-            case WEST -> new Coords(oldCoords.x - 1, oldCoords.y);
-        };
-        return get(newCoords);
-    }
-    public Number get(Coords oldCoords, DiagonalDirection direction) {
-        Coords newCoords = switch (direction) {
-            case NORTHEAST -> new Coords(oldCoords.x + 1, oldCoords.y - 1);
-            case SOUTHEAST -> new Coords(oldCoords.x + 1, oldCoords.y + 1);
-            case SOUTHWEST -> new Coords(oldCoords.x - 1, oldCoords.y + 1);
-            case NORTHWEST -> new Coords(oldCoords.x - 1, oldCoords.y - 1);
-        };
-        return get(newCoords);
-    }
+
     public Dimentions getDimentions() {
         return dimentions.copy();
     }

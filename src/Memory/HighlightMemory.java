@@ -1,6 +1,5 @@
 package Memory;
 
-import Enums.CardinalDirection;
 import Enums.Highlight;
 
 import java.util.Arrays;
@@ -41,14 +40,5 @@ public class HighlightMemory {
         } else {
             return Highlight.OUTSIDE;
         }
-    }
-    public Highlight get(Coords oldCoord, CardinalDirection direction) {
-        Coords newCoord = switch (direction) {
-            case NORTH -> new Coords(oldCoord.x, oldCoord.y - 1);
-            case EAST -> new Coords(oldCoord.x + 1, oldCoord.y);
-            case SOUTH -> new Coords(oldCoord.x, oldCoord.y + 1);
-            case WEST -> new Coords(oldCoord.x - 1, oldCoord.y);
-        };
-        return get(newCoord);
     }
 }

@@ -34,12 +34,12 @@ public class LineMemory {
         }
     }
     public Line getPoint(Coords coords, CardinalDirection direction) {
-        return switch (direction) {
-            case NORTH -> getSquare(new Coords(coords.x, coords.y - 1), CardinalDirection.WEST);
-            case EAST -> getSquare(new Coords(coords.x, coords.y), CardinalDirection.NORTH);
-            case SOUTH -> getSquare(new Coords(coords.x, coords.y), CardinalDirection.WEST);
-            case WEST -> getSquare(new Coords(coords.x - 1, coords.y), CardinalDirection.NORTH);
-        };
+        int index = getIndex(false, coords, direction, dimentions);
+        if (index < 0 || index >= memory.length) {
+            return Line.X;
+        } else {
+            return memory[index];
+        }
     }
     public int getTotalLines() {
         int totalLines = 0;
@@ -59,6 +59,9 @@ public class LineMemory {
     }
     public Changes setPoint(Line line, Coords coords, CardinalDirection direction, boolean override) {
         return set(line, getIndex(false, coords, direction, new Dimentions(dimentions.xSize, dimentions.ySize)), override);
+    }
+    public Changes setPoint(Line line, Coords coords, CardinalDirection direction) {
+        return setPoint(line, coords, direction, false);
     }
     public static int getIndex(boolean square, Coords coords, CardinalDirection direction, Dimentions dimentions) {
         int x = coords.x;
@@ -92,15 +95,12 @@ public class LineMemory {
             return -1;
         } else {
             return switch (direction) {
-                case NORTH -> getIndex(true, new Coords(x, y - 1), CardinalDirection.WEST, dimentions);
+                case NORTH -> getIndex(true, coords.addDirection(CardinalDirection.NORTH), CardinalDirection.WEST, dimentions);
                 case EAST -> getIndex(true, coords, CardinalDirection.NORTH, dimentions);
                 case SOUTH -> getIndex(true, coords, CardinalDirection.WEST, dimentions);
-                case WEST -> getIndex(true, new Coords(x - 1, y), CardinalDirection.NORTH, dimentions);
+                case WEST -> getIndex(true, coords.addDirection(CardinalDirection.WEST), CardinalDirection.NORTH, dimentions);
             };
         }
-    }
-    public Changes setPoint(Line line, Coords coords, CardinalDirection direction) {
-        return setPoint(line, coords, direction, false);
     }
     private Changes set(Line line, int i, boolean override) {
         if (i < 0 || i > memory.length) {

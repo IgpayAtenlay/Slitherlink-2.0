@@ -1,6 +1,6 @@
 package SolvingActions;
 
-import Enums.CardinalDirection;
+import Enums.DiagonalDirection;
 import Enums.Line;
 import Enums.Number;
 import Memory.Coords;
@@ -25,17 +25,13 @@ public class AdjacentDiagonalBlocks {
     }
 
     static public void doubleThrees(FullMemory memory, Coords coords) {
-        if (memory.getNumbers().get(new Coords(coords.x + 1, coords.y - 1)) == Number.THREE) {
-            memory.change(memory.getLines().setSquare(Line.LINE, coords, CardinalDirection.WEST, false));
-            memory.change(memory.getLines().setSquare(Line.LINE, coords, CardinalDirection.SOUTH, false));
-            memory.change(memory.getLines().setSquare(Line.LINE, new Coords(coords.x + 1, coords.y - 1), CardinalDirection.NORTH, false));
-            memory.change(memory.getLines().setSquare(Line.LINE, new Coords(coords.x + 1, coords.y - 1), CardinalDirection.EAST, false));
-        }
-        if (memory.getNumbers().get(new Coords(coords.x + 1, coords.y + 1)) == Number.THREE) {
-            memory.change(memory.getLines().setSquare(Line.LINE, coords, CardinalDirection.WEST, false));
-            memory.change(memory.getLines().setSquare(Line.LINE, coords, CardinalDirection.NORTH, false));
-            memory.change(memory.getLines().setSquare(Line.LINE, new Coords(coords.x + 1, coords.y + 1), CardinalDirection.SOUTH, false));
-            memory.change(memory.getLines().setSquare(Line.LINE, new Coords(coords.x + 1, coords.y + 1), CardinalDirection.EAST, false));
+        for(DiagonalDirection diagonalDirection : new DiagonalDirection[]{DiagonalDirection.NORTHWEST, DiagonalDirection.SOUTHEAST}) {
+            if (memory.getNumbers().get(coords.addDirection(diagonalDirection)) == Number.THREE) {
+                memory.change(memory.getLines().setSquare(Line.LINE, coords, diagonalDirection.getCardinalDirections()[0].getOpposite(), false));
+                memory.change(memory.getLines().setSquare(Line.LINE, coords, diagonalDirection.getCardinalDirections()[1].getOpposite(), false));
+                memory.change(memory.getLines().setSquare(Line.LINE, coords.addDirection(diagonalDirection), diagonalDirection.getCardinalDirections()[0], false));
+                memory.change(memory.getLines().setSquare(Line.LINE, coords.addDirection(diagonalDirection), diagonalDirection.getCardinalDirections()[1], false));
+            }
         }
     }
 }
