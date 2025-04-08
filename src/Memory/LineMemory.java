@@ -25,48 +25,20 @@ public class LineMemory {
         return dimentions.xSize * (dimentions.ySize + 1);
     }
 
-    public Line getSquare(int x, int y, CardinalDirection direction) {
-        if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0) {
-            return switch (direction) {
-                case NORTH -> memory[x + y * dimentions.xSize];
-                case EAST -> memory[numHorzLines() + (x + 1) + y * (dimentions.xSize + 1)];
-                case SOUTH -> memory[x + (y + 1) * dimentions.xSize];
-                case WEST -> memory[numHorzLines() + x + y * (dimentions.xSize + 1)];
-            };
-        } else if (x == -1 && y < dimentions.ySize && y >= 0) {
-            if (direction == CardinalDirection.EAST) {
-                return memory[numHorzLines() + y * (dimentions.xSize + 1)];
-            } else {
-                return Line.X;
-            }
-        } else if (x < dimentions.xSize && x >= 0 && y == -1) {
-            if (direction == CardinalDirection.SOUTH) {
-                return memory[x];
-            } else {
-                return Line.X;
-            }
-        } else if (x == dimentions.xSize && y < dimentions.ySize && y >= 0) {
-            if (direction == CardinalDirection.WEST) {
-                return memory[numHorzLines() + x + y * (dimentions.xSize + 1)];
-            } else {
-                return Line.X;
-            }
-        } else if (x < dimentions.xSize && x >= 0 && y == dimentions.ySize) {
-            if (direction == CardinalDirection.NORTH) {
-                return memory[x + y * dimentions.xSize];
-            } else {
-                return Line.X;
-            }
-        } else {
+    public Line getSquare(Coords coords, CardinalDirection direction) {
+        int index = getIndex(true, coords, direction, dimentions);
+        if (index < 0 || index >= memory.length) {
             return Line.X;
+        } else {
+            return memory[index];
         }
     }
-    public Line getPoint(int x, int y, CardinalDirection direction) {
+    public Line getPoint(Coords coords, CardinalDirection direction) {
         return switch (direction) {
-            case NORTH -> getSquare(x, y - 1, CardinalDirection.WEST);
-            case EAST -> getSquare(x, y, CardinalDirection.NORTH);
-            case SOUTH -> getSquare(x, y, CardinalDirection.WEST);
-            case WEST -> getSquare(x - 1, y, CardinalDirection.NORTH);
+            case NORTH -> getSquare(new Coords(coords.x, coords.y - 1), CardinalDirection.WEST);
+            case EAST -> getSquare(new Coords(coords.x, coords.y), CardinalDirection.NORTH);
+            case SOUTH -> getSquare(new Coords(coords.x, coords.y), CardinalDirection.WEST);
+            case WEST -> getSquare(new Coords(coords.x - 1, coords.y), CardinalDirection.NORTH);
         };
     }
     public int getTotalLines() {
@@ -79,14 +51,14 @@ public class LineMemory {
 
         return totalLines;
     }
-    public Changes setSquare(Line line, int x, int y, CardinalDirection direction, boolean override) {
-        return set(line, getIndex(true, new Coords(x, y), direction, new Dimentions(dimentions.xSize, dimentions.ySize)), override);
+    public Changes setSquare(Line line, Coords coords, CardinalDirection direction, boolean override) {
+        return set(line, getIndex(true, coords, direction, new Dimentions(dimentions.xSize, dimentions.ySize)), override);
     }
-    public Changes setSquare(Line line, int x, int y, CardinalDirection direction) {
-        return setSquare(line, x, y, direction, false);
+    public Changes setSquare(Line line, Coords coords, CardinalDirection direction) {
+        return setSquare(line, coords, direction, false);
     }
-    public Changes setPoint(Line line, int x, int y, CardinalDirection direction, boolean override) {
-        return set(line, getIndex(false, new Coords(x, y), direction, new Dimentions(dimentions.xSize, dimentions.ySize)), override);
+    public Changes setPoint(Line line, Coords coords, CardinalDirection direction, boolean override) {
+        return set(line, getIndex(false, coords, direction, new Dimentions(dimentions.xSize, dimentions.ySize)), override);
     }
     public static int getIndex(boolean square, Coords coords, CardinalDirection direction, Dimentions dimentions) {
         int x = coords.x;
@@ -127,8 +99,8 @@ public class LineMemory {
             };
         }
     }
-    public Changes setPoint(Line line, int x, int y, CardinalDirection direction) {
-        return setPoint(line, x, y, direction, false);
+    public Changes setPoint(Line line, Coords coords, CardinalDirection direction) {
+        return setPoint(line, coords, direction, false);
     }
     private Changes set(Line line, int i, boolean override) {
         if (i < 0 || i > memory.length) {

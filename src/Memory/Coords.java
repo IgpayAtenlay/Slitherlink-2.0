@@ -11,4 +11,16 @@ public class Coords {
     public Coords copy() {
         return new Coords(x, y);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Coords coord = (Coords) o;
+        return x == coord.x && y == coord.y;
+    }
 }

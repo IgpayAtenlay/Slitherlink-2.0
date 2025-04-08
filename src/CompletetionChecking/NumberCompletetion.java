@@ -3,6 +3,7 @@ package CompletetionChecking;
 import Enums.CardinalDirection;
 import Enums.Line;
 import Enums.Number;
+import Memory.Coords;
 import Memory.FullMemory;
 
 public class NumberCompletetion {
@@ -11,15 +12,16 @@ public class NumberCompletetion {
 
         for (int x = 0; x < memory.getDimentions().xSize; x++) {
             for (int y = 0; y < memory.getDimentions().ySize; y++) {
-                Number number = memory.getNumbers().get(x, y);
+                Coords coords = new Coords(x, y);
+                Number number = memory.getNumbers().get(coords);
                 if (number != Number.EMPTY) {
                     int lines = 0;
                     for (CardinalDirection direction : CardinalDirection.values()) {
-                        if (memory.getLines().getSquare(x, y, direction) == Line.LINE) {
+                        if (memory.getLines().getSquare(coords, direction) == Line.LINE) {
                             lines++;
                         }
                     }
-                    if (lines != memory.getNumbers().get(x, y).value) {
+                    if (lines != memory.getNumbers().get(coords).value) {
                         System.out.println(NumberCompletetion.class.getSimpleName() + " finished");
                         return false;
                     }

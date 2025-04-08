@@ -3,6 +3,7 @@ package CompletetionChecking;
 import Enums.CardinalDirection;
 import Enums.Line;
 import ErrorChecking.LoopErrors;
+import Memory.Coords;
 import Memory.FullMemory;
 import Util.ConvertCoordinates;
 
@@ -14,8 +15,9 @@ public class LoopCompletetion {
 
         for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
             for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
-                if (hasLine(memory, x, y)) {
-                    boolean isGoodLoop = isGoodLoop(memory, x, y, totalLines);
+                Coords coords = new Coords(x, y);
+                if (hasLine(memory, coords)) {
+                    boolean isGoodLoop = isGoodLoop(memory, coords, totalLines);
                     System.out.println(LoopErrors.class.getSimpleName() + " finished");
                     return isGoodLoop;
                 }
@@ -26,27 +28,24 @@ public class LoopCompletetion {
         return true;
     }
 
-    public static boolean hasLine(FullMemory memory, int x, int y) {
+    public static boolean hasLine(FullMemory memory, Coords coords) {
         for (CardinalDirection direction : CardinalDirection.values()) {
-            if (memory.getLines().getPoint(x, y, direction) == Line.LINE) {
+            if (memory.getLines().getPoint(coords, direction) == Line.LINE) {
                 return true;
             }
         }
         return false;
     }
-    public static boolean isGoodLoop(FullMemory memory, int startingX, int startingY, int totalLines) {
+    public static boolean isGoodLoop(FullMemory memory, Coords start, int totalLines) {
         CardinalDirection exit = CardinalDirection.NORTH;
         for (CardinalDirection direction : CardinalDirection.values()) {
-            if (memory.getLines().getPoint(startingX, startingY, direction) == Line.LINE) {
+            if (memory.getLines().getPoint(start, direction) == Line.LINE) {
                 exit = direction;
             }
         }
 
         int linesInLoop = 1;
-        int currentX = startingX;
-        int currentY = startingY;
-        currentX = ConvertCoordinates.addDirection(currentX, currentY, exit)[0];
-        currentY = ConvertCoordinates.addDirection(currentX, currentY, exit)[1];
+        Coords currentCoord = ConvertCoordinates.addDirection(start, exit);
 
         // loop start
         CardinalDirection enterence = exit.getOpposite();
@@ -55,7 +54,7 @@ public class LoopCompletetion {
         while(newLine) {
             newLine = false;
             for (CardinalDirection direction : CardinalDirection.values()) {
-                if (memory.getLines().getPoint(currentX, currentY, direction) == Line.LINE) {
+                if (memory.getLines().getPoint(currentCoord, direction) == Line.LINE) {
                     if (enterence != direction) {
                         exit = direction;
                         newLine = true;
@@ -65,12 +64,11 @@ public class LoopCompletetion {
             }
 
             if (newLine) {
-                currentX = ConvertCoordinates.addDirection(currentX, currentY, exit)[0];
-                currentY = ConvertCoordinates.addDirection(currentX, currentY, exit)[1];
+                currentCoord = ConvertCoordinates.addDirection(currentCoord, exit);
                 enterence = exit.getOpposite();
             }
 
-            if (startingX == currentX && startingY == currentY) {
+            if (start.equals(currentCoord)) {
                 return linesInLoop == totalLines;
             }
         }

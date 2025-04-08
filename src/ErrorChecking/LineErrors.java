@@ -2,6 +2,7 @@ package ErrorChecking;
 
 import Enums.CardinalDirection;
 import Enums.Line;
+import Memory.Coords;
 import Memory.FullMemory;
 
 public class LineErrors {
@@ -10,12 +11,13 @@ public class LineErrors {
 
         for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
             for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
+                Coords coords = new Coords(x, y);
                 int lines = 0;
                 int xs = 0;
                 for (CardinalDirection direction : CardinalDirection.values()) {
-                    if (memory.getLines().getPoint(x, y, direction) == Line.LINE) {
+                    if (memory.getLines().getPoint(coords, direction) == Line.LINE) {
                         lines++;
-                    } else if (memory.getLines().getPoint(x, y, direction) == Line.X) {
+                    } else if (memory.getLines().getPoint(coords, direction) == Line.X) {
                         xs++;
                     }
                 }

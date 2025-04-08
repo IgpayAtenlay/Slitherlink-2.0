@@ -3,6 +3,7 @@ package SolvingActions;
 import Enums.CardinalDirection;
 import Enums.Line;
 import Enums.Number;
+import Memory.Coords;
 import Memory.FullMemory;
 
 public class AdjacentDiagonalBlocks {
@@ -12,8 +13,9 @@ public class AdjacentDiagonalBlocks {
 
         for (int x = 0; x < memory.getDimentions().xSize; x++) {
             for (int y = 0; y < memory.getDimentions().ySize; y++) {
-                if (memory.getNumbers().get(x, y) == Number.THREE) {
-                    doubleThrees(memory, x, y);
+                Coords coords = new Coords(x, y);
+                if (memory.getNumbers().get(coords) == Number.THREE) {
+                    doubleThrees(memory, coords);
                 }
             }
         }
@@ -22,18 +24,18 @@ public class AdjacentDiagonalBlocks {
         System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
     }
 
-    static public void doubleThrees(FullMemory memory, int x, int y) {
-        if (memory.getNumbers().get(x + 1, y - 1) == Number.THREE) {
-            memory.change(memory.getLines().setSquare(Line.LINE, x, y, CardinalDirection.WEST, false));
-            memory.change(memory.getLines().setSquare(Line.LINE, x, y, CardinalDirection.SOUTH, false));
-            memory.change(memory.getLines().setSquare(Line.LINE, x + 1, y - 1, CardinalDirection.NORTH, false));
-            memory.change(memory.getLines().setSquare(Line.LINE, x + 1, y - 1, CardinalDirection.EAST, false));
+    static public void doubleThrees(FullMemory memory, Coords coords) {
+        if (memory.getNumbers().get(new Coords(coords.x + 1, coords.y - 1)) == Number.THREE) {
+            memory.change(memory.getLines().setSquare(Line.LINE, coords, CardinalDirection.WEST, false));
+            memory.change(memory.getLines().setSquare(Line.LINE, coords, CardinalDirection.SOUTH, false));
+            memory.change(memory.getLines().setSquare(Line.LINE, new Coords(coords.x + 1, coords.y - 1), CardinalDirection.NORTH, false));
+            memory.change(memory.getLines().setSquare(Line.LINE, new Coords(coords.x + 1, coords.y - 1), CardinalDirection.EAST, false));
         }
-        if (memory.getNumbers().get(x + 1, y + 1) == Number.THREE) {
-            memory.change(memory.getLines().setSquare(Line.LINE, x, y, CardinalDirection.WEST, false));
-            memory.change(memory.getLines().setSquare(Line.LINE, x, y, CardinalDirection.NORTH, false));
-            memory.change(memory.getLines().setSquare(Line.LINE, x + 1, y + 1, CardinalDirection.SOUTH, false));
-            memory.change(memory.getLines().setSquare(Line.LINE, x + 1, y + 1, CardinalDirection.EAST, false));
+        if (memory.getNumbers().get(new Coords(coords.x + 1, coords.y + 1)) == Number.THREE) {
+            memory.change(memory.getLines().setSquare(Line.LINE, coords, CardinalDirection.WEST, false));
+            memory.change(memory.getLines().setSquare(Line.LINE, coords, CardinalDirection.NORTH, false));
+            memory.change(memory.getLines().setSquare(Line.LINE, new Coords(coords.x + 1, coords.y + 1), CardinalDirection.SOUTH, false));
+            memory.change(memory.getLines().setSquare(Line.LINE, new Coords(coords.x + 1, coords.y + 1), CardinalDirection.EAST, false));
         }
     }
 }

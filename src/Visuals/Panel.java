@@ -1,6 +1,7 @@
 package Visuals;
 
 import Enums.*;
+import Memory.Coords;
 import Memory.MemorySet;
 
 import javax.swing.*;
@@ -68,8 +69,9 @@ public class Panel extends JPanel {
     private void drawDots(Graphics g) {
         for (int y = 0; y < memorySet.getVisible().getDimentions().ySize + 1; y++) {
             for (int x = 0; x < memorySet.getVisible().getDimentions().xSize + 1; x++) {
-                g.fillOval(getDotCoords(x, y)[0] - DOT_DIAMETER / 2,
-                        getDotCoords(x, y)[1] - DOT_DIAMETER / 2,
+                Coords dotCoords = getDotCoords(new Coords(x, y));
+                g.fillOval(dotCoords.x - DOT_DIAMETER / 2,
+                        dotCoords.y - DOT_DIAMETER / 2,
                         DOT_DIAMETER,
                         DOT_DIAMETER);
             }
@@ -78,11 +80,12 @@ public class Panel extends JPanel {
     private void drawNumbers(Graphics g) {
         for (int y = 0; y < memorySet.getVisible().getDimentions().ySize; y++) {
             for (int x = 0; x < memorySet.getVisible().getDimentions().xSize; x++) {
-                String text = memorySet.getVisible().getNumbers().get(x, y).toString(true);
+                Coords coords = new Coords(x, y);
+                String text = memorySet.getVisible().getNumbers().get(coords).toString(true);
                 int textWidth = g.getFontMetrics().stringWidth(text);
                 g.drawString(text,
-                        getSquareCenterCoords(x, y)[0] - textWidth / 2,
-                        getSquareCenterCoords(x, y)[1] + (int) (getFont().getSize() / HEIGHT_OFFSET));
+                        getSquareCenterCoords(coords).x - textWidth / 2,
+                        getSquareCenterCoords(coords).y + (int) (getFont().getSize() / HEIGHT_OFFSET));
             }
         }
     }
@@ -90,10 +93,11 @@ public class Panel extends JPanel {
         Color startingColor = g.getColor();
         for (int y = 0; y < memorySet.getVisible().getDimentions().ySize + 1; y++) {
             for (int x = 0; x < memorySet.getVisible().getDimentions().xSize + 1; x++) {
-                Line eastLine = memorySet.getVisible().getLines().getPoint(x, y, CardinalDirection.EAST);
-                Line eastLineAnswer = memorySet.getCalculation().getLines().getPoint(x, y, CardinalDirection.EAST);
-                Line southLine = memorySet.getVisible().getLines().getPoint(x, y, CardinalDirection.SOUTH);
-                Line southLineAnswer = memorySet.getCalculation().getLines().getPoint(x, y, CardinalDirection.SOUTH);
+                Coords coords = new Coords(x, y);
+                Line eastLine = memorySet.getVisible().getLines().getPoint(coords, CardinalDirection.EAST);
+                Line eastLineAnswer = memorySet.getCalculation().getLines().getPoint(coords, CardinalDirection.EAST);
+                Line southLine = memorySet.getVisible().getLines().getPoint(coords, CardinalDirection.SOUTH);
+                Line southLineAnswer = memorySet.getCalculation().getLines().getPoint(coords, CardinalDirection.SOUTH);
 
                 if (checkAccuracy) {
                     if (eastLineAnswer == Line.EMPTY) {
@@ -106,16 +110,16 @@ public class Panel extends JPanel {
                 }
 
                 if (eastLine == Line.LINE && x != memorySet.getVisible().getDimentions().xSize) {
-                    g.drawLine(getDotCoords(x, y)[0],
-                            getDotCoords(x, y)[1],
-                            getDotCoords(x + 1, y)[0],
-                            getDotCoords(x + 1, y)[1]);
+                    g.drawLine(getDotCoords(coords).x,
+                            getDotCoords(coords).y,
+                            getDotCoords(new Coords(coords.x + 1, coords.y)).x,
+                            getDotCoords(new Coords(x + 1, y)).y);
                 } else if (eastLine == Line.X && x != memorySet.getVisible().getDimentions().xSize) {
                     String text = Line.X.toString();
                     int textWidth = g.getFontMetrics().stringWidth(text);
                     g.drawString(text,
-                            getSquareCenterCoords(x, y)[0] - textWidth / 2,
-                            getDotCoords(x, y)[1] + (int) (getFont().getSize() / HEIGHT_OFFSET));
+                            getSquareCenterCoords(coords).x - textWidth / 2,
+                            getDotCoords(coords).y + (int) (getFont().getSize() / HEIGHT_OFFSET));
                 }
 
                 if (checkAccuracy) {
@@ -129,16 +133,16 @@ public class Panel extends JPanel {
                 }
 
                 if (southLine == Line.LINE && y != memorySet.getVisible().getDimentions().ySize) {
-                    g.drawLine(getDotCoords(x, y)[0],
-                            getDotCoords(x, y)[1],
-                            getDotCoords(x, y + 1)[0],
-                            getDotCoords(x, y + 1)[1]);
+                    g.drawLine(getDotCoords(coords).x,
+                            getDotCoords(coords).y,
+                            getDotCoords(new Coords(coords.x, coords.y + 1)).x,
+                            getDotCoords(new Coords(coords.x, coords.y + 1)).y);
                 } else if (southLine == Line.X && y != memorySet.getVisible().getDimentions().ySize) {
                     String text = Line.X.toString();
                     int textWidth = g.getFontMetrics().stringWidth(text);
                     g.drawString(text,
-                            getDotCoords(x, y)[0] - textWidth / 2,
-                            getSquareCenterCoords(x, y)[1] + (int) (getFont().getSize() / HEIGHT_OFFSET));
+                            getDotCoords(coords).x - textWidth / 2,
+                            getSquareCenterCoords(coords).y + (int) (getFont().getSize() / HEIGHT_OFFSET));
                 }
             }
         }
@@ -148,15 +152,16 @@ public class Panel extends JPanel {
         Color startingColor = g.getColor();
         for (int y = 0; y < memorySet.getVisible().getDimentions().ySize; y++) {
             for (int x = 0; x < memorySet.getVisible().getDimentions().xSize; x++) {
-                Highlight highlight = memorySet.getVisible().getHighlights().get(x, y);
+                Coords coords = new Coords(x, y);
+                Highlight highlight = memorySet.getVisible().getHighlights().get(coords);
                 if (highlight != Highlight.EMPTY) {
                     if (highlight == Highlight.INSIDE) {
                         g.setColor(new Color(193, 255, 176));
                     } else if (highlight == Highlight.OUTSIDE) {
                         g.setColor(new Color(198, 255, 255));
                     }
-                    g.fillRect(getDotCoords(x, y)[0],
-                            getDotCoords(x, y)[1],
+                    g.fillRect(getDotCoords(coords).x,
+                            getDotCoords(coords).y,
                             LINE_SIZE,
                             LINE_SIZE);
                 }
@@ -167,49 +172,50 @@ public class Panel extends JPanel {
     private void drawDiagonals(Graphics g) {
         for (int y = 0; y < memorySet.getVisible().getDimentions().ySize; y++) {
             for (int x = 0; x < memorySet.getVisible().getDimentions().xSize; x++) {
+                Coords coords = new Coords(x, y);
                 for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
-                    Diagonal diagonal = memorySet.getVisible().getDiagonals().getSquare(x, y, diagonalDirection);
-                    int[] start = new int[0];
-                    int[] end = new int[0];
+                    Diagonal diagonal = memorySet.getVisible().getDiagonals().getSquare(coords, diagonalDirection);
+                    Coords start = null;
+                    Coords end = null;
                     switch (diagonalDirection) {
                         case NORTHEAST -> {
-                            start = new int[]{getDotCoords(x + 1, y)[0] - LINE_SIZE / 4, getDotCoords(x + 1, y)[1]};
-                            end = new int[]{getDotCoords(x + 1, y)[0], getDotCoords(x + 1, y)[1] + LINE_SIZE / 4};
+                            start = new Coords(getDotCoords(new Coords(coords.x + 1, coords.y)).x - LINE_SIZE / 4, getDotCoords(new Coords(coords.x + 1, coords.y)).y);
+                            end = new Coords(getDotCoords(new Coords(coords.x + 1, coords.y)).x, getDotCoords(new Coords(coords.x + 1, coords.y)).y + LINE_SIZE / 4);
 
                         }
                         case SOUTHEAST -> {
-                            start = new int[]{getDotCoords(x + 1, y + 1)[0] - LINE_SIZE / 4, getDotCoords(x + 1, y + 1)[1]};
-                            end = new int[]{getDotCoords(x + 1, y + 1)[0], getDotCoords(x + 1, y + 1)[1] - LINE_SIZE / 4};
+                            start = new Coords(getDotCoords(new Coords(coords.x + 1, coords.y + 1)).x - LINE_SIZE / 4, getDotCoords(new Coords(coords.x + 1, coords.y + 1)).y);
+                            end = new Coords(getDotCoords(new Coords(coords.x + 1, coords.y + 1)).x, getDotCoords(new Coords(coords.x + 1, coords.y + 1)).y - LINE_SIZE / 4);
                         }
                         case SOUTHWEST -> {
-                            start = new int[]{getDotCoords(x, y + 1)[0] + LINE_SIZE / 4, getDotCoords(x, y + 1)[1]};
-                            end = new int[]{getDotCoords(x, y + 1)[0], getDotCoords(x, y + 1)[1] - LINE_SIZE / 4};
+                            start = new Coords(getDotCoords(new Coords(coords.x, coords.y + 1)).x + LINE_SIZE / 4, getDotCoords(new Coords(coords.x, coords.y + 1)).y);
+                            end = new Coords(getDotCoords(new Coords(coords.x, coords.y + 1)).x, getDotCoords(new Coords(coords.x, coords.y + 1)).y - LINE_SIZE / 4);
                         }
                         case NORTHWEST -> {
-                            start = new int[]{getDotCoords(x, y)[0] + LINE_SIZE / 4, getDotCoords(x, y)[1]};
-                            end = new int[]{getDotCoords(x, y)[0], getDotCoords(x, y)[1] + LINE_SIZE / 4};
+                            start = new Coords(getDotCoords(coords).x + LINE_SIZE / 4, getDotCoords(coords).y);
+                            end = new Coords(getDotCoords(coords).x, getDotCoords(coords).y + LINE_SIZE / 4);
                         }
                     }
 
                     if (diagonal == Diagonal.EITHER_OR) {
-                        g.drawLine(start[0], start[1], end[0], end[1]);
+                        g.drawLine(start.x, start.y, end.x, end.y);
                     } else if (diagonal == Diagonal.BOTH_OR_NEITHER) {
-                        g.drawLine(start[0], start[1], start[0], end[1]);
-                        g.drawLine(start[0], end[1], end[0], end[1]);
+                        g.drawLine(start.x, start.y, start.x, end.y);
+                        g.drawLine(start.x, end.y, end.x, end.y);
                     }
                 }
             }
         }
     }
 
-    public int[] getDotCoords(int x, int y) {
-        return new int[]{STARTING_X + LINE_SIZE * x, STARTING_Y + LINE_SIZE * y};
+    public Coords getDotCoords(Coords coords) {
+        return new Coords(STARTING_X + LINE_SIZE * coords.x, STARTING_Y + LINE_SIZE * coords.y);
     }
-    public int[] getSquareCenterCoords(int x, int y) {
-        return new int[]{STARTING_X + LINE_SIZE / 2 + x * LINE_SIZE, STARTING_Y + LINE_SIZE / 2 + y * LINE_SIZE};
+    public Coords getSquareCenterCoords(Coords coords) {
+        return new Coords(STARTING_X + LINE_SIZE / 2 + coords.x * LINE_SIZE, STARTING_Y + LINE_SIZE / 2 + coords.y * LINE_SIZE);
     }
-    public int[] getSquareIndex(int xCoord, int yCoord) {
-        return new int[]{(xCoord - STARTING_X) / LINE_SIZE, (yCoord - STARTING_Y) / LINE_SIZE};
+    public Coords getSquareIndex(Coords coords) {
+        return new Coords((coords.x - STARTING_X) / LINE_SIZE, (coords.y - STARTING_Y) / LINE_SIZE);
     }
     public int getLineSize() {
         return LINE_SIZE;

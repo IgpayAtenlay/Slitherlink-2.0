@@ -2,6 +2,7 @@ package Visuals;
 
 import Enums.CardinalDirection;
 import Enums.Line;
+import Memory.Coords;
 import Memory.MemorySet;
 
 import java.awt.event.MouseEvent;
@@ -16,27 +17,27 @@ public class Interaction {
     }
 
     public void click(MouseEvent e) {
-        int[] clickCoords = {e.getX(), e.getY()};
-        int[] squareIndex = panel.getSquareIndex(clickCoords[0], clickCoords[1]);
-        int[] dotCoords = panel.getDotCoords(squareIndex[0], squareIndex[1]);
-        int[] relativeCoords = {clickCoords[0] - dotCoords[0], clickCoords[1] - dotCoords[1]};
+        Coords clickCoords = new Coords(e.getX(), e.getY());
+        Coords squareIndex = panel.getSquareIndex(clickCoords);
+        Coords dotCoords = panel.getDotCoords(squareIndex);
+        Coords relativeCoords = new Coords(clickCoords.x - dotCoords.y, clickCoords.x - dotCoords.y);
 
         CardinalDirection direction;
-        if (relativeCoords[0] > relativeCoords[1]) {
-            if (relativeCoords[0] + relativeCoords[1] > panel.getLineSize()) {
+        if (relativeCoords.x > relativeCoords.y) {
+            if (relativeCoords.x + relativeCoords.y > panel.getLineSize()) {
                 direction = CardinalDirection.EAST;
             } else {
                 direction = CardinalDirection.NORTH;
             }
         } else {
-            if (relativeCoords[0] + relativeCoords[1] > panel.getLineSize()) {
+            if (relativeCoords.x + relativeCoords.y > panel.getLineSize()) {
                 direction = CardinalDirection.SOUTH;
             } else {
                 direction = CardinalDirection.WEST;
             }
         }
-        Line currentLine = memorySet.getVisible().getLines().getSquare(squareIndex[0], squareIndex[1], direction);
-        memorySet.getVisible().getLines().setSquare(currentLine.cycle(), squareIndex[0], squareIndex[1], direction, true);
+        Line currentLine = memorySet.getVisible().getLines().getSquare(squareIndex, direction);
+        memorySet.getVisible().getLines().setSquare(currentLine.cycle(), squareIndex, direction, true);
         panel.repaint();
     }
 
@@ -49,8 +50,9 @@ public class Interaction {
         // testing only!!!
         for (int y = 0; y < memorySet.getCalculation().getDimentions().ySize + 1; y++) {
             for (int x = 0; x < memorySet.getCalculation().getDimentions().xSize + 1; x++) {
-                memorySet.getCalculation().change(memorySet.getCalculation().getLines().setSquare(memorySet.getVisible().getLines().getSquare(x, y, CardinalDirection.NORTH), x, y, CardinalDirection.NORTH, true));
-                memorySet.getCalculation().change(memorySet.getCalculation().getLines().setSquare(memorySet.getVisible().getLines().getSquare(x, y, CardinalDirection.WEST), x, y, CardinalDirection.WEST, true));
+                Coords coords = new Coords(x, y);
+                memorySet.getCalculation().change(memorySet.getCalculation().getLines().setSquare(memorySet.getVisible().getLines().getSquare(coords, CardinalDirection.NORTH), coords, CardinalDirection.NORTH, true));
+                memorySet.getCalculation().change(memorySet.getCalculation().getLines().setSquare(memorySet.getVisible().getLines().getSquare(coords, CardinalDirection.WEST), coords, CardinalDirection.WEST, true));
             }
         }
         memorySet.autoSolve(false);

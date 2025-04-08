@@ -31,7 +31,9 @@ public class NumberMemory {
         this.locked = true;
     }
 
-    public Changes set(Number number, int x, int y, boolean override) {
+    public Changes set(Number number, Coords coords, boolean override) {
+        int x = coords.x;
+        int y = coords.y;
         if (!locked && x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0 &&
                 memory[x + y * dimentions.xSize] != number && (memory[x + y * dimentions.xSize] == Number.EMPTY || override)) {
             int i = x + y * dimentions.xSize;
@@ -41,28 +43,32 @@ public class NumberMemory {
             return null;
         }
     }
-    public Number get(int x, int y) {
+    public Number get(Coords coords) {
+        int x = coords.x;
+        int y = coords.y;
         if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0) {
             return memory[x + y * dimentions.xSize];
         } else {
             return Number.EMPTY;
         }
     }
-    public Number get(int x, int y, CardinalDirection direction) {
-        return switch (direction) {
-            case NORTH -> get(x, y - 1);
-            case EAST -> get(x + 1, y);
-            case SOUTH -> get(x, y + 1);
-            case WEST -> get(x - 1, y);
+    public Number get(Coords oldCoords, CardinalDirection direction) {
+        Coords newCoords = switch (direction) {
+            case NORTH -> new Coords(oldCoords.x, oldCoords.y - 1);
+            case EAST -> new Coords(oldCoords.x + 1, oldCoords.y);
+            case SOUTH -> new Coords(oldCoords.x, oldCoords.y + 1);
+            case WEST -> new Coords(oldCoords.x - 1, oldCoords.y);
         };
+        return get(newCoords);
     }
-    public Number get(int x, int y, DiagonalDirection direction) {
-        return switch (direction) {
-            case NORTHEAST -> get(x + 1, y - 1);
-            case SOUTHEAST -> get(x + 1, y + 1);
-            case SOUTHWEST -> get(x - 1, y + 1);
-            case NORTHWEST -> get(x - 1, y - 1);
+    public Number get(Coords oldCoords, DiagonalDirection direction) {
+        Coords newCoords = switch (direction) {
+            case NORTHEAST -> new Coords(oldCoords.x + 1, oldCoords.y - 1);
+            case SOUTHEAST -> new Coords(oldCoords.x + 1, oldCoords.y + 1);
+            case SOUTHWEST -> new Coords(oldCoords.x - 1, oldCoords.y + 1);
+            case NORTHWEST -> new Coords(oldCoords.x - 1, oldCoords.y - 1);
         };
+        return get(newCoords);
     }
     public Dimentions getDimentions() {
         return dimentions.copy();

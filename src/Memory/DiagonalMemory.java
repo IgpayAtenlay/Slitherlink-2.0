@@ -22,12 +22,12 @@ public class DiagonalMemory {
         return new DiagonalMemory(dimentions.copy(), Arrays.copyOf(memory, memory.length));
     }
     
-    public Diagonal getSquare(int x, int y, DiagonalDirection direction) {
-        return getPoint(ConvertCoordinates.squareToPointX(x, direction),
-                ConvertCoordinates.squareToPointY(y, direction),
-                direction.getOpposite());
+    public Diagonal getSquare(Coords coords, DiagonalDirection direction) {
+        return getPoint(ConvertCoordinates.squareToPoint(coords, direction), direction.getOpposite());
     }
-    public Diagonal getPoint(int x, int y, DiagonalDirection direction) {
+    public Diagonal getPoint(Coords coords, DiagonalDirection direction) {
+        int x = coords.x;
+        int y = coords.y;
         if (x < dimentions.xSize + 1 && y < dimentions.ySize + 1 && x >= 0 && y >= 0) {
             return switch (direction) {
                 case NORTHEAST -> memory[2 * x + 1 + 2 * y * getLengthRow()];
@@ -38,14 +38,15 @@ public class DiagonalMemory {
         }
         return Diagonal.BOTH_OR_NEITHER;
     }
-    public Changes setSquare(Diagonal diagonal, int x, int y, DiagonalDirection direction, boolean override) {
+    public Changes setSquare(Diagonal diagonal, Coords coords, DiagonalDirection direction, boolean override) {
         return setPoint(diagonal,
-                ConvertCoordinates.squareToPointX(x, direction),
-                ConvertCoordinates.squareToPointY(y, direction),
+                ConvertCoordinates.squareToPoint(coords, direction),
                 direction.getOpposite(),
                 override);
     }
-    public Changes setPoint(Diagonal diagonal, int x, int y, DiagonalDirection direction, boolean override) {
+    public Changes setPoint(Diagonal diagonal, Coords coords, DiagonalDirection direction, boolean override) {
+        int x = coords.x;
+        int y = coords.y;
         if (x < dimentions.xSize + 1 && y < dimentions.ySize + 1 && x >= 0 && y >= 0) {
             return switch (direction) {
                 case NORTHEAST -> set(diagonal, 2 * x + 1 + 2 * y * getLengthRow(), override);

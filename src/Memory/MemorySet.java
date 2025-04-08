@@ -33,8 +33,9 @@ public class MemorySet {
     public void linesCalculationToVisible() {
         for (int y = 0; y < calculation.getDimentions().ySize + 1; y++) {
             for (int x = 0; x < calculation.getDimentions().xSize + 1; x++) {
-                visible.change(visible.getLines().setSquare(calculation.getLines().getSquare(x, y, CardinalDirection.NORTH), x, y, CardinalDirection.NORTH));
-                visible.change(visible.getLines().setSquare(calculation.getLines().getSquare(x, y, CardinalDirection.WEST), x, y, CardinalDirection.WEST));
+                Coords coords = new Coords(x, y);
+                visible.change(visible.getLines().setSquare(calculation.getLines().getSquare(coords, CardinalDirection.NORTH), coords, CardinalDirection.NORTH));
+                visible.change(visible.getLines().setSquare(calculation.getLines().getSquare(coords, CardinalDirection.WEST), coords, CardinalDirection.WEST));
             }
         }
     }
@@ -51,8 +52,8 @@ public class MemorySet {
     public Control getControl() {
         return control;
     }
-    public void setNumber(Number number, int x, int y) {
-        visible.getNumbers().set(number, x, y, true);
-        calculation.getNumbers().set(number, x, y, true);
+    public void setNumber(Number number, Coords coords) {
+        visible.getNumbers().set(number, coords, true);
+        calculation.getNumbers().set(number, coords, true);
     }
 }

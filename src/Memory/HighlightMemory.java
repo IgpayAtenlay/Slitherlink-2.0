@@ -21,7 +21,9 @@ public class HighlightMemory {
         return new HighlightMemory(dimentions.copy(), Arrays.copyOf(memory, memory.length));
     }
 
-    public Changes set(Highlight highlight, int x, int y, boolean override) {
+    public Changes set(Highlight highlight, Coords coords, boolean override) {
+        int x = coords.x;
+        int y = coords.y;
         if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0 &&
                 (memory[x + y * dimentions.xSize] != highlight && (memory[x + y * dimentions.xSize] == Highlight.EMPTY || override))
         ) {
@@ -31,19 +33,22 @@ public class HighlightMemory {
         }
         return null;
     }
-    public Highlight get(int x, int y) {
+    public Highlight get(Coords coords) {
+        int x = coords.x;
+        int y = coords.y;
         if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0) {
             return memory[x + y * dimentions.xSize];
         } else {
             return Highlight.OUTSIDE;
         }
     }
-    public Highlight get(int x, int y, CardinalDirection direction) {
-        return switch (direction) {
-            case NORTH -> get(x, y - 1);
-            case EAST -> get(x + 1, y);
-            case SOUTH -> get(x, y + 1);
-            case WEST -> get(x - 1, y);
+    public Highlight get(Coords oldCoord, CardinalDirection direction) {
+        Coords newCoord = switch (direction) {
+            case NORTH -> new Coords(oldCoord.x, oldCoord.y - 1);
+            case EAST -> new Coords(oldCoord.x + 1, oldCoord.y);
+            case SOUTH -> new Coords(oldCoord.x, oldCoord.y + 1);
+            case WEST -> new Coords(oldCoord.x - 1, oldCoord.y);
         };
+        return get(newCoord);
     }
 }

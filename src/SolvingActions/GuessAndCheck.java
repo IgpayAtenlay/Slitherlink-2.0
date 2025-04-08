@@ -2,6 +2,7 @@ package SolvingActions;
 
 import Enums.CardinalDirection;
 import Enums.Line;
+import Memory.Coords;
 import Memory.FullMemory;
 
 public class GuessAndCheck {
@@ -11,10 +12,11 @@ public class GuessAndCheck {
 
         for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
             for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
+                Coords coords = new Coords(x, y);
                 for (CardinalDirection direction : new CardinalDirection[]{CardinalDirection.EAST, CardinalDirection.SOUTH}) {
-                    if (memory.getLines().getSquare(x, y, direction) == Line.EMPTY) {
+                    if (memory.getLines().getSquare(coords, direction) == Line.EMPTY) {
                         for (Line line : new Line[] {Line.LINE, Line.X}) {
-                            guess(memory, x, y, direction, line);
+                            guess(memory, coords, direction, line);
                             if (memory.getChanges().size() - startingChanges > 0) {
                                 System.out.println(GuessAndCheck.class.getSimpleName() + " finished");
                                 System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
@@ -30,16 +32,16 @@ public class GuessAndCheck {
         System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
     }
 
-    public static void guess(FullMemory memory, int x, int y, CardinalDirection direction, Line line) {
-        System.out.println("guessing (" + x + ", " + y + ") " + direction + " " + line);
+    public static void guess(FullMemory memory, Coords coords, CardinalDirection direction, Line line) {
+        System.out.println("guessing (" + coords.x + ", " + coords.y + ") " + direction + " " + line);
         FullMemory workingMemory = memory.copy();
         Control control = new Control(workingMemory);
-        workingMemory.getLines().setSquare(line, x, y, direction);
+        workingMemory.getLines().setSquare(line, coords, direction);
         control.autoSolve(false);
         if (control.hasErrors()) {
-            memory.change(memory.getLines().setSquare(line.getOpposite(), x, y, direction));
+            memory.change(memory.getLines().setSquare(line.getOpposite(), coords, direction));
         } else if (control.isComplete()) {
-            memory.change(memory.getLines().setSquare(line, x, y, direction));
+            memory.change(memory.getLines().setSquare(line, coords, direction));
         }
     }
 }

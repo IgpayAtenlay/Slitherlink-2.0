@@ -83,23 +83,24 @@ public class FullMemory {
         for (int y = 0; y < dimentions.ySize; y++) {
             System.out.print(". ");
             for (int x = 0; x < dimentions.xSize; x++) {
-                System.out.print(getLines().getSquare(x, y, CardinalDirection.NORTH).toString(false));
+                System.out.print(getLines().getSquare(new Coords(x, y), CardinalDirection.NORTH).toString(false));
                 System.out.print(" . ");
             }
             System.out.println();
 
             for (int x = 0; x < dimentions.xSize; x++) {
-                System.out.print(getLines().getSquare(x, y, CardinalDirection.WEST).toString(true) + " ");
-                System.out.print(getNumbers().get(x, y).toString(true) + " ");
+                Coords coords = new Coords(x, y);
+                System.out.print(getLines().getSquare(coords, CardinalDirection.WEST).toString(true) + " ");
+                System.out.print(getNumbers().get(coords).toString(true) + " ");
             }
 
-            System.out.print(getLines().getSquare(dimentions.xSize - 1, y, CardinalDirection.EAST).toString(true));
+            System.out.print(getLines().getSquare(new Coords(dimentions.xSize - 1, y), CardinalDirection.EAST).toString(true));
             System.out.println();
 
         }
         System.out.print(". ");
         for (int x = 0; x < dimentions.xSize; x++) {
-            System.out.print(getLines().getSquare(x, dimentions.ySize - 1, CardinalDirection.SOUTH).toString(false));
+            System.out.print(getLines().getSquare(new Coords(x, dimentions.ySize - 1), CardinalDirection.SOUTH).toString(false));
             System.out.print(" . ");
         }
         System.out.println();
@@ -107,7 +108,7 @@ public class FullMemory {
     public void printNumbers() {
         for (int y = 0; y < dimentions.ySize; y++) {
             for (int x = 0; x < dimentions.xSize; x++) {
-                System.out.print(numbers.get(x, y) + " ");
+                System.out.print(numbers.get(new Coords(x, y)) + " ");
             }
             System.out.println();
         }
@@ -116,24 +117,25 @@ public class FullMemory {
         for (int y = 0; y < dimentions.ySize; y++) {
             System.out.print("     ");
             for (int x = 0; x < dimentions.xSize; x++) {
-                System.out.print(getLines().getSquare(x, y, CardinalDirection.NORTH));
+                System.out.print(getLines().getSquare(new Coords(x, y), CardinalDirection.NORTH));
                 System.out.print("      ");
             }
             System.out.println();
 
             for (int x = 0; x < dimentions.xSize; x++) {
-                System.out.print(getLines().getSquare(x, y, CardinalDirection.WEST));
-                System.out.print(getHighlights().get(x, y));
+                Coords coords = new Coords(x, y);
+                System.out.print(getLines().getSquare(coords, CardinalDirection.WEST));
+                System.out.print(getHighlights().get(coords));
                 System.out.print(" ");
             }
 
-            System.out.print(getLines().getSquare(dimentions.xSize - 1, y, CardinalDirection.EAST));
+            System.out.print(getLines().getSquare(new Coords(dimentions.xSize - 1, y), CardinalDirection.EAST));
             System.out.println();
 
         }
         System.out.print("     ");
         for (int x = 0; x < dimentions.xSize; x++) {
-            System.out.print(getLines().getSquare(x, dimentions.ySize - 1, CardinalDirection.SOUTH));
+            System.out.print(getLines().getSquare(new Coords(x, dimentions.ySize - 1), CardinalDirection.SOUTH));
             System.out.print("      ");
         }
         System.out.println();
