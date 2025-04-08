@@ -10,14 +10,16 @@ public class FullMemory {
     private final NumberMemory numbers;
     private final HighlightMemory highlights;
     private final DiagonalMemory diagonals;
+    private final LoopMemory loops;
     private final ArrayList<Changes> changes;
 
-    public FullMemory(Dimentions dimentions, LineMemory lines, NumberMemory numbers, HighlightMemory highlights, DiagonalMemory diagonals, ArrayList<Changes> changes) {
+    public FullMemory(Dimentions dimentions, LineMemory lines, NumberMemory numbers, HighlightMemory highlights, DiagonalMemory diagonals, LoopMemory loops, ArrayList<Changes> changes) {
         this.dimentions = dimentions;
         this.lines = lines;
         this.numbers = numbers;
         this.highlights = highlights;
         this.diagonals = diagonals;
+        this.loops = loops;
         this.changes = changes;
     }
     public FullMemory(NumberMemory numbers) {
@@ -26,6 +28,7 @@ public class FullMemory {
                 numbers.copy(),
                 new HighlightMemory(numbers.getDimentions()),
                 new DiagonalMemory(numbers.getDimentions()),
+                new LoopMemory(numbers.getDimentions()),
                 new ArrayList<>());
     }
     public FullMemory(Dimentions dimentions) {
@@ -34,6 +37,7 @@ public class FullMemory {
                 new NumberMemory(dimentions.copy()),
                 new HighlightMemory(dimentions.copy()),
                 new DiagonalMemory(dimentions.copy()),
+                new LoopMemory(dimentions.copy()),
                 new ArrayList<>());
     }
     public FullMemory() {
@@ -50,6 +54,7 @@ public class FullMemory {
                 numbers.copy(),
                 highlights.copy(),
                 diagonals.copy(),
+                loops.copy(),
                 changes
         );
     }
@@ -68,6 +73,9 @@ public class FullMemory {
     }
     public DiagonalMemory getDiagonals() {
         return diagonals;
+    }
+    public LoopMemory getLoops() {
+        return loops;
     }
 
     public void change(Changes change) {
