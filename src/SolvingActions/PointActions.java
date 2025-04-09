@@ -56,7 +56,7 @@ public class PointActions {
                 if (lineOne == lineTwo) {
                     memory.change(memory.getDiagonals().setPoint(Diagonal.BOTH_OR_NEITHER, coords, direction, false));
                 } else if (lineOne.getOpposite() == lineTwo) {
-                    memory.change(memory.getDiagonals().setPoint(Diagonal.EITHER_OR, coords, direction, false));
+                    memory.change(memory.getDiagonals().setPoint(Diagonal.EXACTLY_ONE, coords, direction, false));
                 }
             }
         }
@@ -68,7 +68,7 @@ public class PointActions {
             Line lineTwo = memory.getLine(false, coords, direction.getCardinalDirections()[1]);
 
             if (diagonal != Diagonal.EMPTY) {
-                if (diagonal == Diagonal.EITHER_OR) {
+                if (diagonal == Diagonal.EXACTLY_ONE) {
                     memory.change(memory.setLine(false, lineOne.getOpposite(), coords, direction.getCardinalDirections()[1], false));
                     memory.change(memory.setLine(false, lineTwo.getOpposite(), coords, direction.getCardinalDirections()[0], false));
                 } else if (diagonal == Diagonal.BOTH_OR_NEITHER) {

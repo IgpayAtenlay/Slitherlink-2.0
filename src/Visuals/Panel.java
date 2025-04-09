@@ -201,7 +201,7 @@ public class Panel extends JPanel {
                         }
                     }
 
-                    if (diagonal == Diagonal.EITHER_OR) {
+                    if (diagonal == Diagonal.EXACTLY_ONE) {
                         g.drawLine(start.x, start.y, end.x, end.y);
                     } else if (diagonal == Diagonal.BOTH_OR_NEITHER) {
                         g.drawLine(start.x, start.y, start.x, end.y);

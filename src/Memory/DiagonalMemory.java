@@ -57,11 +57,16 @@ public class DiagonalMemory {
         return null;
     }
     private Changes set(Diagonal diagonal, int i, boolean override) {
-        if (memory[i] != diagonal && (memory[i] == Diagonal.EMPTY || override)) {
+        if (memory[i] != diagonal &&
+                (memory[i] == Diagonal.EMPTY ||
+                override ||
+                ((memory[i] == Diagonal.AT_LEAST_ONE || memory[i] == Diagonal.AT_MOST_ONE) && (diagonal == Diagonal.EXACTLY_ONE || diagonal == Diagonal.BOTH_OR_NEITHER)))
+        ) {
 //            System.out.println("changing diagonal " + i + " to " + diagonal);
             memory[i] = diagonal;
             return new Changes(diagonal, i);
         }
+
         return null;
     }
     

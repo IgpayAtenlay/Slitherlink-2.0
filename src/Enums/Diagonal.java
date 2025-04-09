@@ -2,6 +2,8 @@ package Enums;
 
 public enum Diagonal {
     EMPTY,
-    EITHER_OR,
-    BOTH_OR_NEITHER
+    EXACTLY_ONE,
+    BOTH_OR_NEITHER,
+    AT_LEAST_ONE,
+    AT_MOST_ONE
 }
