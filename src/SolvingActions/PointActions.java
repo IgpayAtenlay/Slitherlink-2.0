@@ -49,7 +49,6 @@ public class PointActions {
     }
     public static void fillDiagonals(FullMemory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
-            // something is SSSSUUUUPPPPER broken here, but also not just here
             Line lineOne = memory.getLine(false, coords, direction.getCardinalDirections()[0]);
             Line lineTwo = memory.getLine(false, coords, direction.getCardinalDirections()[1]);
             if (lineOne != Line.EMPTY && lineTwo != Line.EMPTY) {
@@ -58,6 +57,10 @@ public class PointActions {
                 } else if (lineOne.getOpposite() == lineTwo) {
                     memory.change(memory.getDiagonals().setPoint(Diagonal.EXACTLY_ONE, coords, direction, false));
                 }
+            } else if (lineOne == Line.LINE || lineTwo == Line.LINE) {
+                memory.change(memory.getDiagonals().setPoint(Diagonal.AT_LEAST_ONE, coords, direction, false));
+            } else if (lineOne == Line.X || lineTwo == Line.X) {
+                memory.change(memory.getDiagonals().setPoint(Diagonal.AT_MOST_ONE, coords, direction, false));
             }
         }
     }
@@ -80,12 +83,12 @@ public class PointActions {
     }
     public static void copyDiagonals(FullMemory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
-            memory.change(memory.getDiagonals().setPoint(
-                    memory.getDiagonals().getPoint(coords, direction),
-                    coords,
-                    direction.getOpposite(),
-                    false
-            ));
+            Diagonal diagonal = memory.getDiagonals().getPoint(coords, direction);
+            switch (diagonal) {
+                case BOTH_OR_NEITHER, EXACTLY_ONE -> memory.change(memory.getDiagonals().setPoint(diagonal, coords, direction.getOpposite(), false));
+                case AT_LEAST_ONE -> memory.change(memory.getDiagonals().setPoint(Diagonal.AT_MOST_ONE, coords, direction.getOpposite(), false));
+            }
+
         }
     }
 }

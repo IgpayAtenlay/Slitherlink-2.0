@@ -32,7 +32,7 @@ public class Control {
             AdjacentDiagonalBlocks.run(memory);
             LineIntoBlock.run(memory);
             if (roundChanges == memory.getChanges().size()) {
-                LoopAction.run(memory);
+                CheckLoop.run(memory);
             }
             if (guessAndCheck) {
                 if (roundChanges == memory.getChanges().size()) {

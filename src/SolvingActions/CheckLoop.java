@@ -6,9 +6,9 @@ import Memory.Coords;
 import Memory.FullMemory;
 import Memory.Loop;
 
-public class LoopAction {
+public class CheckLoop {
     static public void run(FullMemory memory) {
-        System.out.println("starting " + LoopAction.class.getSimpleName());
+        System.out.println("starting " + CheckLoop.class.getSimpleName());
         int startingChanges = memory.getChanges().size();
 
         int totalLines = memory.getNumLines();
@@ -19,7 +19,7 @@ public class LoopAction {
             }
         }
 
-        System.out.println(LoopAction.class.getSimpleName() + " finished");
+        System.out.println(CheckLoop.class.getSimpleName() + " finished");
         System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
     }
     public static void checkLoop(FullMemory memory, Coords coords, int totalLines) {

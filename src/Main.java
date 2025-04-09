@@ -22,7 +22,7 @@ public class Main {
     public static void solvePuzzle(Difficulty difficulty, int size, int volume, int book) {
         ArrayList<ArrayList<TextData>> puzzles = ParseData.splitLists(ExtractDataToVariable.extract(difficulty, size, volume, book));
         MemorySet memory = new MemorySet(ParseData.parsePuzzle(puzzles.get(2)));
-        memory.autoSolve(true);
+        memory.autoSolve(false);
         memory.linesCalculationToVisible();
 //        memory.getCalculation().getLoops().print();
         new Frame(memory);

@@ -174,7 +174,8 @@ public class Panel extends JPanel {
             for (int x = 0; x < memorySet.getVisible().getDimentions().xSize; x++) {
                 Coords coords = new Coords(x, y);
                 for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
-                    Diagonal diagonal = memorySet.getVisible().getDiagonals().getSquare(coords, diagonalDirection);
+                    // switch back to visual only
+                    Diagonal diagonal = memorySet.getCalculation().getDiagonals().getSquare(coords, diagonalDirection);
                     Coords start = null;
                     Coords end = null;
                     switch (diagonalDirection) {
@@ -201,11 +202,21 @@ public class Panel extends JPanel {
                         }
                     }
 
-                    if (diagonal == Diagonal.EXACTLY_ONE) {
-                        g.drawLine(start.x, start.y, end.x, end.y);
-                    } else if (diagonal == Diagonal.BOTH_OR_NEITHER) {
-                        g.drawLine(start.x, start.y, start.x, end.y);
-                        g.drawLine(start.x, end.y, end.x, end.y);
+                    switch (diagonal) {
+                        case EXACTLY_ONE -> {
+                            g.drawLine(start.x, start.y, end.x, end.y);
+                        }
+                        case BOTH_OR_NEITHER -> {
+                            g.drawLine(start.x, start.y, start.x, end.y);
+                            g.drawLine(start.x, end.y, end.x, end.y);
+                        }
+                        case AT_LEAST_ONE -> {
+                            g.drawLine(start.x, end.y, end.x, start.y);
+                        }
+                        case AT_MOST_ONE -> {
+                            g.drawOval(start.x, end.y, 2, 2);
+                            g.drawOval(end.x, start.y, 2, 2);
+                        }
                     }
                 }
             }
