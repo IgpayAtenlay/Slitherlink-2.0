@@ -1,6 +1,7 @@
 package Util;
 
 import Enums.CardinalDirection;
+import Enums.DiagonalDirection;
 import Memory.Coords;
 import Memory.Dimentions;
 
@@ -42,6 +43,23 @@ public class Indexes {
                 case SOUTH -> line(true, coords, CardinalDirection.WEST, dimentions);
                 case WEST -> line(true, coords.addDirection(CardinalDirection.WEST), CardinalDirection.NORTH, dimentions);
             };
+        }
+    }
+    public static int diagonal(boolean square, Coords coords, DiagonalDirection direction, Dimentions dimentions) {
+        if (square) {
+            return diagonal(false, coords.squareToPoint(direction), direction.getOpposite(), dimentions);
+        } else {
+            int x = coords.x;
+            int y = coords.y;
+            if (x < dimentions.xSize + 1 && y < dimentions.ySize + 1 && x >= 0 && y >= 0) {
+                return switch (direction) {
+                    case NORTHEAST -> 2 * x + 1 + 2 * y * (dimentions.xSize * 2 + 2);
+                    case SOUTHEAST -> 2 * x + 1 + (2 * y + 1) * (dimentions.xSize * 2 + 2);
+                    case SOUTHWEST -> 2 * x + (2 * y + 1) * (dimentions.xSize * 2 + 2);
+                    case NORTHWEST -> 2 * x + 2 * y * (dimentions.xSize * 2 + 2);
+                };
+            }
+            return -1;
         }
     }
 }

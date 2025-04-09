@@ -53,20 +53,20 @@ public class PointActions {
             Line lineTwo = memory.getLine(false, coords, direction.getCardinalDirections()[1]);
             if (lineOne != Line.EMPTY && lineTwo != Line.EMPTY) {
                 if (lineOne == lineTwo) {
-                    memory.change(memory.getDiagonals().setPoint(Diagonal.BOTH_OR_NEITHER, coords, direction, false));
+                    memory.change(memory.setDiagonal(false, Diagonal.BOTH_OR_NEITHER, coords, direction, false));
                 } else if (lineOne.getOpposite() == lineTwo) {
-                    memory.change(memory.getDiagonals().setPoint(Diagonal.EXACTLY_ONE, coords, direction, false));
+                    memory.change(memory.setDiagonal(false, Diagonal.EXACTLY_ONE, coords, direction, false));
                 }
             } else if (lineOne == Line.LINE || lineTwo == Line.LINE) {
-                memory.change(memory.getDiagonals().setPoint(Diagonal.AT_LEAST_ONE, coords, direction, false));
+                memory.change(memory.setDiagonal(false, Diagonal.AT_LEAST_ONE, coords, direction, false));
             } else if (lineOne == Line.X || lineTwo == Line.X) {
-                memory.change(memory.getDiagonals().setPoint(Diagonal.AT_MOST_ONE, coords, direction, false));
+                memory.change(memory.setDiagonal(false, Diagonal.AT_MOST_ONE, coords, direction, false));
             }
         }
     }
     public static void useDiagonals(FullMemory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
-            Diagonal diagonal = memory.getDiagonals().getPoint(coords, direction);
+            Diagonal diagonal = memory.getDiagonal(false, coords, direction);
             Line lineOne = memory.getLine(false, coords, direction.getCardinalDirections()[0]);
             Line lineTwo = memory.getLine(false, coords, direction.getCardinalDirections()[1]);
 
@@ -83,10 +83,10 @@ public class PointActions {
     }
     public static void copyDiagonals(FullMemory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
-            Diagonal diagonal = memory.getDiagonals().getPoint(coords, direction);
+            Diagonal diagonal = memory.getDiagonal(false, coords, direction);
             switch (diagonal) {
-                case BOTH_OR_NEITHER, EXACTLY_ONE -> memory.change(memory.getDiagonals().setPoint(diagonal, coords, direction.getOpposite(), false));
-                case AT_LEAST_ONE -> memory.change(memory.getDiagonals().setPoint(Diagonal.AT_MOST_ONE, coords, direction.getOpposite(), false));
+                case BOTH_OR_NEITHER, EXACTLY_ONE -> memory.change(memory.setDiagonal(false, diagonal, coords, direction.getOpposite(), false));
+                case AT_LEAST_ONE -> memory.change(memory.setDiagonal(false, Diagonal.AT_MOST_ONE, coords, direction.getOpposite(), false));
             }
 
         }

@@ -1,6 +1,8 @@
 package Memory;
 
 import Enums.CardinalDirection;
+import Enums.Diagonal;
+import Enums.DiagonalDirection;
 import Enums.Line;
 import Util.Indexes;
 
@@ -9,19 +11,19 @@ import java.util.Arrays;
 
 public class FullMemory {
     private final Dimentions dimentions;
-    private final Line[] memory;
+    private final Line[] lines;
     private final NumberMemory numbers;
     private final HighlightMemory highlights;
-    private final DiagonalMemory diagonals;
+    private final Diagonal[] memory;
     private final LoopMemory loops;
     private final ArrayList<Changes> changes;
 
-    public FullMemory(Dimentions dimentions, Line[] lines, NumberMemory numbers, HighlightMemory highlights, DiagonalMemory diagonals, LoopMemory loops, ArrayList<Changes> changes) {
+    public FullMemory(Dimentions dimentions, Line[] lines, NumberMemory numbers, HighlightMemory highlights, Diagonal[] diagonals, LoopMemory loops, ArrayList<Changes> changes) {
         this.dimentions = dimentions;
-        this.memory = lines;
+        this.lines = lines;
         this.numbers = numbers;
         this.highlights = highlights;
-        this.diagonals = diagonals;
+        this.memory = diagonals;
         this.loops = loops;
         this.changes = changes;
     }
@@ -31,11 +33,12 @@ public class FullMemory {
                 new Line[dimentions.xSize * (dimentions.ySize + 1) + dimentions.ySize * (dimentions.xSize + 1)],
                 numbers,
                 new HighlightMemory(dimentions),
-                new DiagonalMemory(dimentions),
+                new Diagonal[(dimentions.xSize + 1) * (dimentions.ySize + 1) * 4],
                 new LoopMemory(dimentions),
                 new ArrayList<>()
         );
-        Arrays.fill(memory, Line.EMPTY);
+        Arrays.fill(lines, Line.EMPTY);
+        Arrays.fill(memory, Diagonal.EMPTY);
     }
     public FullMemory(NumberMemory numbers) {
         this(numbers.getDimentions(), numbers.copy());
@@ -53,10 +56,10 @@ public class FullMemory {
         }
         return new FullMemory(
                 dimentions.copy(),
-                memory.clone(),
+                lines.clone(),
                 numbers.copy(),
                 highlights.copy(),
-                diagonals.copy(),
+                memory.clone(),
                 loops.copy(),
                 changes
         );
@@ -70,9 +73,6 @@ public class FullMemory {
     }
     public HighlightMemory getHighlights() {
         return highlights;
-    }
-    public DiagonalMemory getDiagonals() {
-        return diagonals;
     }
     public LoopMemory getLoops() {
         return loops;
@@ -152,12 +152,12 @@ public class FullMemory {
     // setters and getters
     public Changes setLine(boolean square, Line line, Coords coords, CardinalDirection direction, boolean override) {
         int i = Indexes.line(square, coords, direction, new Dimentions(dimentions.xSize, dimentions.ySize));
-        if (i < 0 || i > memory.length) {
+        if (i < 0 || i > lines.length) {
             return null;
         }
-        if (memory[i] != line && (memory[i] == Line.EMPTY || override)) {
+        if (lines[i] != line && (lines[i] == Line.EMPTY || override)) {
 //            System.out.println("changing " + coords + " " + direction + " to " + line);
-            memory[i] = line;
+            lines[i] = line;
             if (line == Line.LINE) {
                 loops.setLoop(square, coords, direction);
             }
@@ -167,20 +167,45 @@ public class FullMemory {
     }
     public Line getLine(boolean square, Coords coords, CardinalDirection direction) {
         int index = Indexes.line(square, coords, direction, dimentions);
-        if (index < 0 || index >= memory.length) {
+        if (index < 0 || index >= lines.length) {
             return Line.X;
         } else {
-            return memory[index];
+            return lines[index];
         }
     }
     public int getNumLines() {
         int totalLines = 0;
-        for (Line line : memory) {
+        for (Line line : lines) {
             if (line == Line.LINE) {
                 totalLines++;
             }
         }
 
         return totalLines;
+    }
+    public Diagonal getDiagonal(boolean square, Coords coords, DiagonalDirection direction) {
+        int i = Indexes.diagonal(square, coords, direction, dimentions);
+        if (i < 0 || i >= memory.length) {
+            return Diagonal.BOTH_OR_NEITHER;
+        } else {
+            return memory[i];
+        }
+    }
+    public Changes setDiagonal(boolean square, Diagonal diagonal, Coords coords, DiagonalDirection direction, boolean override) {
+        int i = Indexes.diagonal(square, coords, direction, dimentions);
+        if (i < 0 || i > memory.length) {
+            return null;
+        }
+        if (memory[i] != diagonal &&
+                (memory[i] == Diagonal.EMPTY ||
+                        override ||
+                        ((memory[i] == Diagonal.AT_LEAST_ONE || memory[i] == Diagonal.AT_MOST_ONE) && (diagonal == Diagonal.EXACTLY_ONE || diagonal == Diagonal.BOTH_OR_NEITHER)))
+        ) {
+//            System.out.println("changing diagonal " + i + " to " + diagonal);
+            memory[i] = diagonal;
+            return new Changes(diagonal, i);
+        }
+
+        return null;
     }
 }

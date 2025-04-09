@@ -43,12 +43,12 @@ public class SingleBlock {
 
     public static void populateDiagonalsOne(FullMemory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
-            memory.change(memory.getDiagonals().setSquare(Diagonal.AT_MOST_ONE, coords, direction, false));
+            memory.change(memory.setDiagonal(true, Diagonal.AT_MOST_ONE, coords, direction, false));
         }
     }
     public static void populateDiagonalsThree(FullMemory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
-            memory.change(memory.getDiagonals().setSquare(Diagonal.AT_LEAST_ONE, coords, direction, false));
+            memory.change(memory.setDiagonal(true, Diagonal.AT_LEAST_ONE, coords, direction, false));
         }
     }
     public static void fillSidesUsingNumbers(FullMemory memory, Coords coords) {
@@ -80,7 +80,7 @@ public class SingleBlock {
         int numAtMost = 0;
         int numEmpty = 0;
         for (DiagonalDirection direction : DiagonalDirection.values()) {
-            Diagonal diagonal = memory.getDiagonals().getSquare(coords, direction);
+            Diagonal diagonal = memory.getDiagonal(true, coords, direction);
             switch (diagonal) {
                 case EXACTLY_ONE -> numExactOne++;
                 case BOTH_OR_NEITHER -> numBoth++;
@@ -93,79 +93,79 @@ public class SingleBlock {
         if (numBoth + numExactOne == 3) {
             if (numBoth % 2 == 1) {
                 for (DiagonalDirection direction : DiagonalDirection.values()) {
-                    memory.change(memory.getDiagonals().setSquare(Diagonal.BOTH_OR_NEITHER, coords, direction, false));
+                    memory.change(memory.setDiagonal(true, Diagonal.BOTH_OR_NEITHER, coords, direction, false));
                 }
             } else if (numExactOne % 2 == 1) {
                 for (DiagonalDirection direction : DiagonalDirection.values()) {
-                    memory.change(memory.getDiagonals().setSquare(Diagonal.EXACTLY_ONE, coords, direction, false));
+                    memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction, false));
                 }
             }
         } else if (numBoth == 2 && numAtLeast >= 1) {
             for (DiagonalDirection direction : DiagonalDirection.values()) {
-                memory.change(memory.getDiagonals().setSquare(Diagonal.EXACTLY_ONE, coords, direction, false));
+                memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction, false));
             }
         }
     }
     public static void useDiagonalOne(FullMemory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
-            switch (memory.getDiagonals().getSquare(coords, direction)) {
+            switch (memory.getDiagonal(true, coords, direction)) {
                 case EXACTLY_ONE, AT_LEAST_ONE -> {
                     memory.change(memory.setLine(true, Line.X, coords, direction.getCardinalDirections()[0].getOpposite(), false));
                     memory.change(memory.setLine(true, Line.X, coords, direction.getCardinalDirections()[1].getOpposite(), false));
-                    memory.change(memory.getDiagonals().setSquare(Diagonal.BOTH_OR_NEITHER, coords, direction.getOpposite(), false));
-                    memory.change(memory.getDiagonals().setSquare(Diagonal.EXACTLY_ONE, coords, direction, false));
+                    memory.change(memory.setDiagonal(true, Diagonal.BOTH_OR_NEITHER, coords, direction.getOpposite(), false));
+                    memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction, false));
                 }
                 case BOTH_OR_NEITHER -> {
                     memory.change(memory.setLine(true, Line.X, coords, direction.getCardinalDirections()[0], false));
                     memory.change(memory.setLine(true, Line.X, coords, direction.getCardinalDirections()[1], false));
-                    memory.change(memory.getDiagonals().setSquare(Diagonal.EXACTLY_ONE, coords, direction.getOpposite(), false));
+                    memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction.getOpposite(), false));
                 }
             }
         }
     }
     public static void useDiagonalTwo(FullMemory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
-            switch (memory.getDiagonals().getSquare(coords, direction)) {
+            switch (memory.getDiagonal(true, coords, direction)) {
                 case EXACTLY_ONE -> {
-                    memory.change(memory.getDiagonals().setSquare(Diagonal.EXACTLY_ONE, coords, direction.getOpposite(), false));
+                    memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction.getOpposite(), false));
                 }
                 case BOTH_OR_NEITHER -> {
-                    memory.change(memory.getDiagonals().setSquare(Diagonal.EXACTLY_ONE, coords, direction.getAdjacent(), false));
-                    memory.change(memory.getDiagonals().setSquare(Diagonal.BOTH_OR_NEITHER, coords, direction.getOpposite(), false));
-                    memory.change(memory.getDiagonals().setSquare(Diagonal.EXACTLY_ONE, coords, direction.getAdjacent().getOpposite(), false));
+                    memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction.getAdjacent(), false));
+                    memory.change(memory.setDiagonal(true, Diagonal.BOTH_OR_NEITHER, coords, direction.getOpposite(), false));
+                    memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction.getAdjacent().getOpposite(), false));
                 }
             }
         }
     }
     public static void useDiagonalThree(FullMemory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
-            switch (memory.getDiagonals().getSquare(coords, direction)) {
+            switch (memory.getDiagonal(true, coords, direction)) {
                 case EXACTLY_ONE, AT_MOST_ONE -> {
                     memory.change(memory.setLine(true, Line.LINE, coords, direction.getCardinalDirections()[0].getOpposite(), false));
                     memory.change(memory.setLine(true, Line.LINE, coords, direction.getCardinalDirections()[1].getOpposite(), false));
-                    memory.change(memory.getDiagonals().setSquare(Diagonal.BOTH_OR_NEITHER, coords, direction.getOpposite(), false));
-                    memory.change(memory.getDiagonals().setSquare(Diagonal.EXACTLY_ONE, coords, direction, false));
+                    memory.change(memory.setDiagonal(true, Diagonal.BOTH_OR_NEITHER, coords, direction.getOpposite(), false));
+                    memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction, false));
                 }
                 case BOTH_OR_NEITHER -> {
                     memory.change(memory.setLine(true, Line.LINE, coords, direction.getCardinalDirections()[0], false));
                     memory.change(memory.setLine(true, Line.LINE, coords, direction.getCardinalDirections()[1], false));
-                    memory.change(memory.getDiagonals().setSquare(Diagonal.EXACTLY_ONE, coords, direction.getOpposite(), false));
+                    memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction.getOpposite(), false));
                 }
             }
         }
     }
     public static void addLogicZero(FullMemory memory, Coords coords) {
-        if (memory.getDiagonals().getSquare(coords, DiagonalDirection.NORTHEAST) == Diagonal.BOTH_OR_NEITHER &&
-                memory.getDiagonals().getSquare(coords, DiagonalDirection.SOUTHEAST) == Diagonal.BOTH_OR_NEITHER &&
-                memory.getDiagonals().getSquare(coords, DiagonalDirection.SOUTHWEST) == Diagonal.BOTH_OR_NEITHER &&
-                memory.getDiagonals().getSquare(coords, DiagonalDirection.NORTHWEST) == Diagonal.BOTH_OR_NEITHER
+        if (memory.getDiagonal(true, coords, DiagonalDirection.NORTHEAST) == Diagonal.BOTH_OR_NEITHER &&
+                memory.getDiagonal(true, coords, DiagonalDirection.SOUTHEAST) == Diagonal.BOTH_OR_NEITHER &&
+                memory.getDiagonal(true, coords, DiagonalDirection.SOUTHWEST) == Diagonal.BOTH_OR_NEITHER &&
+                memory.getDiagonal(true, coords, DiagonalDirection.NORTHWEST) == Diagonal.BOTH_OR_NEITHER
         ) {
             memory.change(memory.getNumbers().set(Number.ZERO, coords, false)) ;
         }
     }
     public static void addLogicOne(FullMemory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
-            if (memory.getDiagonals().getSquare(coords, direction) == Diagonal.EXACTLY_ONE &&
+            if (memory.getDiagonal(true, coords, direction) == Diagonal.EXACTLY_ONE &&
                     memory.getLine(true, coords, direction.getCardinalDirections()[0].getOpposite()) == Line.X &&
                     memory.getLine(true, coords, direction.getCardinalDirections()[1].getOpposite()) == Line.X
             ) {
@@ -175,8 +175,8 @@ public class SingleBlock {
     }
     public static void addLogicTwo(FullMemory memory, Coords coords) {
         for (DiagonalDirection direction : new DiagonalDirection[]{DiagonalDirection.NORTHEAST, DiagonalDirection.SOUTHEAST}) {
-            if (memory.getDiagonals().getSquare(coords, direction) == Diagonal.EXACTLY_ONE &&
-                    memory.getDiagonals().getSquare(coords, direction.getOpposite()) == Diagonal.EXACTLY_ONE
+            if (memory.getDiagonal(true, coords, direction) == Diagonal.EXACTLY_ONE &&
+                    memory.getDiagonal(true, coords, direction.getOpposite()) == Diagonal.EXACTLY_ONE
             ) {
                 memory.change(memory.getNumbers().set(Number.TWO, coords, false));
             }
@@ -194,7 +194,7 @@ public class SingleBlock {
             memory.change(memory.getNumbers().set(Number.THREE, coords, false));
         } else {
             for (DiagonalDirection direction : DiagonalDirection.values()) {
-                if (memory.getDiagonals().getSquare(coords, direction) == Diagonal.EXACTLY_ONE &&
+                if (memory.getDiagonal(true, coords, direction) == Diagonal.EXACTLY_ONE &&
                         memory.getLine(true, coords, direction.getCardinalDirections()[0].getOpposite()) == Line.LINE &&
                         memory.getLine(true, coords, direction.getCardinalDirections()[1].getOpposite()) == Line.LINE
                 ) {
