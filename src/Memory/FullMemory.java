@@ -196,14 +196,18 @@ public class FullMemory {
         if (i < 0 || i > memory.length) {
             return null;
         }
-        if (memory[i] != diagonal &&
-                (memory[i] == Diagonal.EMPTY ||
-                        override ||
-                        ((memory[i] == Diagonal.AT_LEAST_ONE || memory[i] == Diagonal.AT_MOST_ONE) && (diagonal == Diagonal.EXACTLY_ONE || diagonal == Diagonal.BOTH_OR_NEITHER)))
-        ) {
+        if (memory[i] != diagonal) {
+            if (memory[i] == Diagonal.EMPTY ||
+                    override ||
+                    ((memory[i] == Diagonal.AT_LEAST_ONE || memory[i] == Diagonal.AT_MOST_ONE) && (diagonal == Diagonal.EXACTLY_ONE || diagonal == Diagonal.BOTH_OR_NEITHER))
+            ) {
 //            System.out.println("changing diagonal " + i + " to " + diagonal);
-            memory[i] = diagonal;
-            return new Changes(diagonal, i);
+                memory[i] = diagonal;
+                return new Changes(diagonal, i);
+            } else if ((memory[i] == Diagonal.AT_LEAST_ONE && diagonal == Diagonal.AT_MOST_ONE) || (diagonal == Diagonal.AT_LEAST_ONE && memory[i] == Diagonal.AT_MOST_ONE)) {
+                memory[i] = Diagonal.EXACTLY_ONE;
+                return new Changes(Diagonal.EXACTLY_ONE, i);
+            }
         }
 
         return null;
