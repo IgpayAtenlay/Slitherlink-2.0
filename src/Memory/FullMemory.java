@@ -14,7 +14,7 @@ public class FullMemory {
     private final Line[] lines;
     private final NumberMemory numbers;
     private final HighlightMemory highlights;
-    private final Diagonal[] memory;
+    private final Diagonal[] diagonals;
     private final LoopMemory loops;
     private final ArrayList<Changes> changes;
 
@@ -23,7 +23,7 @@ public class FullMemory {
         this.lines = lines;
         this.numbers = numbers;
         this.highlights = highlights;
-        this.memory = diagonals;
+        this.diagonals = diagonals;
         this.loops = loops;
         this.changes = changes;
     }
@@ -38,7 +38,7 @@ public class FullMemory {
                 new ArrayList<>()
         );
         Arrays.fill(lines, Line.EMPTY);
-        Arrays.fill(memory, Diagonal.EMPTY);
+        Arrays.fill(diagonals, Diagonal.EMPTY);
     }
     public FullMemory(NumberMemory numbers) {
         this(numbers.getDimentions(), numbers.copy());
@@ -59,7 +59,7 @@ public class FullMemory {
                 lines.clone(),
                 numbers.copy(),
                 highlights.copy(),
-                memory.clone(),
+                diagonals.clone(),
                 loops.copy(),
                 changes
         );
@@ -185,27 +185,27 @@ public class FullMemory {
     }
     public Diagonal getDiagonal(boolean square, Coords coords, DiagonalDirection direction) {
         int i = Indexes.diagonal(square, coords, direction, dimentions);
-        if (i < 0 || i >= memory.length) {
+        if (i < 0 || i >= diagonals.length) {
             return Diagonal.BOTH_OR_NEITHER;
         } else {
-            return memory[i];
+            return diagonals[i];
         }
     }
     public Changes setDiagonal(boolean square, Diagonal diagonal, Coords coords, DiagonalDirection direction, boolean override) {
         int i = Indexes.diagonal(square, coords, direction, dimentions);
-        if (i < 0 || i > memory.length) {
+        if (i < 0 || i > diagonals.length) {
             return null;
         }
-        if (memory[i] != diagonal) {
-            if (memory[i] == Diagonal.EMPTY ||
+        if (diagonals[i] != diagonal) {
+            if (diagonals[i] == Diagonal.EMPTY ||
                     override ||
-                    ((memory[i] == Diagonal.AT_LEAST_ONE || memory[i] == Diagonal.AT_MOST_ONE) && (diagonal == Diagonal.EXACTLY_ONE || diagonal == Diagonal.BOTH_OR_NEITHER))
+                    ((diagonals[i] == Diagonal.AT_LEAST_ONE || diagonals[i] == Diagonal.AT_MOST_ONE) && (diagonal == Diagonal.EXACTLY_ONE || diagonal == Diagonal.BOTH_OR_NEITHER))
             ) {
 //            System.out.println("changing diagonal " + i + " to " + diagonal);
-                memory[i] = diagonal;
+                diagonals[i] = diagonal;
                 return new Changes(diagonal, i);
-            } else if ((memory[i] == Diagonal.AT_LEAST_ONE && diagonal == Diagonal.AT_MOST_ONE) || (diagonal == Diagonal.AT_LEAST_ONE && memory[i] == Diagonal.AT_MOST_ONE)) {
-                memory[i] = Diagonal.EXACTLY_ONE;
+            } else if ((diagonals[i] == Diagonal.AT_LEAST_ONE && diagonal == Diagonal.AT_MOST_ONE) || (diagonal == Diagonal.AT_LEAST_ONE && diagonals[i] == Diagonal.AT_MOST_ONE)) {
+                diagonals[i] = Diagonal.EXACTLY_ONE;
                 return new Changes(Diagonal.EXACTLY_ONE, i);
             }
         }

@@ -28,7 +28,10 @@ public class SingleBlock {
                         populateDiagonalsOne(memory, coords);
                         useDiagonalOne(memory, coords);
                     }
-                    case TWO -> useDiagonalTwo(memory, coords);
+                    case TWO -> {
+                        populateDiagonalsTwo(memory, coords);
+                        useDiagonalTwo(memory, coords);
+                    }
                     case THREE -> {
                         populateDiagonalsThree(memory, coords);
                         useDiagonalThree(memory, coords);
@@ -44,6 +47,20 @@ public class SingleBlock {
     public static void populateDiagonalsOne(FullMemory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
             memory.change(memory.setDiagonal(true, Diagonal.AT_MOST_ONE, coords, direction, false));
+        }
+    }
+    public static void populateDiagonalsTwo(FullMemory memory, Coords coords) {
+        for (CardinalDirection direction : CardinalDirection.values()) {
+            switch (memory.getLine(true, coords, direction)) {
+                case X -> {
+                    memory.change(memory.setDiagonal(true, Diagonal.AT_LEAST_ONE, coords, direction.getOpposite().getDiagonalDirections()[0], false));
+                    memory.change(memory.setDiagonal(true, Diagonal.AT_LEAST_ONE, coords, direction.getOpposite().getDiagonalDirections()[1], false));
+                }
+                case LINE -> {
+                    memory.change(memory.setDiagonal(true, Diagonal.AT_MOST_ONE, coords, direction.getOpposite().getDiagonalDirections()[0], false));
+                    memory.change(memory.setDiagonal(true, Diagonal.AT_MOST_ONE, coords, direction.getOpposite().getDiagonalDirections()[1], false));
+                }
+            }
         }
     }
     public static void populateDiagonalsThree(FullMemory memory, Coords coords) {
@@ -133,6 +150,12 @@ public class SingleBlock {
                     memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction.getAdjacent(), false));
                     memory.change(memory.setDiagonal(true, Diagonal.BOTH_OR_NEITHER, coords, direction.getOpposite(), false));
                     memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction.getAdjacent().getOpposite(), false));
+                }
+                case AT_LEAST_ONE -> {
+                    memory.change(memory.setDiagonal(true, Diagonal.AT_MOST_ONE, coords, direction.getOpposite(), false));
+                }
+                case AT_MOST_ONE -> {
+                    memory.change(memory.setDiagonal(true, Diagonal.AT_LEAST_ONE, coords, direction.getOpposite(), false));
                 }
             }
         }
