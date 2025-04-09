@@ -1,8 +1,6 @@
 package SolvingActions;
 
-import Enums.CardinalDirection;
-import Enums.Highlight;
-import Enums.Line;
+import Enums.*;
 import Enums.Number;
 import Memory.Coords;
 import Memory.FullMemory;
@@ -15,8 +13,9 @@ public class AdjacentBlocks {
         for (int x = 0; x < memory.getDimentions().xSize; x++) {
             for (int y = 0; y < memory.getDimentions().ySize; y++) {
                 Coords coords = new Coords(x, y);
-                if (memory.getNumbers().get(coords) == Number.THREE) {
-                    doubleThrees(memory, coords);
+                switch (memory.getNumbers().get(coords)) {
+                    case THREE -> doubleThrees(memory, coords);
+                    case TWO -> twoSandwich(memory, coords);
                 }
 
                 if (memory.getHighlights().get(coords) == Highlight.EMPTY) {
@@ -62,6 +61,18 @@ public class AdjacentBlocks {
                 memory.change(memory.setLine(true, Line.X, coords, direction, false));
             } else if (currentHighlight != Highlight.EMPTY && adjacentHighlight != Highlight.EMPTY) {
                 memory.change(memory.setLine(true, Line.LINE, coords, direction, false));
+            }
+        }
+    }
+    static public void twoSandwich(FullMemory memory, Coords coords) {
+        for (CardinalDirection direction : new CardinalDirection[] {CardinalDirection.EAST, CardinalDirection.SOUTH}) {
+            if (
+                    memory.getHighlights().get(coords.addDirection(direction)) == memory.getHighlights().get(coords.addDirection(direction.getOpposite())) &&
+                    memory.getHighlights().get(coords.addDirection(direction)) != Highlight.EMPTY
+            ) {
+                for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
+                    memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, diagonalDirection, false));
+                }
             }
         }
     }

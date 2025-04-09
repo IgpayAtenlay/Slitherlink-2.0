@@ -174,8 +174,7 @@ public class Panel extends JPanel {
             for (int x = 0; x < memorySet.getVisible().getDimentions().xSize; x++) {
                 Coords coords = new Coords(x, y);
                 for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
-                    // switch back to visual only
-                    Diagonal diagonal = memorySet.getCalculation().getDiagonal(true, coords, diagonalDirection);
+                    Diagonal diagonal = memorySet.getVisible().getDiagonal(true, coords, diagonalDirection);
                     Coords start = null;
                     Coords end = null;
                     switch (diagonalDirection) {
