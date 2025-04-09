@@ -14,7 +14,7 @@ public enum DiagonalDirection {
             case NORTHEAST -> new CardinalDirection[] {CardinalDirection.NORTH, CardinalDirection.EAST};
             case SOUTHEAST -> new CardinalDirection[] {CardinalDirection.EAST, CardinalDirection.SOUTH};
             case SOUTHWEST -> new CardinalDirection[] {CardinalDirection.SOUTH, CardinalDirection.WEST};
-            case NORTHWEST -> new CardinalDirection[] {CardinalDirection.NORTH, CardinalDirection.WEST};
+            case NORTHWEST -> new CardinalDirection[] {CardinalDirection.WEST, CardinalDirection.NORTH};
         };
     }
 

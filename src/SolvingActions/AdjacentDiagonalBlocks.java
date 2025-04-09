@@ -1,5 +1,6 @@
 package SolvingActions;
 
+import Enums.Diagonal;
 import Enums.DiagonalDirection;
 import Enums.Line;
 import Enums.Number;
@@ -25,12 +26,19 @@ public class AdjacentDiagonalBlocks {
     }
 
     static public void doubleThrees(FullMemory memory, Coords coords) {
-        for(DiagonalDirection diagonalDirection : new DiagonalDirection[]{DiagonalDirection.NORTHEAST, DiagonalDirection.SOUTHEAST}) {
+        for(DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
             if (memory.getNumbers().get(coords.addDirection(diagonalDirection)) == Number.THREE) {
                 memory.change(memory.setLine(true, Line.LINE, coords, diagonalDirection.getCardinalDirections()[0].getOpposite(), false));
                 memory.change(memory.setLine(true, Line.LINE, coords, diagonalDirection.getCardinalDirections()[1].getOpposite(), false));
                 memory.change(memory.setLine(true, Line.LINE, coords.addDirection(diagonalDirection), diagonalDirection.getCardinalDirections()[0], false));
                 memory.change(memory.setLine(true, Line.LINE, coords.addDirection(diagonalDirection), diagonalDirection.getCardinalDirections()[1], false));
+                // check if there is a nearby EitherOr
+                Coords thirdLocation = coords.addDirection(diagonalDirection.getCardinalDirections()[0]);
+                DiagonalDirection cornerToCheck = diagonalDirection.getCounterClockwise();
+                if (memory.getDiagonal(true, thirdLocation, cornerToCheck) == Diagonal.BOTH_OR_NEITHER) {
+                    memory.change(memory.setLine(true, Line.X, thirdLocation, cornerToCheck.getCardinalDirections()[0], false));
+                    memory.change(memory.setLine(true, Line.X, thirdLocation, cornerToCheck.getCardinalDirections()[1], false));
+                }
             }
         }
     }
