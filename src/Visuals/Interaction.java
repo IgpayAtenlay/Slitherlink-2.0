@@ -20,7 +20,7 @@ public class Interaction {
         Coords clickCoords = new Coords(e.getX(), e.getY());
         Coords squareIndex = panel.getSquareIndex(clickCoords);
         Coords dotCoords = panel.getDotCoords(squareIndex);
-        Coords relativeCoords = new Coords(clickCoords.x - dotCoords.y, clickCoords.x - dotCoords.y);
+        Coords relativeCoords = new Coords(clickCoords.x - dotCoords.x, clickCoords.y - dotCoords.y);
 
         CardinalDirection direction;
         if (relativeCoords.x > relativeCoords.y) {
