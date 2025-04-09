@@ -147,9 +147,9 @@ public class SingleBlock {
                     memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction.getOpposite(), false));
                 }
                 case BOTH_OR_NEITHER -> {
-                    memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction.getAdjacent(), false));
+                    memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction.getClockwise(), false));
                     memory.change(memory.setDiagonal(true, Diagonal.BOTH_OR_NEITHER, coords, direction.getOpposite(), false));
-                    memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction.getAdjacent().getOpposite(), false));
+                    memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, direction.getCounterClockwise(), false));
                 }
                 case AT_LEAST_ONE -> {
                     memory.change(memory.setDiagonal(true, Diagonal.AT_MOST_ONE, coords, direction.getOpposite(), false));

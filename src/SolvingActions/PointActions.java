@@ -96,10 +96,10 @@ public class PointActions {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
             Diagonal diagonal = memory.getDiagonal(false, coords, direction);
             if (diagonal == Diagonal.AT_LEAST_ONE || diagonal == Diagonal.EXACTLY_ONE) {
-                if (memory.getDiagonal(false, coords, direction.getAdjacent()) == Diagonal.AT_MOST_ONE) {
-                    memory.setDiagonal(false, Diagonal.AT_LEAST_ONE, coords, direction.getAdjacent().getOpposite(), false);
-                } else if (memory.getDiagonal(false, coords, direction.getAdjacent().getOpposite()) == Diagonal.AT_MOST_ONE) {
-                    memory.setDiagonal(false, Diagonal.AT_LEAST_ONE, coords, direction.getAdjacent(), false);
+                if (memory.getDiagonal(false, coords, direction.getClockwise()) == Diagonal.AT_MOST_ONE) {
+                    memory.setDiagonal(false, Diagonal.AT_LEAST_ONE, coords, direction.getCounterClockwise(), false);
+                } else if (memory.getDiagonal(false, coords, direction.getCounterClockwise()) == Diagonal.AT_MOST_ONE) {
+                    memory.setDiagonal(false, Diagonal.AT_LEAST_ONE, coords, direction.getClockwise(), false);
                 }
             }
         }

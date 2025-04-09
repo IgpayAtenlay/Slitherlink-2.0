@@ -38,6 +38,8 @@ public class AdjacentBlocks {
                 memory.change(memory.setLine(true, Line.LINE, coords, direction.getOpposite(), false));
                 memory.change(memory.setLine(true, Line.LINE, coords, direction, false));
                 memory.change(memory.setLine(true, Line.LINE, coords.addDirection(direction), direction, false));
+                memory.change(memory.setLine(true, Line.X, coords.addDirection(direction.getClockwise()), direction, false));
+                memory.change(memory.setLine(true, Line.X, coords.addDirection(direction.getCounterClockwise()), direction, false));
             }
         }
     }

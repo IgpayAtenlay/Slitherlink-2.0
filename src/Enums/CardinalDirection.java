@@ -25,4 +25,20 @@ public enum CardinalDirection {
             case WEST -> new DiagonalDirection[] {DiagonalDirection.SOUTHWEST, DiagonalDirection.NORTHWEST};
         };
     }
+    public CardinalDirection getClockwise() {
+        return switch (this) {
+            case NORTH -> EAST;
+            case EAST -> SOUTH;
+            case SOUTH -> WEST;
+            case WEST -> NORTH;
+        };
+    }
+    public CardinalDirection getCounterClockwise() {
+        return switch (this) {
+            case NORTH -> WEST;
+            case EAST -> NORTH;
+            case SOUTH -> EAST;
+            case WEST -> SOUTH;
+        };
+    }
 }

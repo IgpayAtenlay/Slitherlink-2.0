@@ -26,12 +26,20 @@ public enum DiagonalDirection {
             case NORTHWEST -> SOUTHEAST;
         };
     }
-    public DiagonalDirection getAdjacent() {
+    public DiagonalDirection getClockwise() {
         return switch (this) {
             case NORTHEAST -> SOUTHEAST;
             case SOUTHEAST -> SOUTHWEST;
             case SOUTHWEST -> NORTHWEST;
             case NORTHWEST -> NORTHEAST;
+        };
+    }
+    public DiagonalDirection getCounterClockwise() {
+        return switch (this) {
+            case NORTHEAST -> NORTHWEST;
+            case SOUTHEAST -> NORTHEAST;
+            case SOUTHWEST -> SOUTHEAST;
+            case NORTHWEST -> SOUTHWEST;
         };
     }
 }
