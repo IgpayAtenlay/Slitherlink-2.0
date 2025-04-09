@@ -10,4 +10,9 @@ public class Loop {
     public Loop copy() {
         return new Loop(coords.copy(), length);
     }
+
+    @Override
+    public String toString() {
+        return coords.toString() + " length: " + length;
+    }
 }

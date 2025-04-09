@@ -1,5 +1,7 @@
 package Memory;
 
+import Enums.CardinalDirection;
+
 public class LoopMemory {
     private final Dimentions dimentions;
     private final Loop[] memory;
@@ -23,41 +25,51 @@ public class LoopMemory {
         return new LoopMemory(memory, dimentions);
     }
 
-    public void setLoop(Coords coordOne, Coords coordTwo) {
-        if (getIndex(coordOne) < 0 || getIndex(coordOne) >= memory.length || getIndex(coordTwo) < 0 || getIndex(coordTwo) >= memory.length) {
-            return;
-        }
-        if (wouldCreateLoop(coordOne, coordTwo)) {
-            memory[getIndex(coordOne)] = null;
-            memory[getIndex(coordTwo)] = null;
-            return;
-        }
-
-        Loop oneLoopEnd = memory[getIndex(coordOne)];
-        Loop twoLoopEnd = memory[getIndex(coordTwo)];
-
-        int length = 1;
-        if (oneLoopEnd != null) {
-            length += oneLoopEnd.length;
-        }
-        if (twoLoopEnd != null) {
-            length += twoLoopEnd.length;
-        }
-
-        Loop newOneLoop = new Loop(twoLoopEnd == null ? coordTwo : twoLoopEnd.coords, length);
-        Loop newTwoLoop = new Loop(oneLoopEnd == null ? coordOne : oneLoopEnd.coords, length);
-
-        if (oneLoopEnd == null) {
-            memory[getIndex(coordOne)] = newOneLoop;
+    public void setLoop(boolean square, Coords coordOne, CardinalDirection direction) {
+        if (square) {
+            switch (direction) {
+                case NORTH -> setLoop(false, coordOne, CardinalDirection.EAST);
+                case EAST -> setLoop(false, coordOne.addDirection(CardinalDirection.EAST), CardinalDirection.SOUTH);
+                case SOUTH -> setLoop(false, coordOne.addDirection(CardinalDirection.SOUTH), CardinalDirection.EAST);
+                case WEST -> setLoop(false, coordOne, CardinalDirection.SOUTH);
+            };
         } else {
-            memory[getIndex(coordOne)] = null;
-            memory[getIndex(oneLoopEnd.coords)] = newOneLoop;
-        }
-        if (twoLoopEnd == null) {
-            memory[getIndex(coordTwo)] = newTwoLoop;
-        } else {
-            memory[getIndex(coordTwo)] = null;
-            memory[getIndex(twoLoopEnd.coords)] = newTwoLoop;
+            Coords coordTwo = coordOne.addDirection(direction);
+            if (getIndex(coordOne) < 0 || getIndex(coordOne) >= memory.length || getIndex(coordTwo) < 0 || getIndex(coordTwo) >= memory.length) {
+                return;
+            }
+            if (wouldCreateLoop(coordOne, coordTwo)) {
+                memory[getIndex(coordOne)] = null;
+                memory[getIndex(coordTwo)] = null;
+                return;
+            }
+
+            Loop oneLoopEnd = memory[getIndex(coordOne)];
+            Loop twoLoopEnd = memory[getIndex(coordTwo)];
+
+            int length = 1;
+            if (oneLoopEnd != null) {
+                length += oneLoopEnd.length;
+            }
+            if (twoLoopEnd != null) {
+                length += twoLoopEnd.length;
+            }
+
+            Loop newOneLoop = new Loop(twoLoopEnd == null ? coordTwo : twoLoopEnd.coords, length);
+            Loop newTwoLoop = new Loop(oneLoopEnd == null ? coordOne : oneLoopEnd.coords, length);
+
+            if (oneLoopEnd == null) {
+                memory[getIndex(coordOne)] = newOneLoop;
+            } else {
+                memory[getIndex(coordOne)] = null;
+                memory[getIndex(oneLoopEnd.coords)] = newOneLoop;
+            }
+            if (twoLoopEnd == null) {
+                memory[getIndex(coordTwo)] = newTwoLoop;
+            } else {
+                memory[getIndex(coordTwo)] = null;
+                memory[getIndex(twoLoopEnd.coords)] = newTwoLoop;
+            }
         }
     }
     public int getLoopLength(Coords coords) {
@@ -67,10 +79,22 @@ public class LoopMemory {
         if (getIndex(coordOne) < 0 || getIndex(coordOne) >= memory.length || getIndex(coordTwo) < 0 || getIndex(coordTwo) >= memory.length) {
             return false;
         }
+        if (memory[getIndex(coordOne)] == null) {
+            return false;
+        }
         return memory[getIndex(coordOne)].coords.equals(coordTwo);
     }
 
     public int getIndex(Coords coords) {
         return coords.x + coords.y * (dimentions.xSize + 1);
+    }
+
+    public void print() {
+        for (int y = 0; y < dimentions.ySize + 1; y++) {
+            for (int x = 0; x < dimentions.xSize + 1; x++) {
+                System.out.println(new Coords(x, y));
+                System.out.println(memory[getIndex(new Coords(x, y))]);
+            }
+        }
     }
 }

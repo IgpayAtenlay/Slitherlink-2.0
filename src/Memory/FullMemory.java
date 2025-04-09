@@ -151,20 +151,14 @@ public class FullMemory {
     
     // setters and getters
     public Changes setLine(boolean square, Line line, Coords coords, CardinalDirection direction, boolean override) {
-        if (square) {
-            return setLine(line, Indexes.line(true, coords, direction, new Dimentions(dimentions.xSize, dimentions.ySize)), override);
-        } else {
-            return setLine(line, Indexes.line(false, coords, direction, new Dimentions(dimentions.xSize, dimentions.ySize)), override);
-        }
-        
-    }
-    private Changes setLine(Line line, int i, boolean override) {
+        int i = Indexes.line(square, coords, direction, new Dimentions(dimentions.xSize, dimentions.ySize));
         if (i < 0 || i > memory.length) {
             return null;
         }
         if (memory[i] != line && (memory[i] == Line.EMPTY || override)) {
             memory[i] = line;
 //            System.out.println("changing line " + i + " to " + line);
+            loops.setLoop(square, coords, direction);
             return new Changes(line, i);
         }
         return null;
