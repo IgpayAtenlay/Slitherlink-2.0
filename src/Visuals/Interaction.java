@@ -2,6 +2,7 @@ package Visuals;
 
 import Enums.CardinalDirection;
 import Enums.Line;
+import ErrorChecking.Errors;
 import Memory.Coords;
 import Memory.MemorySet;
 
@@ -60,14 +61,14 @@ public class Interaction {
         panel.repaint();
     }
     public void checkForErrors() {
-        if (memorySet.getControl().hasErrors()) {
+        if (Errors.hasErrors(memorySet.getVisible())) {
             System.out.println("Error");
         } else {
             System.out.println("No errors");
         }
     }
     public void checkForCompletetion() {
-        if (memorySet.getControl().isComplete()) {
+        if (Errors.isComplete(memorySet.getVisible())) {
             System.out.println("Complete");
         } else {
             System.out.println("Not Complete");

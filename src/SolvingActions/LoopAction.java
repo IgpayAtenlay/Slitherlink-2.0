@@ -1,0 +1,35 @@
+package SolvingActions;
+
+import Enums.CardinalDirection;
+import Enums.Line;
+import Memory.Coords;
+import Memory.FullMemory;
+import Memory.Loop;
+
+public class LoopAction {
+    static public void run(FullMemory memory) {
+        System.out.println("starting " + LoopAction.class.getSimpleName());
+        int startingChanges = memory.getChanges().size();
+
+        int totalLines = memory.getNumLines();
+
+        for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
+            for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
+                checkLoop(memory, new Coords(x, y), totalLines);
+            }
+        }
+
+        System.out.println(LoopAction.class.getSimpleName() + " finished");
+        System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
+    }
+    public static void checkLoop(FullMemory memory, Coords coords, int totalLines) {
+        Loop loop = memory.getLoops().getLoop(coords);
+        if (loop != null && totalLines != loop.length && loop.length != 1) {
+            for (CardinalDirection direction : CardinalDirection.values()) {
+                if (loop.coords.equals(coords.addDirection(direction))) {
+                    memory.change(memory.setLine(false, Line.X, coords, direction, false));
+                }
+            }
+        }
+    }
+}

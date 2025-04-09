@@ -2,6 +2,7 @@ package SolvingActions;
 
 import Enums.CardinalDirection;
 import Enums.Line;
+import ErrorChecking.Errors;
 import Memory.Coords;
 import Memory.FullMemory;
 
@@ -33,15 +34,24 @@ public class GuessAndCheck {
     }
 
     public static void guess(FullMemory memory, Coords coords, CardinalDirection direction, Line line) {
-        System.out.println("guessing (" + coords.x + ", " + coords.y + ") " + direction + " " + line);
+//        System.out.println("guessing " + coords + " " + direction + " " + line);
         FullMemory workingMemory = memory.copy();
         Control control = new Control(workingMemory);
         workingMemory.setLine(true, line, coords, direction, false);
-        control.autoSolve(false);
-        if (control.hasErrors()) {
+        if (Errors.hasErrors(workingMemory)) {
             memory.change(memory.setLine(true, line.getOpposite(), coords, direction, false));
-        } else if (control.isComplete()) {
+            return;
+        } else if (Errors.isComplete(workingMemory)) {
             memory.change(memory.setLine(true, line, coords, direction, false));
+            return;
+        }
+        control.autoSolve(false);
+        if (Errors.hasErrors(workingMemory)) {
+            memory.change(memory.setLine(true, line.getOpposite(), coords, direction, false));
+            return;
+        } else if (Errors.isComplete(workingMemory)) {
+            memory.change(memory.setLine(true, line, coords, direction, false));
+            return;
         }
     }
 }

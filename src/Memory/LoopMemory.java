@@ -84,6 +84,18 @@ public class LoopMemory {
         }
         return memory[getIndex(coordOne)].coords.equals(coordTwo);
     }
+    public boolean isLoop(Coords coords) {
+        if (getIndex(coords) < 0 || getIndex(coords) >= memory.length) {
+            return false;
+        }
+        return memory[getIndex(coords)] != null;
+    }
+    public Loop getLoop(Coords coords) {
+        if (getIndex(coords) < 0 || getIndex(coords) >= memory.length) {
+            return null;
+        }
+        return memory[getIndex(coords)];
+    }
 
     public int getIndex(Coords coords) {
         return coords.x + coords.y * (dimentions.xSize + 1);

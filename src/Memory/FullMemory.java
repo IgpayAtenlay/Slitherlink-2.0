@@ -156,9 +156,11 @@ public class FullMemory {
             return null;
         }
         if (memory[i] != line && (memory[i] == Line.EMPTY || override)) {
+//            System.out.println("changing " + coords + " " + direction + " to " + line);
             memory[i] = line;
-//            System.out.println("changing line " + i + " to " + line);
-            loops.setLoop(square, coords, direction);
+            if (line == Line.LINE) {
+                loops.setLoop(square, coords, direction);
+            }
             return new Changes(line, i);
         }
         return null;

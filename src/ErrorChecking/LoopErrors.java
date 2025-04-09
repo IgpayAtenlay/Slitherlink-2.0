@@ -42,6 +42,7 @@ public class LoopErrors {
 
         // loop start
         if (linesInLoop == 2) {
+            linesInLoop--;
             visited[currentCoord.x][currentCoord.y] = true;
             CardinalDirection enterence = exit.getOpposite();
             boolean newLine = true;

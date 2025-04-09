@@ -1,11 +1,5 @@
 package SolvingActions;
 
-import CompletetionChecking.LoopCompletetion;
-import CompletetionChecking.NumberCompletetion;
-import CompletetionChecking.PointCompletetion;
-import ErrorChecking.LineErrors;
-import ErrorChecking.LoopErrors;
-import ErrorChecking.NumberErrors;
 import Memory.Dimentions;
 import Memory.FullMemory;
 
@@ -38,7 +32,7 @@ public class Control {
             AdjacentDiagonalBlocks.run(memory);
             LineIntoBlock.run(memory);
             if (roundChanges == memory.getChanges().size()) {
-                Loop.run(memory);
+                LoopAction.run(memory);
             }
             if (guessAndCheck) {
                 if (roundChanges == memory.getChanges().size()) {
@@ -53,34 +47,6 @@ public class Control {
 
         System.out.println("autoSolve finished");
         System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
-    }
-    public boolean hasErrors() {
-        if (NumberErrors.run(memory)) {
-            System.out.println("number error");
-            return true;
-        }
-        if (LineErrors.run(memory)) {
-            System.out.println("line error");
-            return true;
-        }
-        if (LoopErrors.run(memory)) {
-            System.out.println("loop error");
-            return true;
-        }
-        System.out.println("No errors");
-        return false;
-    }
-    public boolean isComplete() {
-        if (!NumberCompletetion.run(memory)) {
-            return false;
-        }
-        if (!PointCompletetion.run(memory)) {
-            return false;
-        }
-        if (!LoopCompletetion.run(memory)) {
-            return false;
-        }
-        return true;
     }
 
     public FullMemory getMemory() {

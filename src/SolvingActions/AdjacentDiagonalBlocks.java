@@ -25,7 +25,7 @@ public class AdjacentDiagonalBlocks {
     }
 
     static public void doubleThrees(FullMemory memory, Coords coords) {
-        for(DiagonalDirection diagonalDirection : new DiagonalDirection[]{DiagonalDirection.NORTHWEST, DiagonalDirection.SOUTHEAST}) {
+        for(DiagonalDirection diagonalDirection : new DiagonalDirection[]{DiagonalDirection.NORTHEAST, DiagonalDirection.SOUTHEAST}) {
             if (memory.getNumbers().get(coords.addDirection(diagonalDirection)) == Number.THREE) {
                 memory.change(memory.setLine(true, Line.LINE, coords, diagonalDirection.getCardinalDirections()[0].getOpposite(), false));
                 memory.change(memory.setLine(true, Line.LINE, coords, diagonalDirection.getCardinalDirections()[1].getOpposite(), false));
