@@ -145,12 +145,12 @@ public class Memory {
         }
         if (lines[i] != line && (lines[i] == Line.EMPTY || override)) {
 //            System.out.println("changing " + coords + " " + direction + " to " + line);
+            changes.add(new LineChange(line, lines[i], i));
             lines[i] = line;
             switch (line) {
                 case LINE -> setLoop(square, coords, direction);
                 case X -> breakLoop(square, coords, direction);
             }
-            changes.add(new Changes(line, i));
         }
     }
     public Line getLine(boolean square, Coords coords, CardinalDirection direction) {
@@ -190,11 +190,11 @@ public class Memory {
                     ((diagonals[i] == Diagonal.AT_LEAST_ONE || diagonals[i] == Diagonal.AT_MOST_ONE) && (diagonal == Diagonal.EXACTLY_ONE || diagonal == Diagonal.BOTH_OR_NEITHER))
             ) {
 //            System.out.println("changing diagonal " + i + " to " + diagonal);
+                changes.add(new DiagonalChange(diagonal, diagonals[i], i));
                 diagonals[i] = diagonal;
-                changes.add(new Changes(diagonal, i));
             } else if ((diagonals[i] == Diagonal.AT_LEAST_ONE && diagonal == Diagonal.AT_MOST_ONE) || (diagonal == Diagonal.AT_LEAST_ONE && diagonals[i] == Diagonal.AT_MOST_ONE)) {
+                changes.add(new DiagonalChange(Diagonal.EXACTLY_ONE, diagonals[i], i));
                 diagonals[i] = Diagonal.EXACTLY_ONE;
-                changes.add(new Changes(Diagonal.EXACTLY_ONE, i));
             }
         }
     }
@@ -204,9 +204,9 @@ public class Memory {
         if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0 &&
                 (highlights[x + y * dimentions.xSize] != highlight && (highlights[x + y * dimentions.xSize] == Highlight.EMPTY || override))
         ) {
-            int i = x + y * dimentions.xSize;
+            int i = Indexes.box(coords, dimentions);
+            changes.add(new HighlightChange(highlight, highlights[i], i));
             highlights[i] = highlight;
-            changes.add(new Changes(highlight, i));
         }
     }
     public Highlight getHighlight(Coords coords) {
@@ -223,9 +223,9 @@ public class Memory {
         int y = coords.y;
         if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0 &&
                 numbers[x + y * dimentions.xSize] != number && (numbers[x + y * dimentions.xSize] == Number.EMPTY || override)) {
-            int i = x + y * dimentions.xSize;
+            int i = Indexes.box(coords, dimentions);
+            changes.add(new NumberChange(number, numbers[i], i));
             numbers[i] = number;
-            changes.add(new Changes(number, i));
         }
     }
     public Number getNumber(Coords coords) {

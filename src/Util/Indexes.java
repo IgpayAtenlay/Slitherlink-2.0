@@ -65,4 +65,7 @@ public class Indexes {
     public static int point(Coords coords, Dimentions dimentions) {
         return coords.x + coords.y * (dimentions.xSize + 1);
     }
+    public static int box(Coords coords, Dimentions dimentions) {
+        return coords.x + coords.y * dimentions.xSize;
+    }
 }
