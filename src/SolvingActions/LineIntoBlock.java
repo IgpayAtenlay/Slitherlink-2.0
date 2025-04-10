@@ -9,7 +9,7 @@ import Memory.Memory;
 public class LineIntoBlock {
     static public void run(Memory memory) {
         System.out.println("starting " + LineIntoBlock.class.getSimpleName());
-        int startingChanges = memory.getChanges().size();
+        int startingChanges = memory.getNumChanges();
 
         for (int x = 0; x < memory.getDimentions().xSize; x++) {
             for (int y = 0; y < memory.getDimentions().ySize; y++) {
@@ -22,7 +22,7 @@ public class LineIntoBlock {
         }
 
         System.out.println(LineIntoBlock.class.getSimpleName() + " finished");
-        System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
+        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
     }
 
     static public void lineIntoTwo(Memory memory, Coords coords) {
@@ -44,8 +44,8 @@ public class LineIntoBlock {
                         memory.getLine(true, coords, cardinalDirections[1].getOpposite()) == Line.X
                 ) {
                     // set opposite sides to LINE
-                    memory.change(memory.setLine(true, Line.LINE, coords, cardinalDirections[0].getOpposite(), false));
-                    memory.change(memory.setLine(true, Line.LINE, coords, cardinalDirections[1].getOpposite(), false));
+                    memory.setLine(true, Line.LINE, coords, cardinalDirections[0].getOpposite(), false);
+                    memory.setLine(true, Line.LINE, coords, cardinalDirections[1].getOpposite(), false);
                 }
             }
         }
@@ -65,8 +65,8 @@ public class LineIntoBlock {
                     ) == Line.LINE
             ) {
                 // set opposite sides to LINE
-                memory.change(memory.setLine(true, Line.LINE, coords, cardinalDirections[0].getOpposite(), false));
-                memory.change(memory.setLine(true, Line.LINE, coords, cardinalDirections[1].getOpposite(), false));
+                memory.setLine(true, Line.LINE, coords, cardinalDirections[0].getOpposite(), false);
+                memory.setLine(true, Line.LINE, coords, cardinalDirections[1].getOpposite(), false);
             }
         }
     }

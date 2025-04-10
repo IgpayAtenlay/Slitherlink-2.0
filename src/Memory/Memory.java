@@ -68,14 +68,11 @@ public class Memory {
     public Dimentions getDimentions() {
         return dimentions;
     }
-
-    public void change(Changes change) {
-        if (change != null) {
-            changes.add(change);
-        }
-    }
     public ArrayList<Changes> getChanges() {
         return changes;
+    }
+    public int getNumChanges() {
+        return changes.size();
     }
 
     public void print() {
@@ -141,10 +138,10 @@ public class Memory {
     }
     
     // setters and getters
-    public Changes setLine(boolean square, Line line, Coords coords, CardinalDirection direction, boolean override) {
+    public void setLine(boolean square, Line line, Coords coords, CardinalDirection direction, boolean override) {
         int i = Indexes.line(square, coords, direction, new Dimentions(dimentions.xSize, dimentions.ySize));
         if (i < 0 || i > lines.length) {
-            return null;
+            return;
         }
         if (lines[i] != line && (lines[i] == Line.EMPTY || override)) {
 //            System.out.println("changing " + coords + " " + direction + " to " + line);
@@ -152,9 +149,8 @@ public class Memory {
             if (line == Line.LINE) {
                 setLoop(square, coords, direction);
             }
-            return new Changes(line, i);
+            changes.add(new Changes(line, i));
         }
-        return null;
     }
     public Line getLine(boolean square, Coords coords, CardinalDirection direction) {
         int index = Indexes.line(square, coords, direction, dimentions);
@@ -182,10 +178,10 @@ public class Memory {
             return diagonals[i];
         }
     }
-    public Changes setDiagonal(boolean square, Diagonal diagonal, Coords coords, DiagonalDirection direction, boolean override) {
+    public void setDiagonal(boolean square, Diagonal diagonal, Coords coords, DiagonalDirection direction, boolean override) {
         int i = Indexes.diagonal(square, coords, direction, dimentions);
         if (i < 0 || i > diagonals.length) {
-            return null;
+            return;
         }
         if (diagonals[i] != diagonal) {
             if (diagonals[i] == Diagonal.EMPTY ||
@@ -194,16 +190,14 @@ public class Memory {
             ) {
 //            System.out.println("changing diagonal " + i + " to " + diagonal);
                 diagonals[i] = diagonal;
-                return new Changes(diagonal, i);
+                changes.add(new Changes(diagonal, i));
             } else if ((diagonals[i] == Diagonal.AT_LEAST_ONE && diagonal == Diagonal.AT_MOST_ONE) || (diagonal == Diagonal.AT_LEAST_ONE && diagonals[i] == Diagonal.AT_MOST_ONE)) {
                 diagonals[i] = Diagonal.EXACTLY_ONE;
-                return new Changes(Diagonal.EXACTLY_ONE, i);
+                changes.add(new Changes(Diagonal.EXACTLY_ONE, i));
             }
         }
-
-        return null;
     }
-    public Changes setHighlight(Highlight highlight, Coords coords, boolean override) {
+    public void setHighlight(Highlight highlight, Coords coords, boolean override) {
         int x = coords.x;
         int y = coords.y;
         if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0 &&
@@ -211,9 +205,8 @@ public class Memory {
         ) {
             int i = x + y * dimentions.xSize;
             highlights[i] = highlight;
-            return new Changes(highlight, i);
+            changes.add(new Changes(highlight, i));
         }
-        return null;
     }
     public Highlight getHighlight(Coords coords) {
         int x = coords.x;
@@ -224,16 +217,14 @@ public class Memory {
             return Highlight.OUTSIDE;
         }
     }
-    public Changes setNumber(Number number, Coords coords, boolean override) {
+    public void setNumber(Number number, Coords coords, boolean override) {
         int x = coords.x;
         int y = coords.y;
         if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0 &&
                 numbers[x + y * dimentions.xSize] != number && (numbers[x + y * dimentions.xSize] == Number.EMPTY || override)) {
             int i = x + y * dimentions.xSize;
             numbers[i] = number;
-            return new Changes(number, i);
-        } else {
-            return null;
+            changes.add(new Changes(number, i));
         }
     }
     public Number getNumber(Coords coords) {

@@ -52,8 +52,8 @@ public class Interaction {
         for (int y = 0; y < memorySet.getCalculation().getDimentions().ySize + 1; y++) {
             for (int x = 0; x < memorySet.getCalculation().getDimentions().xSize + 1; x++) {
                 Coords coords = new Coords(x, y);
-                memorySet.getCalculation().change(memorySet.getCalculation().setLine(true, memorySet.getVisible().getLine(true, coords, CardinalDirection.NORTH), coords, CardinalDirection.NORTH, true));
-                memorySet.getCalculation().change(memorySet.getCalculation().setLine(true, memorySet.getVisible().getLine(true, coords, CardinalDirection.WEST), coords, CardinalDirection.WEST, true));
+                memorySet.getCalculation().setLine(true, memorySet.getVisible().getLine(true, coords, CardinalDirection.NORTH), coords, CardinalDirection.NORTH, true);
+                memorySet.getCalculation().setLine(true, memorySet.getVisible().getLine(true, coords, CardinalDirection.WEST), coords, CardinalDirection.WEST, true);
             }
         }
         memorySet.autoSolve(false);

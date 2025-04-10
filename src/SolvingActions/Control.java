@@ -19,12 +19,12 @@ public class Control {
     public void autoSolve(boolean guessAndCheck) {
         System.out.println("starting autoSolve");
         int roundNum = 0;
-        int startingChanges = memory.getChanges().size();
+        int startingChanges = memory.getNumChanges();
         System.out.println(startingChanges);
         int roundChanges;
         do {
             System.out.println("starting autoSolve round " + roundNum);
-            roundChanges = memory.getChanges().size();
+            roundChanges = memory.getNumChanges();
 
             SingleBlock.run(memory);
             PointActions.run(memory);
@@ -32,22 +32,22 @@ public class Control {
             AdjacentDiagonalBlocks.run(memory);
             LineIntoBlock.run(memory);
             CheckLoop.run(memory);
-            if (roundChanges == memory.getChanges().size()) {
+            if (roundChanges == memory.getNumChanges()) {
                 Trapped.run(memory);
             }
             if (guessAndCheck) {
-                if (roundChanges == memory.getChanges().size()) {
+                if (roundChanges == memory.getNumChanges()) {
                     GuessAndCheck.run(memory);
                 }
             }
 
             System.out.println("autoSolve round " + roundNum++ + " finished");
-            System.out.println("changes: " + (memory.getChanges().size() - roundChanges));
-        } while (roundChanges != memory.getChanges().size());
+            System.out.println("changes: " + (memory.getNumChanges() - roundChanges));
+        } while (roundChanges != memory.getNumChanges());
 
 
         System.out.println("autoSolve finished");
-        System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
+        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
     }
 
     public Memory getMemory() {

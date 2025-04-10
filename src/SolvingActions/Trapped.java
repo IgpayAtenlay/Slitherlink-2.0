@@ -10,7 +10,7 @@ import java.util.ArrayDeque;
 public class Trapped {
     static public void run(Memory memory) {
         System.out.println("starting " + Trapped.class.getSimpleName());
-        int startingChanges = memory.getChanges().size();
+        int startingChanges = memory.getNumChanges();
 
         for (int x = 0; x < memory.getDimentions().xSize; x++) {
             for (int y = 0; y < memory.getDimentions().ySize; y++) {
@@ -22,7 +22,7 @@ public class Trapped {
         }
 
         System.out.println(Trapped.class.getSimpleName() + " finished");
-        System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
+        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
     }
 
     public static void checkTrapped(Memory memory, Coords emptyCoord) {
@@ -110,7 +110,7 @@ public class Trapped {
                     }
 
                     if (highlightOneFound && highlightTwoFound) {
-                        memory.change(memory.setHighlight(highlight.getOpposite(), emptyCoord, false));
+                        memory.setHighlight(highlight.getOpposite(), emptyCoord, false);
                     }
                 }
             }

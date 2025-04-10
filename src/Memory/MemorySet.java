@@ -34,8 +34,8 @@ public class MemorySet {
         for (int y = 0; y < calculation.getDimentions().ySize + 1; y++) {
             for (int x = 0; x < calculation.getDimentions().xSize + 1; x++) {
                 Coords coords = new Coords(x, y);
-                visible.change(visible.setLine(true, calculation.getLine(true, coords, CardinalDirection.NORTH), coords, CardinalDirection.NORTH, false));
-                visible.change(visible.setLine(true, calculation.getLine(true, coords, CardinalDirection.WEST), coords, CardinalDirection.WEST, false));
+                visible.setLine(true, calculation.getLine(true, coords, CardinalDirection.NORTH), coords, CardinalDirection.NORTH, false);
+                visible.setLine(true, calculation.getLine(true, coords, CardinalDirection.WEST), coords, CardinalDirection.WEST, false);
             }
         }
     }
