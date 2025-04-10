@@ -3,9 +3,12 @@ package PuzzleLoading;
 import Enums.Number;
 import Memory.Coords;
 import Memory.Dimentions;
-import Memory.NumberMemory;
+import Memory.Memory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.TreeSet;
 
 public class ParseData {
     public static ArrayList<ArrayList<TextData>> splitLists(List<TextData> data) {
@@ -33,7 +36,7 @@ public class ParseData {
 
         return puzzles;
     }
-    public static NumberMemory parsePuzzle(ArrayList<TextData> puzzleList) {
+    public static Memory parsePuzzle(ArrayList<TextData> puzzleList) {
         TreeSet<Float> xValues = new TreeSet<>();
         TreeSet<Float> yValues = new TreeSet<>();
 
@@ -69,17 +72,15 @@ public class ParseData {
                 (int) ((yValues.last() - yValues.first()) / inbetweenSpace) + 1
         );
 
-        NumberMemory memory = new NumberMemory(dimentions);
+        Memory memory = new Memory(dimentions);
         for(TextData data : puzzleList) {
             Number number = Number.getNumber(Integer.parseInt(data.text));
             Coords coords = new Coords(
                     (int) (data.x / inbetweenSpace - xValues.first() / inbetweenSpace),
                     (int) (data.y / inbetweenSpace - yValues.first() / inbetweenSpace)
             );
-            memory.set(number, coords, true);
+            memory.setNumber(number, coords, true);
         }
-
-        memory.lock();
 
         return memory;
     }

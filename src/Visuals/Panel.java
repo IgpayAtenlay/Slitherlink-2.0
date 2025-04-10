@@ -81,7 +81,7 @@ public class Panel extends JPanel {
         for (int y = 0; y < memorySet.getVisible().getDimentions().ySize; y++) {
             for (int x = 0; x < memorySet.getVisible().getDimentions().xSize; x++) {
                 Coords coords = new Coords(x, y);
-                String text = memorySet.getVisible().getNumbers().get(coords).toString(true);
+                String text = memorySet.getVisible().getNumber(coords).toString(true);
                 int textWidth = g.getFontMetrics().stringWidth(text);
                 g.drawString(text,
                         getSquareCenterCoords(coords).x - textWidth / 2,
@@ -153,7 +153,7 @@ public class Panel extends JPanel {
         for (int y = 0; y < memorySet.getVisible().getDimentions().ySize; y++) {
             for (int x = 0; x < memorySet.getVisible().getDimentions().xSize; x++) {
                 Coords coords = new Coords(x, y);
-                Highlight highlight = memorySet.getVisible().getHighlights().get(coords);
+                Highlight highlight = memorySet.getVisible().getHighlight(coords);
                 if (highlight != Highlight.EMPTY) {
                     if (highlight == Highlight.INSIDE) {
                         g.setColor(new Color(193, 255, 176));

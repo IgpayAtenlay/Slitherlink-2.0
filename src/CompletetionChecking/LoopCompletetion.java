@@ -4,10 +4,10 @@ import Enums.CardinalDirection;
 import Enums.Line;
 import ErrorChecking.LoopErrors;
 import Memory.Coords;
-import Memory.FullMemory;
+import Memory.Memory;
 
 public class LoopCompletetion {
-    static public boolean run(FullMemory memory) {
+    static public boolean run(Memory memory) {
         System.out.println("starting " + LoopErrors.class.getSimpleName());
 
         int totalLines = memory.getNumLines();
@@ -27,7 +27,7 @@ public class LoopCompletetion {
         return true;
     }
 
-    public static boolean hasLine(FullMemory memory, Coords coords) {
+    public static boolean hasLine(Memory memory, Coords coords) {
         for (CardinalDirection direction : CardinalDirection.values()) {
             if (memory.getLine(false, coords, direction) == Line.LINE) {
                 return true;
@@ -35,7 +35,7 @@ public class LoopCompletetion {
         }
         return false;
     }
-    public static boolean isGoodLoop(FullMemory memory, Coords start, int totalLines) {
+    public static boolean isGoodLoop(Memory memory, Coords start, int totalLines) {
         CardinalDirection exit = CardinalDirection.NORTH;
         for (CardinalDirection direction : CardinalDirection.values()) {
             if (memory.getLine(false, start, direction) == Line.LINE) {

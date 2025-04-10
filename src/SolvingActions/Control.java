@@ -1,19 +1,19 @@
 package SolvingActions;
 
 import Memory.Dimentions;
-import Memory.FullMemory;
+import Memory.Memory;
 
 public class Control {
-    private final FullMemory memory;
+    private final Memory memory;
 
-    public Control(FullMemory memory) {
+    public Control(Memory memory) {
         this.memory = memory;
     }
     public Control() {
-        this(new FullMemory());
+        this(new Memory());
     }
     public Control(int xSize, int ySize) {
-        this(new FullMemory(new Dimentions(xSize, ySize)));
+        this(new Memory(new Dimentions(xSize, ySize)));
     }
 
     public void autoSolve(boolean guessAndCheck) {
@@ -50,7 +50,7 @@ public class Control {
         System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
     }
 
-    public FullMemory getMemory() {
+    public Memory getMemory() {
         return memory;
     }
 }

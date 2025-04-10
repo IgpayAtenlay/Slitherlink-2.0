@@ -3,25 +3,25 @@ package SolvingActions;
 import Enums.*;
 import Enums.Number;
 import Memory.Coords;
-import Memory.FullMemory;
+import Memory.Memory;
 
 public class AdjacentBlocks {
-    static public void run(FullMemory memory) {
+    static public void run(Memory memory) {
         System.out.println("starting " + AdjacentBlocks.class.getSimpleName());
         int startingChanges = memory.getChanges().size();
 
         for (int x = 0; x < memory.getDimentions().xSize; x++) {
             for (int y = 0; y < memory.getDimentions().ySize; y++) {
                 Coords coords = new Coords(x, y);
-                switch (memory.getNumbers().get(coords)) {
+                switch (memory.getNumber(coords)) {
                     case THREE -> doubleThrees(memory, coords);
                     case TWO -> twoSandwich(memory, coords);
                 }
 
-                if (memory.getHighlights().get(coords) == Highlight.EMPTY) {
+                if (memory.getHighlight(coords) == Highlight.EMPTY) {
                     createHighlight(memory, coords);
                 }
-                if (memory.getHighlights().get(coords) != Highlight.EMPTY) {
+                if (memory.getHighlight(coords) != Highlight.EMPTY) {
                     useHighlight(memory, coords);
                 }
             }
@@ -31,9 +31,9 @@ public class AdjacentBlocks {
         System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
     }
 
-    static public void doubleThrees(FullMemory memory, Coords coords) {
+    static public void doubleThrees(Memory memory, Coords coords) {
         for (CardinalDirection direction : new CardinalDirection[] {CardinalDirection.EAST, CardinalDirection.SOUTH}) {
-            if (memory.getNumbers().get(coords.addDirection(direction)) == Number.THREE) {
+            if (memory.getNumber(coords.addDirection(direction)) == Number.THREE) {
                 memory.change(memory.setLine(true, Line.LINE, coords, direction.getOpposite(), false));
                 memory.change(memory.setLine(true, Line.LINE, coords, direction, false));
                 memory.change(memory.setLine(true, Line.LINE, coords.addDirection(direction), direction, false));
@@ -42,21 +42,21 @@ public class AdjacentBlocks {
             }
         }
     }
-    static public void createHighlight(FullMemory memory, Coords coords) {
+    static public void createHighlight(Memory memory, Coords coords) {
         for (CardinalDirection direction : CardinalDirection.values()) {
-            Highlight adjacentHighlight = memory.getHighlights().get(coords.addDirection(direction));
+            Highlight adjacentHighlight = memory.getHighlight(coords.addDirection(direction));
             Line line = memory.getLine(true, coords, direction);
             if (line == Line.LINE) {
-                memory.change(memory.getHighlights().set(adjacentHighlight.getOpposite(), coords, false));
+                memory.change(memory.setHighlight(adjacentHighlight.getOpposite(), coords, false));
             } else if (line == Line.X) {
-                memory.change(memory.getHighlights().set(adjacentHighlight, coords, false));
+                memory.change(memory.setHighlight(adjacentHighlight, coords, false));
             }
         }
     }
-    static public void useHighlight(FullMemory memory, Coords coords) {
-        Highlight currentHighlight = memory.getHighlights().get(coords);
+    static public void useHighlight(Memory memory, Coords coords) {
+        Highlight currentHighlight = memory.getHighlight(coords);
         for (CardinalDirection direction : CardinalDirection.values()) {
-            Highlight adjacentHighlight = memory.getHighlights().get(coords.addDirection(direction));
+            Highlight adjacentHighlight = memory.getHighlight(coords.addDirection(direction));
             if (currentHighlight == adjacentHighlight) {
                 memory.change(memory.setLine(true, Line.X, coords, direction, false));
             } else if (currentHighlight != Highlight.EMPTY && adjacentHighlight != Highlight.EMPTY) {
@@ -64,11 +64,11 @@ public class AdjacentBlocks {
             }
         }
     }
-    static public void twoSandwich(FullMemory memory, Coords coords) {
+    static public void twoSandwich(Memory memory, Coords coords) {
         for (CardinalDirection direction : new CardinalDirection[] {CardinalDirection.EAST, CardinalDirection.SOUTH}) {
             if (
-                    memory.getHighlights().get(coords.addDirection(direction)) == memory.getHighlights().get(coords.addDirection(direction.getOpposite())) &&
-                    memory.getHighlights().get(coords.addDirection(direction)) != Highlight.EMPTY
+                    memory.getHighlight(coords.addDirection(direction)) == memory.getHighlight(coords.addDirection(direction.getOpposite())) &&
+                    memory.getHighlight(coords.addDirection(direction)) != Highlight.EMPTY
             ) {
                 for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
                     memory.change(memory.setDiagonal(true, Diagonal.EXACTLY_ONE, coords, diagonalDirection, false));

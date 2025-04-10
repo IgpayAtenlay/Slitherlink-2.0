@@ -62,4 +62,7 @@ public class Indexes {
             return -1;
         }
     }
+    public static int point(Coords coords, Dimentions dimentions) {
+        return coords.x + coords.y * (dimentions.xSize + 1);
+    }
 }

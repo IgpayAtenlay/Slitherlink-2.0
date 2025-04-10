@@ -3,10 +3,10 @@ package ErrorChecking;
 import Enums.CardinalDirection;
 import Enums.Line;
 import Memory.Coords;
-import Memory.FullMemory;
+import Memory.Memory;
 
 public class LineErrors {
-    public static boolean run(FullMemory memory) {
+    public static boolean run(Memory memory) {
         System.out.println("starting " + LineErrors.class.getSimpleName());
 
         for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {

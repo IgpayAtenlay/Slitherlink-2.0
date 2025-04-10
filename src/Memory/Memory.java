@@ -1,24 +1,22 @@
 package Memory;
 
-import Enums.CardinalDirection;
-import Enums.Diagonal;
-import Enums.DiagonalDirection;
-import Enums.Line;
+import Enums.*;
+import Enums.Number;
 import Util.Indexes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class FullMemory {
+public class Memory {
     private final Dimentions dimentions;
     private final Line[] lines;
-    private final NumberMemory numbers;
-    private final HighlightMemory highlights;
+    private final Number[] numbers;
+    private final Highlight[] highlights;
     private final Diagonal[] diagonals;
-    private final LoopMemory loops;
+    private final Loop[] loops;
     private final ArrayList<Changes> changes;
 
-    public FullMemory(Dimentions dimentions, Line[] lines, NumberMemory numbers, HighlightMemory highlights, Diagonal[] diagonals, LoopMemory loops, ArrayList<Changes> changes) {
+    public Memory(Dimentions dimentions, Line[] lines, Number[] numbers, Highlight[] highlights, Diagonal[] diagonals, Loop[] loops, ArrayList<Changes> changes) {
         this.dimentions = dimentions;
         this.lines = lines;
         this.numbers = numbers;
@@ -27,55 +25,48 @@ public class FullMemory {
         this.loops = loops;
         this.changes = changes;
     }
-    private FullMemory(Dimentions dimentions, NumberMemory numbers) {
+    public Memory(Dimentions dimentions) {
         this(
                 dimentions,
                 new Line[dimentions.xSize * (dimentions.ySize + 1) + dimentions.ySize * (dimentions.xSize + 1)],
-                numbers,
-                new HighlightMemory(dimentions),
+                new Number[dimentions.xSize * dimentions.ySize],
+                new Highlight[dimentions.xSize * dimentions.ySize],
                 new Diagonal[(dimentions.xSize + 1) * (dimentions.ySize + 1) * 4],
-                new LoopMemory(dimentions),
+                new Loop[(dimentions.xSize + 1) * (dimentions.ySize + 1)],
                 new ArrayList<>()
         );
         Arrays.fill(lines, Line.EMPTY);
         Arrays.fill(diagonals, Diagonal.EMPTY);
+        Arrays.fill(highlights, Highlight.EMPTY);
+        Arrays.fill(numbers, Number.EMPTY);
     }
-    public FullMemory(NumberMemory numbers) {
-        this(numbers.getDimentions(), numbers.copy());
-    }
-    public FullMemory(Dimentions dimentions) {
-        this(dimentions, new NumberMemory(dimentions.copy()));
-    }
-    public FullMemory() {
+    public Memory() {
         this(new Dimentions(20, 20));
     }
-    public FullMemory copy() {
+    public Memory copy() {
         ArrayList<Changes> changes = new ArrayList<>();
         for (Changes change : this.changes) {
             changes.add(change.copy());
         }
-        return new FullMemory(
+        Loop[] loops = new Loop[this.loops.length];
+        for (int i = 0; i < this.loops.length; i++) {
+            if (this.loops[i] != null) {
+                loops[i] = this.loops[i].copy();
+            }
+        }
+        return new Memory(
                 dimentions.copy(),
                 lines.clone(),
-                numbers.copy(),
-                highlights.copy(),
+                numbers.clone(),
+                highlights.clone(),
                 diagonals.clone(),
-                loops.copy(),
+                loops,
                 changes
         );
     }
 
     public Dimentions getDimentions() {
         return dimentions;
-    }
-    public NumberMemory getNumbers() {
-        return numbers;
-    }
-    public HighlightMemory getHighlights() {
-        return highlights;
-    }
-    public LoopMemory getLoops() {
-        return loops;
     }
 
     public void change(Changes change) {
@@ -99,7 +90,7 @@ public class FullMemory {
             for (int x = 0; x < dimentions.xSize; x++) {
                 Coords coords = new Coords(x, y);
                 System.out.print(getLine(true, coords, CardinalDirection.WEST).toString(true) + " ");
-                System.out.print(getNumbers().get(coords).toString(true) + " ");
+                System.out.print(getNumber(coords).toString(true) + " ");
             }
 
             System.out.print(getLine(true, new Coords(dimentions.xSize - 1, y), CardinalDirection.EAST).toString(true));
@@ -116,7 +107,7 @@ public class FullMemory {
     public void printNumbers() {
         for (int y = 0; y < dimentions.ySize; y++) {
             for (int x = 0; x < dimentions.xSize; x++) {
-                System.out.print(numbers.get(new Coords(x, y)) + " ");
+                System.out.print(getNumber(new Coords(x, y)) + " ");
             }
             System.out.println();
         }
@@ -133,7 +124,7 @@ public class FullMemory {
             for (int x = 0; x < dimentions.xSize; x++) {
                 Coords coords = new Coords(x, y);
                 System.out.print(getLine(true, coords, CardinalDirection.WEST));
-                System.out.print(getHighlights().get(coords));
+                System.out.print(getHighlight(coords));
                 System.out.print(" ");
             }
 
@@ -159,7 +150,7 @@ public class FullMemory {
 //            System.out.println("changing " + coords + " " + direction + " to " + line);
             lines[i] = line;
             if (line == Line.LINE) {
-                loops.setLoop(square, coords, direction);
+                setLoop(square, coords, direction);
             }
             return new Changes(line, i);
         }
@@ -211,5 +202,100 @@ public class FullMemory {
         }
 
         return null;
+    }
+    public Changes setHighlight(Highlight highlight, Coords coords, boolean override) {
+        int x = coords.x;
+        int y = coords.y;
+        if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0 &&
+                (highlights[x + y * dimentions.xSize] != highlight && (highlights[x + y * dimentions.xSize] == Highlight.EMPTY || override))
+        ) {
+            int i = x + y * dimentions.xSize;
+            highlights[i] = highlight;
+            return new Changes(highlight, i);
+        }
+        return null;
+    }
+    public Highlight getHighlight(Coords coords) {
+        int x = coords.x;
+        int y = coords.y;
+        if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0) {
+            return highlights[x + y * dimentions.xSize];
+        } else {
+            return Highlight.OUTSIDE;
+        }
+    }
+    public Changes setNumber(Number number, Coords coords, boolean override) {
+        int x = coords.x;
+        int y = coords.y;
+        if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0 &&
+                numbers[x + y * dimentions.xSize] != number && (numbers[x + y * dimentions.xSize] == Number.EMPTY || override)) {
+            int i = x + y * dimentions.xSize;
+            numbers[i] = number;
+            return new Changes(number, i);
+        } else {
+            return null;
+        }
+    }
+    public Number getNumber(Coords coords) {
+        int x = coords.x;
+        int y = coords.y;
+        if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0) {
+            return numbers[x + y * dimentions.xSize];
+        } else {
+            return Number.EMPTY;
+        }
+    }
+    public void setLoop(boolean square, Coords coordOne, CardinalDirection direction) {
+        if (square) {
+            switch (direction) {
+                case NORTH -> setLoop(false, coordOne, CardinalDirection.EAST);
+                case EAST -> setLoop(false, coordOne.addDirection(CardinalDirection.EAST), CardinalDirection.SOUTH);
+                case SOUTH -> setLoop(false, coordOne.addDirection(CardinalDirection.SOUTH), CardinalDirection.EAST);
+                case WEST -> setLoop(false, coordOne, CardinalDirection.SOUTH);
+            };
+        } else {
+            Coords coordTwo = coordOne.addDirection(direction);
+            if (Indexes.point(coordOne, dimentions) < 0 || Indexes.point(coordOne, dimentions) >= loops.length || Indexes.point(coordTwo, dimentions) < 0 || Indexes.point(coordTwo, dimentions) >= loops.length) {
+                return;
+            }
+            if (loops[Indexes.point(coordOne, dimentions)] != null && loops[Indexes.point(coordOne, dimentions)].coords.equals(coordTwo)) {
+                loops[Indexes.point(coordOne, dimentions)] = null;
+                loops[Indexes.point(coordTwo, dimentions)] = null;
+                return;
+            }
+
+            Loop oneLoopEnd = loops[Indexes.point(coordOne, dimentions)];
+            Loop twoLoopEnd = loops[Indexes.point(coordTwo, dimentions)];
+
+            int length = 1;
+            if (oneLoopEnd != null) {
+                length += oneLoopEnd.length;
+            }
+            if (twoLoopEnd != null) {
+                length += twoLoopEnd.length;
+            }
+
+            Loop newOneLoop = new Loop(twoLoopEnd == null ? coordTwo : twoLoopEnd.coords, length);
+            Loop newTwoLoop = new Loop(oneLoopEnd == null ? coordOne : oneLoopEnd.coords, length);
+
+            if (oneLoopEnd == null) {
+                loops[Indexes.point(coordOne, dimentions)] = newOneLoop;
+            } else {
+                loops[Indexes.point(coordOne, dimentions)] = null;
+                loops[Indexes.point(oneLoopEnd.coords, dimentions)] = newOneLoop;
+            }
+            if (twoLoopEnd == null) {
+                loops[Indexes.point(coordTwo, dimentions)] = newTwoLoop;
+            } else {
+                loops[Indexes.point(coordTwo, dimentions)] = null;
+                loops[Indexes.point(twoLoopEnd.coords, dimentions)] = newTwoLoop;
+            }
+        }
+    }
+    public Loop getLoop(Coords coords) {
+        if (Indexes.point(coords, dimentions) < 0 || Indexes.point(coords, dimentions) >= loops.length) {
+            return null;
+        }
+        return loops[Indexes.point(coords, dimentions)];
     }
 }

@@ -4,10 +4,10 @@ import Enums.CardinalDirection;
 import Enums.Line;
 import ErrorChecking.Errors;
 import Memory.Coords;
-import Memory.FullMemory;
+import Memory.Memory;
 
 public class GuessAndCheck {
-    static public void run(FullMemory memory) {
+    static public void run(Memory memory) {
         System.out.println("starting " + GuessAndCheck.class.getSimpleName());
         int startingChanges = memory.getChanges().size();
 
@@ -33,9 +33,9 @@ public class GuessAndCheck {
         System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
     }
 
-    public static void guess(FullMemory memory, Coords coords, CardinalDirection direction, Line line) {
+    public static void guess(Memory memory, Coords coords, CardinalDirection direction, Line line) {
 //        System.out.println("guessing " + coords + " " + direction + " " + line);
-        FullMemory workingMemory = memory.copy();
+        Memory workingMemory = memory.copy();
         Control control = new Control(workingMemory);
         workingMemory.setLine(true, line, coords, direction, false);
         if (Errors.hasErrors(workingMemory)) {

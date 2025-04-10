@@ -3,19 +3,19 @@ package SolvingActions;
 import Enums.CardinalDirection;
 import Enums.Highlight;
 import Memory.Coords;
-import Memory.FullMemory;
+import Memory.Memory;
 
 import java.util.ArrayDeque;
 
 public class Trapped {
-    static public void run(FullMemory memory) {
+    static public void run(Memory memory) {
         System.out.println("starting " + Trapped.class.getSimpleName());
         int startingChanges = memory.getChanges().size();
 
         for (int x = 0; x < memory.getDimentions().xSize; x++) {
             for (int y = 0; y < memory.getDimentions().ySize; y++) {
                 Coords coords = new Coords(x, y);
-                if (memory.getHighlights().get(coords) == Highlight.EMPTY) {
+                if (memory.getHighlight(coords) == Highlight.EMPTY) {
                     checkTrapped(memory, coords);
                 }
             }
@@ -25,14 +25,14 @@ public class Trapped {
         System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
     }
 
-    public static void checkTrapped(FullMemory memory, Coords emptyCoord) {
+    public static void checkTrapped(Memory memory, Coords emptyCoord) {
         for (CardinalDirection cardinalDirection : CardinalDirection.values()) {
             // two of same highlight with empty inbetween
             Coords startLocation = emptyCoord.addDirection(cardinalDirection);
             Coords endLocation = emptyCoord.addDirection(cardinalDirection.getOpposite());
-            if (memory.getHighlights().get(startLocation) == memory.getHighlights().get(endLocation)) {
+            if (memory.getHighlight(startLocation) == memory.getHighlight(endLocation)) {
                 System.out.println(emptyCoord + " surrounded by highlights");
-                Highlight highlight = memory.getHighlights().get(startLocation);
+                Highlight highlight = memory.getHighlight(startLocation);
                 // see if they are part of the same group
                 boolean[][] visitied = new boolean[memory.getDimentions().xSize + 2][memory.getDimentions().ySize + 2];
                 ArrayDeque<Coords> queue = new ArrayDeque<>();
@@ -51,7 +51,7 @@ public class Trapped {
                                 sameGroup = true;
                                 break;
                             }
-                            if (highlight == memory.getHighlights().get(newLocation)) {
+                            if (highlight == memory.getHighlight(newLocation)) {
                                 queue.add(newLocation);
                                 visitied[newLocation.x + 1][newLocation.y + 1] = true;
                             }
@@ -75,11 +75,11 @@ public class Trapped {
                                     newLocation.y >= -1 && newLocation.y <= memory.getDimentions().ySize &&
                                     !visitied[newLocation.x + 1][newLocation.y + 1]
                             ) {
-                                if (highlight.getOpposite() == memory.getHighlights().get(newLocation)) {
+                                if (highlight.getOpposite() == memory.getHighlight(newLocation)) {
                                     highlightOneFound = true;
                                     break;
                                 }
-                                if (Highlight.EMPTY == memory.getHighlights().get(newLocation)) {
+                                if (Highlight.EMPTY == memory.getHighlight(newLocation)) {
                                     queue.add(newLocation);
                                     visitied[newLocation.x + 1][newLocation.y + 1] = true;
                                 }
@@ -97,11 +97,11 @@ public class Trapped {
                                             newLocation.y >= -1 && newLocation.y <= memory.getDimentions().ySize &&
                                             !visitied[newLocation.x + 1][newLocation.y + 1]
                             ) {
-                                if (highlight.getOpposite() == memory.getHighlights().get(newLocation)) {
+                                if (highlight.getOpposite() == memory.getHighlight(newLocation)) {
                                     highlightTwoFound = true;
                                     break;
                                 }
-                                if (Highlight.EMPTY == memory.getHighlights().get(newLocation)) {
+                                if (Highlight.EMPTY == memory.getHighlight(newLocation)) {
                                     queue.add(newLocation);
                                     visitied[newLocation.x + 1][newLocation.y + 1] = true;
                                 }
@@ -110,7 +110,7 @@ public class Trapped {
                     }
 
                     if (highlightOneFound && highlightTwoFound) {
-                        memory.change(memory.getHighlights().set(highlight.getOpposite(), emptyCoord, false));
+                        memory.change(memory.setHighlight(highlight.getOpposite(), emptyCoord, false));
                     }
                 }
             }

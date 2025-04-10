@@ -4,17 +4,17 @@ import Enums.CardinalDirection;
 import Enums.DiagonalDirection;
 import Enums.Line;
 import Memory.Coords;
-import Memory.FullMemory;
+import Memory.Memory;
 
 public class LineIntoBlock {
-    static public void run(FullMemory memory) {
+    static public void run(Memory memory) {
         System.out.println("starting " + LineIntoBlock.class.getSimpleName());
         int startingChanges = memory.getChanges().size();
 
         for (int x = 0; x < memory.getDimentions().xSize; x++) {
             for (int y = 0; y < memory.getDimentions().ySize; y++) {
                 Coords coords = new Coords(x, y);
-                switch (memory.getNumbers().get(coords)) {
+                switch (memory.getNumber(coords)) {
                     case TWO -> lineIntoTwo(memory, coords);
                     case THREE -> lineIntoThree(memory, coords);
                 }
@@ -25,7 +25,7 @@ public class LineIntoBlock {
         System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
     }
 
-    static public void lineIntoTwo(FullMemory memory, Coords coords) {
+    static public void lineIntoTwo(Memory memory, Coords coords) {
         for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
 
             // if there is a line entering the TWO
@@ -50,7 +50,7 @@ public class LineIntoBlock {
             }
         }
     }
-    static public void lineIntoThree(FullMemory memory, Coords coords) {
+    static public void lineIntoThree(Memory memory, Coords coords) {
         for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
             // if there is a line entering the THREE
             CardinalDirection[] cardinalDirections = diagonalDirection.getCardinalDirections();

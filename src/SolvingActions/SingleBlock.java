@@ -3,11 +3,11 @@ package SolvingActions;
 import Enums.Number;
 import Enums.*;
 import Memory.Coords;
-import Memory.FullMemory;
+import Memory.Memory;
 
 public class SingleBlock {
     
-    public static void run(FullMemory memory) {
+    public static void run(Memory memory) {
         System.out.println("starting " + SingleBlock.class.getSimpleName());
         
         int startingChanges = memory.getChanges().size();
@@ -17,7 +17,7 @@ public class SingleBlock {
                 Coords coords = new Coords(x, y);
                 fillSidesUsingNumbers(memory, coords);
                 fillDiagonals(memory, coords);
-                switch (memory.getNumbers().get(coords)) {
+                switch (memory.getNumber(coords)) {
                     case EMPTY -> {
                         addLogicZero(memory, coords);
                         addLogicOne(memory, coords);
@@ -44,12 +44,12 @@ public class SingleBlock {
         System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
     }
 
-    public static void populateDiagonalsOne(FullMemory memory, Coords coords) {
+    public static void populateDiagonalsOne(Memory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
             memory.change(memory.setDiagonal(true, Diagonal.AT_MOST_ONE, coords, direction, false));
         }
     }
-    public static void populateDiagonalsTwo(FullMemory memory, Coords coords) {
+    public static void populateDiagonalsTwo(Memory memory, Coords coords) {
         for (CardinalDirection direction : CardinalDirection.values()) {
             switch (memory.getLine(true, coords, direction)) {
                 case X -> {
@@ -63,12 +63,12 @@ public class SingleBlock {
             }
         }
     }
-    public static void populateDiagonalsThree(FullMemory memory, Coords coords) {
+    public static void populateDiagonalsThree(Memory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
             memory.change(memory.setDiagonal(true, Diagonal.AT_LEAST_ONE, coords, direction, false));
         }
     }
-    public static void fillSidesUsingNumbers(FullMemory memory, Coords coords) {
+    public static void fillSidesUsingNumbers(Memory memory, Coords coords) {
         int xs = 0;
         int lines = 0;
         for (CardinalDirection direction : CardinalDirection.values()) {
@@ -79,18 +79,18 @@ public class SingleBlock {
             }
         }
 
-        if (lines == memory.getNumbers().get(coords).value) {
+        if (lines == memory.getNumber(coords).value) {
             for (CardinalDirection direction : CardinalDirection.values()) {
                 memory.change(memory.setLine(true, Line.X, coords, direction, false));
                 memory.change(memory.setLine(true, Line.X, coords, direction, false));
             }
-        } else if (xs == 4 - memory.getNumbers().get(coords).value) {
+        } else if (xs == 4 - memory.getNumber(coords).value) {
             for (CardinalDirection direction : CardinalDirection.values()) {
                 memory.change(memory.setLine(true, Line.LINE, coords, direction, false));
             }
         }
     }
-    public static void fillDiagonals(FullMemory memory, Coords coords) {
+    public static void fillDiagonals(Memory memory, Coords coords) {
         int numExactOne = 0;
         int numBoth = 0;
         int numAtLeast = 0;
@@ -123,7 +123,7 @@ public class SingleBlock {
             }
         }
     }
-    public static void useDiagonalOne(FullMemory memory, Coords coords) {
+    public static void useDiagonalOne(Memory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
             switch (memory.getDiagonal(true, coords, direction)) {
                 case EXACTLY_ONE, AT_LEAST_ONE -> {
@@ -140,7 +140,7 @@ public class SingleBlock {
             }
         }
     }
-    public static void useDiagonalTwo(FullMemory memory, Coords coords) {
+    public static void useDiagonalTwo(Memory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
             switch (memory.getDiagonal(true, coords, direction)) {
                 case EXACTLY_ONE -> {
@@ -160,7 +160,7 @@ public class SingleBlock {
             }
         }
     }
-    public static void useDiagonalThree(FullMemory memory, Coords coords) {
+    public static void useDiagonalThree(Memory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
             switch (memory.getDiagonal(true, coords, direction)) {
                 case EXACTLY_ONE, AT_MOST_ONE -> {
@@ -177,35 +177,35 @@ public class SingleBlock {
             }
         }
     }
-    public static void addLogicZero(FullMemory memory, Coords coords) {
+    public static void addLogicZero(Memory memory, Coords coords) {
         if (memory.getDiagonal(true, coords, DiagonalDirection.NORTHEAST) == Diagonal.BOTH_OR_NEITHER &&
                 memory.getDiagonal(true, coords, DiagonalDirection.SOUTHEAST) == Diagonal.BOTH_OR_NEITHER &&
                 memory.getDiagonal(true, coords, DiagonalDirection.SOUTHWEST) == Diagonal.BOTH_OR_NEITHER &&
                 memory.getDiagonal(true, coords, DiagonalDirection.NORTHWEST) == Diagonal.BOTH_OR_NEITHER
         ) {
-            memory.change(memory.getNumbers().set(Number.ZERO, coords, false)) ;
+            memory.change(memory.setNumber(Number.ZERO, coords, false)) ;
         }
     }
-    public static void addLogicOne(FullMemory memory, Coords coords) {
+    public static void addLogicOne(Memory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
             if (memory.getDiagonal(true, coords, direction) == Diagonal.EXACTLY_ONE &&
                     memory.getLine(true, coords, direction.getCardinalDirections()[0].getOpposite()) == Line.X &&
                     memory.getLine(true, coords, direction.getCardinalDirections()[1].getOpposite()) == Line.X
             ) {
-                memory.change(memory.getNumbers().set(Number.ONE, coords, false));
+                memory.change(memory.setNumber(Number.ONE, coords, false));
             }
         }
     }
-    public static void addLogicTwo(FullMemory memory, Coords coords) {
+    public static void addLogicTwo(Memory memory, Coords coords) {
         for (DiagonalDirection direction : new DiagonalDirection[]{DiagonalDirection.NORTHEAST, DiagonalDirection.SOUTHEAST}) {
             if (memory.getDiagonal(true, coords, direction) == Diagonal.EXACTLY_ONE &&
                     memory.getDiagonal(true, coords, direction.getOpposite()) == Diagonal.EXACTLY_ONE
             ) {
-                memory.change(memory.getNumbers().set(Number.TWO, coords, false));
+                memory.change(memory.setNumber(Number.TWO, coords, false));
             }
         }
     }
-    public static void addLogicThree(FullMemory memory, Coords coords) {
+    public static void addLogicThree(Memory memory, Coords coords) {
         int lines = 0;
         for (CardinalDirection direction : CardinalDirection.values()) {
             if (memory.getLine(true, coords, direction) == Line.LINE) {
@@ -214,14 +214,14 @@ public class SingleBlock {
         }
 
         if (lines == 3) {
-            memory.change(memory.getNumbers().set(Number.THREE, coords, false));
+            memory.change(memory.setNumber(Number.THREE, coords, false));
         } else {
             for (DiagonalDirection direction : DiagonalDirection.values()) {
                 if (memory.getDiagonal(true, coords, direction) == Diagonal.EXACTLY_ONE &&
                         memory.getLine(true, coords, direction.getCardinalDirections()[0].getOpposite()) == Line.LINE &&
                         memory.getLine(true, coords, direction.getCardinalDirections()[1].getOpposite()) == Line.LINE
                 ) {
-                    memory.change(memory.getNumbers().set(Number.THREE, coords, false));
+                    memory.change(memory.setNumber(Number.THREE, coords, false));
                 }
             }
         }

@@ -3,11 +3,11 @@ package SolvingActions;
 import Enums.CardinalDirection;
 import Enums.Line;
 import Memory.Coords;
-import Memory.FullMemory;
+import Memory.Memory;
 import Memory.Loop;
 
 public class CheckLoop {
-    static public void run(FullMemory memory) {
+    static public void run(Memory memory) {
         System.out.println("starting " + CheckLoop.class.getSimpleName());
         int startingChanges = memory.getChanges().size();
 
@@ -22,8 +22,8 @@ public class CheckLoop {
         System.out.println(CheckLoop.class.getSimpleName() + " finished");
         System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
     }
-    public static void checkLoop(FullMemory memory, Coords coords, int totalLines) {
-        Loop loop = memory.getLoops().getLoop(coords);
+    public static void checkLoop(Memory memory, Coords coords, int totalLines) {
+        Loop loop = memory.getLoop(coords);
         if (loop != null && totalLines != loop.length && loop.length != 1) {
             for (CardinalDirection direction : CardinalDirection.values()) {
                 if (loop.coords.equals(coords.addDirection(direction))) {

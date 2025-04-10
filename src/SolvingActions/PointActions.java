@@ -5,10 +5,10 @@ import Enums.Diagonal;
 import Enums.DiagonalDirection;
 import Enums.Line;
 import Memory.Coords;
-import Memory.FullMemory;
+import Memory.Memory;
 
 public class PointActions {
-    static public void run(FullMemory memory) {
+    static public void run(Memory memory) {
         System.out.println("starting " + PointActions.class.getSimpleName());
         int startingChanges = memory.getChanges().size();
 
@@ -27,7 +27,7 @@ public class PointActions {
         System.out.println("changes: " + (memory.getChanges().size() - startingChanges));
     }
 
-    public static void fillSides(FullMemory memory, Coords coords) {
+    public static void fillSides(Memory memory, Coords coords) {
         int xs = 0;
         int lines = 0;
         for (CardinalDirection direction : CardinalDirection.values()) {
@@ -48,7 +48,7 @@ public class PointActions {
             }
         }
     }
-    public static void fillDiagonals(FullMemory memory, Coords coords) {
+    public static void fillDiagonals(Memory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
             Line lineOne = memory.getLine(false, coords, direction.getCardinalDirections()[0]);
             Line lineTwo = memory.getLine(false, coords, direction.getCardinalDirections()[1]);
@@ -65,7 +65,7 @@ public class PointActions {
             }
         }
     }
-    public static void useDiagonals(FullMemory memory, Coords coords) {
+    public static void useDiagonals(Memory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
             Diagonal diagonal = memory.getDiagonal(false, coords, direction);
             Line lineOne = memory.getLine(false, coords, direction.getCardinalDirections()[0]);
@@ -82,7 +82,7 @@ public class PointActions {
             }
         }
     }
-    public static void copyDiagonals(FullMemory memory, Coords coords) {
+    public static void copyDiagonals(Memory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
             Diagonal diagonal = memory.getDiagonal(false, coords, direction);
             switch (diagonal) {
@@ -92,7 +92,7 @@ public class PointActions {
 
         }
     }
-    public static void adjacentDiagonals(FullMemory memory, Coords coords) {
+    public static void adjacentDiagonals(Memory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
             Diagonal diagonal = memory.getDiagonal(false, coords, direction);
             if (diagonal == Diagonal.AT_LEAST_ONE || diagonal == Diagonal.EXACTLY_ONE) {

@@ -5,23 +5,23 @@ import Enums.CardinalDirection;
 import Enums.Number;
 
 public class MemorySet {
-    private final FullMemory visible;
-    private final FullMemory calculation;
+    private final Memory visible;
+    private final Memory calculation;
     private final Control control;
 
-    public MemorySet(FullMemory visible, FullMemory calculation, Control control) {
+    public MemorySet(Memory visible, Memory calculation, Control control) {
         this.visible = visible;
         this.calculation = calculation;
         this.control = control;
     }
-    public MemorySet(FullMemory visible, FullMemory calculation) {
+    public MemorySet(Memory visible, Memory calculation) {
         this(visible, calculation, new Control(calculation));
     }
-    public MemorySet(NumberMemory realNumbers) {
-        this(new FullMemory(realNumbers), new FullMemory(realNumbers.copy(false)));
+    public MemorySet(Memory memory) {
+        this(memory, memory.copy());
     }
     public MemorySet(Dimentions dimentions) {
-        this(new FullMemory(dimentions), new FullMemory(dimentions.copy()));
+        this(new Memory(dimentions), new Memory(dimentions.copy()));
     }
     public MemorySet copy() {
         return new MemorySet(visible.copy(), calculation.copy());
@@ -43,17 +43,17 @@ public class MemorySet {
         visible.print();
     }
 
-    public FullMemory getVisible() {
+    public Memory getVisible() {
         return visible;
     }
-    public FullMemory getCalculation() {
+    public Memory getCalculation() {
         return calculation;
     }
     public Control getControl() {
         return control;
     }
     public void setNumber(Number number, Coords coords) {
-        visible.getNumbers().set(number, coords, true);
-        calculation.getNumbers().set(number, coords, true);
+        visible.setNumber(number, coords, true);
+        calculation.setNumber(number, coords, true);
     }
 }

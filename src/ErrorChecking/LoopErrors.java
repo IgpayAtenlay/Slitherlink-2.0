@@ -3,10 +3,10 @@ package ErrorChecking;
 import Enums.CardinalDirection;
 import Enums.Line;
 import Memory.Coords;
-import Memory.FullMemory;
+import Memory.Memory;
 
 public class LoopErrors {
-    static public boolean run(FullMemory memory) {
+    static public boolean run(Memory memory) {
         // this doesn't work
         System.out.println("starting " + LoopErrors.class.getSimpleName());
 
@@ -28,7 +28,7 @@ public class LoopErrors {
         System.out.println(LoopErrors.class.getSimpleName() + " finished");
         return false;
     }
-    public static boolean isThisLoopProblem(FullMemory memory, Coords start, int totalLines, boolean[][] visited) {
+    public static boolean isThisLoopProblem(Memory memory, Coords start, int totalLines, boolean[][] visited) {
         int linesInLoop = 0;
         CardinalDirection exit = CardinalDirection.NORTH;
         for (CardinalDirection direction : CardinalDirection.values()) {

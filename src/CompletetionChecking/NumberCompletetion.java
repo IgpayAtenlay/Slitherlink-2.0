@@ -4,16 +4,16 @@ import Enums.CardinalDirection;
 import Enums.Line;
 import Enums.Number;
 import Memory.Coords;
-import Memory.FullMemory;
+import Memory.Memory;
 
 public class NumberCompletetion {
-    public static boolean run(FullMemory memory) {
+    public static boolean run(Memory memory) {
         System.out.println("starting " + NumberCompletetion.class.getSimpleName());
 
         for (int x = 0; x < memory.getDimentions().xSize; x++) {
             for (int y = 0; y < memory.getDimentions().ySize; y++) {
                 Coords coords = new Coords(x, y);
-                Number number = memory.getNumbers().get(coords);
+                Number number = memory.getNumber(coords);
                 if (number != Number.EMPTY) {
                     int lines = 0;
                     for (CardinalDirection direction : CardinalDirection.values()) {
@@ -21,7 +21,7 @@ public class NumberCompletetion {
                             lines++;
                         }
                     }
-                    if (lines != memory.getNumbers().get(coords).value) {
+                    if (lines != memory.getNumber(coords).value) {
                         System.out.println(NumberCompletetion.class.getSimpleName() + " finished");
                         return false;
                     }

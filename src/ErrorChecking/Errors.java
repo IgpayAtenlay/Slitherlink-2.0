@@ -3,10 +3,10 @@ package ErrorChecking;
 import CompletetionChecking.LoopCompletetion;
 import CompletetionChecking.NumberCompletetion;
 import CompletetionChecking.PointCompletetion;
-import Memory.FullMemory;
+import Memory.Memory;
 
 public class Errors {
-    public static boolean hasErrors(FullMemory memory) {
+    public static boolean hasErrors(Memory memory) {
         if (NumberErrors.run(memory)) {
             System.out.println("number error");
             return true;
@@ -22,7 +22,7 @@ public class Errors {
         System.out.println("No errors");
         return false;
     }
-    public static boolean isComplete(FullMemory memory) {
+    public static boolean isComplete(Memory memory) {
         if (!NumberCompletetion.run(memory)) {
             return false;
         }
