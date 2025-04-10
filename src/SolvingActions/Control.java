@@ -31,8 +31,9 @@ public class Control {
             AdjacentBlocks.run(memory);
             AdjacentDiagonalBlocks.run(memory);
             LineIntoBlock.run(memory);
+            CheckLoop.run(memory);
             if (roundChanges == memory.getChanges().size()) {
-                CheckLoop.run(memory);
+                Trapped.run(memory);
             }
             if (guessAndCheck) {
                 if (roundChanges == memory.getChanges().size()) {
