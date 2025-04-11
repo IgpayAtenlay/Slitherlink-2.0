@@ -1,9 +1,5 @@
-condense memory into one class
 create a way to save
-create an undo button
-create a mass undo button
 make loop successfully track deleted lines
-make highlight loop logic
 make it prettier
 auto create puzzles
 create way to input numbers

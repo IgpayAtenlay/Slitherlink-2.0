@@ -24,7 +24,6 @@ public class Main {
         MemorySet memory = new MemorySet(ParseData.parsePuzzle(puzzles.get(2)));
         memory.autoSolve(false);
         memory.linesCalculationToVisible();
-//        memory.getCalculation().getLoops().print();
         new Frame(memory);
     }
 }

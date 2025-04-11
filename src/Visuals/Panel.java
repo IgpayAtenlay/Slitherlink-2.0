@@ -49,6 +49,10 @@ public class Panel extends JPanel {
         createButton("Check for Errors - testing only!", e -> interaction.checkForErrors());
         createButton("Check for Completetion - testing only!", e -> interaction.checkForCompletetion());
         createButton("Fill in Highlight - not implimented", e -> interaction.fillInHighlight());
+        createButton("Undo", e -> interaction.undo());
+        createButton("50 Undo", e -> interaction.undo(50));
+        createButton("Redo", e -> interaction.redo());
+        createButton("50 Redo", e -> interaction.redo(50));
     }
 
     @Override

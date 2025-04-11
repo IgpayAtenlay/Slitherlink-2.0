@@ -77,4 +77,18 @@ public class Interaction {
     public void fillInHighlight() {
         // don't do this
     }
+    public void undo(int reps) {
+        memorySet.getVisible().undo(reps);
+        panel.repaint();
+    }
+    public void undo() {
+        undo(1);
+    }
+    public void redo(int reps) {
+        memorySet.getVisible().redo(reps);
+        panel.repaint();
+    }
+    public void redo() {
+        redo(1);
+    }
 }

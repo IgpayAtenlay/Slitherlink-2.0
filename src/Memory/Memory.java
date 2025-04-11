@@ -1,11 +1,11 @@
 package Memory;
 
-import Enums.*;
 import Enums.Number;
+import Enums.*;
 import Util.Indexes;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Stack;
 
 public class Memory {
     private final Dimentions dimentions;
@@ -14,16 +14,18 @@ public class Memory {
     private final Highlight[] highlights;
     private final Diagonal[] diagonals;
     private final Loop[] loops;
-    private final ArrayList<Changes> changes;
+    private final Stack<Changes> undo;
+    private final Stack<Changes> redo;
 
-    public Memory(Dimentions dimentions, Line[] lines, Number[] numbers, Highlight[] highlights, Diagonal[] diagonals, Loop[] loops, ArrayList<Changes> changes) {
+    public Memory(Dimentions dimentions, Line[] lines, Number[] numbers, Highlight[] highlights, Diagonal[] diagonals, Loop[] loops, Stack<Changes> undo, Stack<Changes> redo) {
         this.dimentions = dimentions;
         this.lines = lines;
         this.numbers = numbers;
         this.highlights = highlights;
         this.diagonals = diagonals;
         this.loops = loops;
-        this.changes = changes;
+        this.undo = undo;
+        this.redo = redo;
     }
     public Memory(Dimentions dimentions) {
         this(
@@ -33,7 +35,8 @@ public class Memory {
                 new Highlight[dimentions.xSize * dimentions.ySize],
                 new Diagonal[(dimentions.xSize + 1) * (dimentions.ySize + 1) * 4],
                 new Loop[(dimentions.xSize + 1) * (dimentions.ySize + 1)],
-                new ArrayList<>()
+                new Stack<>(),
+                new Stack<>()
         );
         Arrays.fill(lines, Line.EMPTY);
         Arrays.fill(diagonals, Diagonal.EMPTY);
@@ -44,9 +47,13 @@ public class Memory {
         this(new Dimentions(20, 20));
     }
     public Memory copy() {
-        ArrayList<Changes> changes = new ArrayList<>();
-        for (Changes change : this.changes) {
-            changes.add(change.copy());
+        Stack<Changes> undo = new Stack<>();
+        for (Changes change : this.undo) {
+            undo.push(change.copy());
+        }
+        Stack<Changes> redo = new Stack<>();
+        for (Changes change : this.redo) {
+            redo.push(change.copy());
         }
         Loop[] loops = new Loop[this.loops.length];
         for (int i = 0; i < this.loops.length; i++) {
@@ -61,18 +68,16 @@ public class Memory {
                 highlights.clone(),
                 diagonals.clone(),
                 loops,
-                changes
+                undo,
+                redo
         );
     }
 
     public Dimentions getDimentions() {
         return dimentions;
     }
-    public ArrayList<Changes> getChanges() {
-        return changes;
-    }
     public int getNumChanges() {
-        return changes.size();
+        return undo.size();
     }
 
     public void print() {
@@ -145,7 +150,7 @@ public class Memory {
         }
         if (lines[i] != line && (lines[i] == Line.EMPTY || override)) {
 //            System.out.println("changing " + coords + " " + direction + " to " + line);
-            changes.add(new LineChange(line, lines[i], i));
+            change(new LineChange(line, lines[i], i));
             lines[i] = line;
             if (line == Line.LINE) {
                 setLoop(square, coords, direction);
@@ -189,10 +194,10 @@ public class Memory {
                     ((diagonals[i] == Diagonal.AT_LEAST_ONE || diagonals[i] == Diagonal.AT_MOST_ONE) && (diagonal == Diagonal.EXACTLY_ONE || diagonal == Diagonal.BOTH_OR_NEITHER))
             ) {
 //            System.out.println("changing diagonal " + i + " to " + diagonal);
-                changes.add(new DiagonalChange(diagonal, diagonals[i], i));
+                change(new DiagonalChange(diagonal, diagonals[i], i));
                 diagonals[i] = diagonal;
             } else if ((diagonals[i] == Diagonal.AT_LEAST_ONE && diagonal == Diagonal.AT_MOST_ONE) || (diagonal == Diagonal.AT_LEAST_ONE && diagonals[i] == Diagonal.AT_MOST_ONE)) {
-                changes.add(new DiagonalChange(Diagonal.EXACTLY_ONE, diagonals[i], i));
+                change(new DiagonalChange(Diagonal.EXACTLY_ONE, diagonals[i], i));
                 diagonals[i] = Diagonal.EXACTLY_ONE;
             }
         }
@@ -204,7 +209,7 @@ public class Memory {
                 (highlights[x + y * dimentions.xSize] != highlight && (highlights[x + y * dimentions.xSize] == Highlight.EMPTY || override))
         ) {
             int i = Indexes.box(coords, dimentions);
-            changes.add(new HighlightChange(highlight, highlights[i], i));
+            change(new HighlightChange(highlight, highlights[i], i));
             highlights[i] = highlight;
         }
     }
@@ -223,7 +228,7 @@ public class Memory {
         if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0 &&
                 numbers[x + y * dimentions.xSize] != number && (numbers[x + y * dimentions.xSize] == Number.EMPTY || override)) {
             int i = Indexes.box(coords, dimentions);
-            changes.add(new NumberChange(number, numbers[i], i));
+            change(new NumberChange(number, numbers[i], i));
             numbers[i] = number;
         }
     }
@@ -288,5 +293,44 @@ public class Memory {
             return null;
         }
         return loops[Indexes.point(coords, dimentions)];
+    }
+
+    public void undo(int reps) {
+        for (int i = 0; i < reps; i++) {
+            if (undo.size() > 0) {
+                Changes change = undo.pop();
+                redo.push(change);
+                if (change instanceof LineChange) {
+                    lines[change.index] = ((LineChange) change).previous;
+                } else if (change instanceof NumberChange) {
+                    numbers[change.index] = ((NumberChange) change).previous;
+                } else if (change instanceof DiagonalChange) {
+                    diagonals[change.index] = ((DiagonalChange) change).previous;
+                } else if (change instanceof HighlightChange) {
+                    highlights[change.index] = ((HighlightChange) change).previous;
+                }
+            }
+        }
+    }
+    public void redo(int reps) {
+        for (int i = 0; i < reps; i++) {
+            if (redo.size() > 0) {
+                Changes change = redo.pop();
+                undo.push(change);
+                if (change instanceof LineChange) {
+                    lines[change.index] = ((LineChange) change).current;
+                } else if (change instanceof NumberChange) {
+                    numbers[change.index] = ((NumberChange) change).current;
+                } else if (change instanceof DiagonalChange) {
+                    diagonals[change.index] = ((DiagonalChange) change).current;
+                } else if (change instanceof HighlightChange) {
+                    highlights[change.index] = ((HighlightChange) change).current;
+                }
+            }
+        }
+    }
+    public void change(Changes changes) {
+        undo.push(changes);
+        redo.empty();
     }
 }
