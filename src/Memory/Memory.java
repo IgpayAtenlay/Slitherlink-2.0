@@ -147,9 +147,8 @@ public class Memory {
 //            System.out.println("changing " + coords + " " + direction + " to " + line);
             changes.add(new LineChange(line, lines[i], i));
             lines[i] = line;
-            switch (line) {
-                case LINE -> setLoop(square, coords, direction);
-                case X -> breakLoop(square, coords, direction);
+            if (line == Line.LINE) {
+                setLoop(square, coords, direction);
             }
         }
     }
@@ -281,75 +280,6 @@ public class Memory {
             } else {
                 loops[Indexes.point(coordTwo, dimentions)] = null;
                 loops[Indexes.point(twoLoopEnd.coords, dimentions)] = newTwoLoop;
-            }
-        }
-    }
-    public void breakLoop(boolean square, Coords coordOne, CardinalDirection direction) {
-        if (square) {
-            switch (direction) {
-                case NORTH -> breakLoop(false, coordOne, CardinalDirection.EAST);
-                case EAST -> breakLoop(false, coordOne.addDirection(CardinalDirection.EAST), CardinalDirection.SOUTH);
-                case SOUTH -> breakLoop(false, coordOne.addDirection(CardinalDirection.SOUTH), CardinalDirection.EAST);
-                case WEST -> breakLoop(false, coordOne, CardinalDirection.SOUTH);
-            };
-        } else {
-            Coords coordTwo = coordOne.addDirection(direction);
-            if (Indexes.point(coordOne, dimentions) < 0 || Indexes.point(coordOne, dimentions) >= loops.length || Indexes.point(coordTwo, dimentions) < 0 || Indexes.point(coordTwo, dimentions) >= loops.length) {
-                return;
-            }
-
-            Loop oneLoopEnd = loops[Indexes.point(coordOne, dimentions)];
-            Loop twoLoopEnd = loops[Indexes.point(coordTwo, dimentions)];
-            if (oneLoopEnd != null && oneLoopEnd.coords.equals(coordTwo)) {
-                loops[Indexes.point(coordOne, dimentions)] = null;
-                loops[Indexes.point(coordTwo, dimentions)] = null;
-                return;
-            }
-
-            if (oneLoopEnd != null) {
-                int length = oneLoopEnd.length - 1;
-                loops[Indexes.point(coordTwo, dimentions)] = new Loop(oneLoopEnd.coords, length);
-                loops[Indexes.point(oneLoopEnd.coords, dimentions)] = new Loop(coordTwo, length);
-                loops[Indexes.point(coordOne, dimentions)] = null;
-            } else if (twoLoopEnd != null) {
-                int length = twoLoopEnd.length - 1;
-                loops[Indexes.point(coordOne, dimentions)] = new Loop(twoLoopEnd.coords, length);
-                loops[Indexes.point(twoLoopEnd.coords, dimentions)] = new Loop(coordOne, length);
-                loops[Indexes.point(coordTwo, dimentions)] = null;
-            }
-
-            if (oneLoopEnd == null && twoLoopEnd == null) {
-                Coords currentCoord = coordOne;
-                CardinalDirection enterance = direction;
-                int length = 0;
-                while (loops[Indexes.point(currentCoord, dimentions)] == null) {
-                    for (CardinalDirection posibleExits : CardinalDirection.values()) {
-                        if (posibleExits != enterance && getLine(false, currentCoord, posibleExits) == Line.LINE) {
-                            currentCoord = currentCoord.addDirection(posibleExits);
-                            enterance = posibleExits.getOpposite();
-                            length++;
-                            break;
-                        }
-                    }
-                }
-                loops[Indexes.point(coordOne, dimentions)] = new Loop(currentCoord, length);
-                loops[Indexes.point(currentCoord, dimentions)] = new Loop(coordOne, length);
-
-                currentCoord = coordTwo;
-                enterance = direction.getOpposite();
-                length = 0;
-                while (loops[Indexes.point(currentCoord, dimentions)] == null) {
-                    for (CardinalDirection posibleExits : CardinalDirection.values()) {
-                        if (posibleExits != enterance && getLine(false, currentCoord, posibleExits) == Line.LINE) {
-                            currentCoord = currentCoord.addDirection(posibleExits);
-                            enterance = posibleExits.getOpposite();
-                            length++;
-                            break;
-                        }
-                    }
-                }
-                loops[Indexes.point(coordTwo, dimentions)] = new Loop(currentCoord, length);
-                loops[Indexes.point(currentCoord, dimentions)] = new Loop(coordTwo, length);
             }
         }
     }
