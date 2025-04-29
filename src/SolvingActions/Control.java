@@ -1,22 +1,9 @@
 package SolvingActions;
 
-import Memory.Dimentions;
 import Memory.Memory;
 
 public class Control {
-    private final Memory memory;
-
-    public Control(Memory memory) {
-        this.memory = memory;
-    }
-    public Control() {
-        this(new Memory());
-    }
-    public Control(int xSize, int ySize) {
-        this(new Memory(new Dimentions(xSize, ySize)));
-    }
-
-    public void autoSolve(boolean guessAndCheck) {
+    public static void autoSolve(Memory memory, boolean guessAndCheck) {
         System.out.println("starting autoSolve");
         int roundNum = 0;
         int startingChanges = memory.getNumChanges();
@@ -48,9 +35,5 @@ public class Control {
 
         System.out.println("autoSolve finished");
         System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
-    }
-
-    public Memory getMemory() {
-        return memory;
     }
 }

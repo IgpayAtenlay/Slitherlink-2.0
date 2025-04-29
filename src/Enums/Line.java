@@ -22,13 +22,6 @@ public enum Line {
         };
     }
 
-    public String toString() {
-        return switch (this) {
-            case EMPTY -> "E";
-            case LINE -> "_";
-            case X -> "X";
-        };
-    }
     public String toString(boolean vertical) {
         if (vertical) {
             return switch (this) {

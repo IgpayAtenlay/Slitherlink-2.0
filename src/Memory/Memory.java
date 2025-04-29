@@ -3,6 +3,7 @@ package Memory;
 import Enums.Number;
 import Enums.*;
 import Util.Indexes;
+import Util.JsonConverter;
 
 import java.util.Arrays;
 import java.util.Stack;
@@ -80,6 +81,17 @@ public class Memory {
         return undo.size();
     }
 
+    public String getJson() {
+        return "{" +
+                "\n    \"xSize\": " + dimentions.xSize + "," +
+                "\n    \"ySize\": " + dimentions.ySize + "," +
+                "\n    \"lines\": " + JsonConverter.javaToJson(lines) + "," +
+                "\n    \"numbers\": " + JsonConverter.javaToJson(numbers) + "," +
+                "\n    \"highlights\": " + JsonConverter.javaToJson(highlights) + "," +
+                "\n    \"diagonals\": " + JsonConverter.javaToJson(diagonals) + "," +
+                "\n    \"loops\": " + JsonConverter.javaToJson(loops) +
+                "\n}";
+    }
     public void print() {
         for (int y = 0; y < dimentions.ySize; y++) {
             System.out.print(". ");

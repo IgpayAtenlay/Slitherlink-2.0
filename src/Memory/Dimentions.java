@@ -8,8 +8,10 @@ public class Dimentions {
         this.xSize = xSize;
         this.ySize = ySize;
     }
-
     public Dimentions copy() {
         return new Dimentions(xSize, ySize);
+    }
+    public String toString() {
+        return "(" + xSize + ", " + ySize + ")";
     }
 }

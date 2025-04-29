@@ -36,7 +36,6 @@ public class GuessAndCheck {
     public static void guess(Memory memory, Coords coords, CardinalDirection direction, Line line) {
 //        System.out.println("guessing " + coords + " " + direction + " " + line);
         Memory workingMemory = memory.copy();
-        Control control = new Control(workingMemory);
         workingMemory.setLine(true, line, coords, direction, false);
         if (Errors.hasErrors(workingMemory)) {
             memory.setLine(true, line.getOpposite(), coords, direction, false);
@@ -45,7 +44,7 @@ public class GuessAndCheck {
             memory.setLine(true, line, coords, direction, false);
             return;
         }
-        control.autoSolve(false);
+        Control.autoSolve(workingMemory, false);
         if (Errors.hasErrors(workingMemory)) {
             memory.setLine(true, line.getOpposite(), coords, direction, false);
             return;

@@ -11,13 +11,6 @@ public enum Number {
     Number(int value) {
         this.value = value;
     }
-    public String toString() {
-        if (this == EMPTY) {
-            return "E";
-        } else {
-            return Integer.toString(value);
-        }
-    }
     public String toString(boolean pretty) {
         if (pretty) {
             if (this == EMPTY) {

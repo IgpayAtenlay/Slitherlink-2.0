@@ -5,17 +5,17 @@ import Enums.CardinalDirection;
 import Enums.Number;
 
 public class MemorySet {
+    private String puzzleName;
     private final Memory visible;
     private final Memory calculation;
-    private final Control control;
 
-    public MemorySet(Memory visible, Memory calculation, Control control) {
+    public MemorySet(Memory visible, Memory calculation, String puzzleName) {
         this.visible = visible;
         this.calculation = calculation;
-        this.control = control;
+        this.puzzleName = puzzleName;
     }
     public MemorySet(Memory visible, Memory calculation) {
-        this(visible, calculation, new Control(calculation));
+        this(visible, calculation, "New Puzzle");
     }
     public MemorySet(Memory memory) {
         this(memory, memory.copy());
@@ -28,7 +28,7 @@ public class MemorySet {
     }
 
     public void autoSolve(boolean guessAndCheck) {
-        control.autoSolve(guessAndCheck);
+        Control.autoSolve(calculation, guessAndCheck);
     }
     public void linesCalculationToVisible() {
         for (int y = 0; y < calculation.getDimentions().ySize + 1; y++) {
@@ -49,8 +49,8 @@ public class MemorySet {
     public Memory getCalculation() {
         return calculation;
     }
-    public Control getControl() {
-        return control;
+    public String getPuzzleName() {
+        return puzzleName;
     }
     public void setNumber(Number number, Coords coords) {
         visible.setNumber(number, coords, true);
