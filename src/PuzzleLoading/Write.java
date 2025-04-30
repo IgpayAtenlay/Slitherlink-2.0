@@ -1,4 +1,4 @@
-package Files;
+package PuzzleLoading;
 
 import Memory.MemorySet;
 import Util.CamelCase;

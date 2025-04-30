@@ -1,10 +1,7 @@
 import Enums.Difficulty;
-import Files.Write;
 import Memory.Dimentions;
 import Memory.MemorySet;
-import PuzzleLoading.ExtractDataToVariable;
-import PuzzleLoading.ParseData;
-import PuzzleLoading.TextData;
+import PuzzleLoading.*;
 import Visuals.Frame;
 
 import java.util.ArrayList;
@@ -13,7 +10,15 @@ public class Main {
     public static void main(String[] args) {
 //        testingEnviroment();
 //        solvePuzzle();
-        write();
+//        write();
+        read();
+    }
+
+    public static void read() {
+        MemorySet memorySet = Read.read("new puzzle");
+        if (memorySet != null) {
+            new Frame(memorySet);
+        }
     }
 
     public static void write() {

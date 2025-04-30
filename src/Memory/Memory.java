@@ -28,6 +28,13 @@ public class Memory {
         this.undo = undo;
         this.redo = redo;
     }
+    public Memory(Dimentions dimentions, Line[] lines, Number[] numbers, Highlight[] highlights, Diagonal[] diagonals) {
+        this(dimentions, lines, numbers, highlights, diagonals,
+                new Loop[(dimentions.xSize + 1) * (dimentions.ySize + 1)],
+                new Stack<>(),
+                new Stack<>()
+        );
+    }
     public Memory(Dimentions dimentions) {
         this(
                 dimentions,

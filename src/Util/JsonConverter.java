@@ -1,10 +1,15 @@
 package Util;
 
+import Enums.Diagonal;
+import Enums.Highlight;
 import Enums.Line;
 import Enums.Number;
 import Memory.Loop;
+import Memory.Memory;
+import Memory.Dimentions;
 import Memory.MemorySet;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class JsonConverter {
@@ -22,8 +27,104 @@ public class JsonConverter {
             return Arrays.toString(a).replace(", ", "\", \"").replace("[", "[\"").replace("]", "\"]");
         }
     }
-    public static Object[] jsonToJava(String type, String array) {
-        String[] split = array.split("\", \"");
+    public static MemorySet jsonToMemorySet(ArrayList<String> json) {
+        // grab puzzlename
+        String puzzleName = null;
+        for (String string : json) {
+            if (string.contains("\"puzzleName\":")) {
+                int startingIndex = string.indexOf("\"puzzleName\":") + 15;
+                int endingIndex = string.length() - 2;
+                puzzleName = string.substring(startingIndex, endingIndex);
+            }
+        }
+        int leadingSpaces = -2;
+        int startingIndex = -1;
+        int endingIndex = -1;
+        for (int i = 0; i < json.size(); i++) {
+            String string = json.get(i);
+            if (string.contains("\"visible\":")) {
+                leadingSpaces = string.indexOf("\"visible\":");
+                startingIndex = i;
+            } else if (string.indexOf("}") == leadingSpaces) {
+                endingIndex = i;
+                break;
+            }
+        }
+        Memory visible = null;
+        if (startingIndex != -1 && endingIndex != -1) {
+            ArrayList<String> visibleList = new ArrayList<>();
+            for (int i = startingIndex + 1; i < endingIndex; i++) {
+                visibleList.add(json.get(i));
+            }
+            visible = jsonToMemory(visibleList);
+        }
+        leadingSpaces = -2;
+        startingIndex = -1;
+        endingIndex = -1;
+        for (int i = 0; i < json.size(); i++) {
+            String string = json.get(i);
+            if (string.contains("\"visible\":")) {
+                leadingSpaces = string.indexOf("\"visible\":");
+                startingIndex = i;
+            } else if (string.indexOf("}") == leadingSpaces) {
+                endingIndex = i;
+                break;
+            }
+        }
+        Memory calculation = null;
+        if (startingIndex != -1 && endingIndex != -1) {
+            ArrayList<String> calculationList = new ArrayList<>();
+            for (int i = startingIndex + 1; i < endingIndex; i++) {
+                calculationList.add(json.get(i));
+            }
+            calculation = jsonToMemory(calculationList);
+        }
+        return new MemorySet(visible, calculation, puzzleName);
+    }
+    public static Memory jsonToMemory(ArrayList<String> json) {
+        int xSize = 0;
+        int ySize = 0;
+        Line[] lines = new Line[0];
+        Number[] numbers = new Number[0];
+        Highlight[] highlights = new Highlight[0];
+        Diagonal[] diagonals = new Diagonal[0];
+        Loop[] loops;
+        for (String string : json) {
+            String text = "\"xSize\": ";
+            if (string.contains(text)) {
+                String result = string.substring(string.indexOf(text) + text.length(), string.length() - 1);
+                xSize = Integer.parseInt(result);
+            }
+            text = "\"ySize\": ";
+            if (string.contains(text)) {
+                String result = string.substring(string.indexOf(text) + text.length(), string.length() - 1);
+                ySize = Integer.parseInt(result);
+            }
+            text = "\"lines\": ";
+            if (string.contains(text)) {
+                String result = string.substring(string.indexOf(text) + text.length(), string.length() - 1);
+                lines = (Line[]) jsonToArray("lines", result);
+            }
+            text = "\"numbers\": ";
+            if (string.contains(text)) {
+                String result = string.substring(string.indexOf(text) + text.length(), string.length() - 1);
+                numbers = (Number[]) jsonToArray("numbers", result);
+            }
+            text = "\"highlights\": ";
+            if (string.contains(text)) {
+                String result = string.substring(string.indexOf(text) + text.length(), string.length() - 1);
+                highlights = (Highlight[]) jsonToArray("highlights", result);
+            }
+            text = "\"diagonals\": ";
+            if (string.contains(text)) {
+                String result = string.substring(string.indexOf(text) + text.length(), string.length() - 1);
+                diagonals = (Diagonal[]) jsonToArray("diagonals", result);
+            }
+        }
+        return new Memory(new Dimentions(xSize, ySize), lines, numbers, highlights, diagonals);
+    }
+    public static Object[] jsonToArray(String type, String json) {
+        String[] split = json.split("\", \"");
         split[0] = split[0].replace("[\"", "");
         split[split.length - 1] = split[split.length - 1].replace("\"]", "");
 
@@ -43,10 +144,18 @@ public class JsonConverter {
                 return numbers;
             }
             case "highlights": {
-
+                Highlight[] highlights = new Highlight[split.length];
+                for (int i = 0; i < split.length; i++) {
+                    highlights[i] = Highlight.valueOf(split[i]);
+                }
+                return highlights;
             }
             case "diagonals": {
-
+                Diagonal[] diagonals = new Diagonal[split.length];
+                for (int i = 0; i < split.length; i++) {
+                    diagonals[i] = Diagonal.valueOf(split[i]);
+                }
+                return diagonals;
             }
             case "loops": {
 
