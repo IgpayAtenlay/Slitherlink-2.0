@@ -1,17 +1,18 @@
-package Visuals;
+package Visuals.Panel;
 
 import Enums.*;
 import Memory.Coords;
 import Memory.MemorySet;
+import Visuals.Frame;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Panel extends JPanel {
+public class Puzzle extends JPanel {
     private final MemorySet memorySet;
-    public Interaction interaction;
-    private final Frame frame;
+    public Visuals.Interactions.Puzzle puzzleInteractions;
+    private final Visuals.Frame frame;
     private boolean checkAccuracy;
     private static final int DOT_DIAMETER = 6;
     private static final int STARTING_X = 20;
@@ -23,13 +24,13 @@ public class Panel extends JPanel {
     private static final Color INCORRECT_COLOR = Color.RED;
     private static final int BUTTON_GAP = 5;
 
-    int buttonX;
-    int buttonY;
+    private final int buttonX;
+    private int buttonY;
 
-    public Panel(MemorySet memorySet, Frame frame) {
+    public Puzzle(MemorySet memorySet, Frame frame) {
         this.memorySet = memorySet;
         this.frame = frame;
-        this.interaction = new Interaction(memorySet, this);
+        this.puzzleInteractions = new Visuals.Interactions.Puzzle(memorySet, this);
         buttonX = STARTING_X * 2 + memorySet.getVisible().getDimentions().xSize * LINE_SIZE;
         buttonY = STARTING_Y;
         setLayout(null);
@@ -39,14 +40,14 @@ public class Panel extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                interaction.click(e);
+                puzzleInteractions.click(e);
             }
         });
 
         addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-                interaction.numbers(e);
+                puzzleInteractions.numbers(e);
             }
 
             @Override
@@ -60,16 +61,16 @@ public class Panel extends JPanel {
             }
         });
 
-        createButton("Save", e -> interaction.save());
-        createButton("Check Accuracy", e -> interaction.checkAccuracy());
-        createButton("Autosolve - testing only!", e -> interaction.autoSolve());
-        createButton("Check for Errors - testing only!", e -> interaction.checkForErrors());
-        createButton("Check for Completetion - testing only!", e -> interaction.checkForCompletetion());
-        createButton("Fill in Highlight - not implimented", e -> interaction.fillInHighlight());
-        createButton("Undo", e -> interaction.undo());
-        createButton("50 Undo", e -> interaction.undo(50));
-        createButton("Redo", e -> interaction.redo());
-        createButton("50 Redo", e -> interaction.redo(50));
+        createButton("Save", e -> puzzleInteractions.save());
+        createButton("Check Accuracy", e -> puzzleInteractions.checkAccuracy());
+        createButton("Autosolve - testing only!", e -> puzzleInteractions.autoSolve());
+        createButton("Check for Errors - testing only!", e -> puzzleInteractions.checkForErrors());
+        createButton("Check for Completetion - testing only!", e -> puzzleInteractions.checkForCompletetion());
+        createButton("Fill in Highlight - not implimented", e -> puzzleInteractions.fillInHighlight());
+        createButton("Undo", e -> puzzleInteractions.undo());
+        createButton("50 Undo", e -> puzzleInteractions.undo(50));
+        createButton("Redo", e -> puzzleInteractions.redo());
+        createButton("50 Redo", e -> puzzleInteractions.redo(50));
     }
 
     @Override

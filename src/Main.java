@@ -8,8 +8,9 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
+        new Frame();
 //        testingEnviroment();
-        solvePuzzle();
+//        solvePuzzle();
 //        write();
 //        read("christmas puzzle for dad");
     }
@@ -17,7 +18,7 @@ public class Main {
     public static void read(String fileName) {
         MemorySet memorySet = Read.read(fileName);
         if (memorySet != null) {
-            new Frame(memorySet);
+//            new Frame(memorySet);
         }
     }
 
@@ -29,7 +30,7 @@ public class Main {
 
     public static void testingEnviroment() {
         MemorySet memory = new MemorySet(new Dimentions(9, 3));
-        new Frame(memory);
+//        new Frame(memory);
     }
 
     public static void solvePuzzle() {
@@ -37,6 +38,6 @@ public class Main {
         MemorySet memory = new MemorySet(ParseData.parsePuzzle(puzzles.get(2)));
         memory.autoSolve(false);
         memory.linesCalculationToVisible();
-        new Frame(memory);
+//        new Frame(memory);
     }
 }

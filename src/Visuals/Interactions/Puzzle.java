@@ -1,4 +1,4 @@
-package Visuals;
+package Visuals.Interactions;
 
 import Enums.CardinalDirection;
 import Enums.Line;
@@ -12,31 +12,31 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 
-public class Interaction {
+public class Puzzle {
     private final MemorySet memorySet;
-    private final Panel panel;
+    private final Visuals.Panel.Puzzle puzzle;
     static private String mode = "default";
 
-    public Interaction(MemorySet memorySet, Panel panel) {
+    public Puzzle(MemorySet memorySet, Visuals.Panel.Puzzle puzzle) {
         this.memorySet = memorySet;
-        this.panel = panel;
+        this.puzzle = puzzle;
     }
 
     public void click(MouseEvent e) {
         Coords clickCoords = new Coords(e.getX(), e.getY());
-        Coords squareIndex = panel.getSquareIndex(clickCoords);
-        Coords dotCoords = panel.getDotCoords(squareIndex);
+        Coords squareIndex = puzzle.getSquareIndex(clickCoords);
+        Coords dotCoords = puzzle.getDotCoords(squareIndex);
         Coords relativeCoords = new Coords(clickCoords.x - dotCoords.x, clickCoords.y - dotCoords.y);
 
         CardinalDirection direction;
         if (relativeCoords.x > relativeCoords.y) {
-            if (relativeCoords.x + relativeCoords.y > panel.getLineSize()) {
+            if (relativeCoords.x + relativeCoords.y > puzzle.getLineSize()) {
                 direction = CardinalDirection.EAST;
             } else {
                 direction = CardinalDirection.NORTH;
             }
         } else {
-            if (relativeCoords.x + relativeCoords.y > panel.getLineSize()) {
+            if (relativeCoords.x + relativeCoords.y > puzzle.getLineSize()) {
                 direction = CardinalDirection.SOUTH;
             } else {
                 direction = CardinalDirection.WEST;
@@ -51,7 +51,7 @@ public class Interaction {
             memorySet.getVisible().setNumber(Number.getNumber(Integer.parseInt(mode)), squareIndex, true);
         }
 
-        panel.repaint();
+        puzzle.repaint();
     }
     public void numbers(KeyEvent e) {
         char keyChar = e.getKeyChar();
@@ -66,8 +66,8 @@ public class Interaction {
         Write.write(memorySet);
     }
     public void checkAccuracy() {
-        panel.toggleCheckAccuracy();
-        panel.repaint();
+        puzzle.toggleCheckAccuracy();
+        puzzle.repaint();
     }
     public void autoSolve() {
         System.out.println("autosolve button");
@@ -81,7 +81,7 @@ public class Interaction {
         }
         memorySet.autoSolve(false);
         memorySet.linesCalculationToVisible();
-        panel.repaint();
+        puzzle.repaint();
     }
     public void checkForErrors() {
         if (Errors.hasErrors(memorySet.getVisible())) {
@@ -102,14 +102,14 @@ public class Interaction {
     }
     public void undo(int reps) {
         memorySet.getVisible().undo(reps);
-        panel.repaint();
+        puzzle.repaint();
     }
     public void undo() {
         undo(1);
     }
     public void redo(int reps) {
         memorySet.getVisible().redo(reps);
-        panel.repaint();
+        puzzle.repaint();
     }
     public void redo() {
         redo(1);
