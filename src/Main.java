@@ -9,13 +9,13 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String[] args) {
 //        testingEnviroment();
-//        solvePuzzle();
+        solvePuzzle();
 //        write();
-        read();
+//        read("christmas puzzle for dad");
     }
 
-    public static void read() {
-        MemorySet memorySet = Read.read("new puzzle");
+    public static void read(String fileName) {
+        MemorySet memorySet = Read.read(fileName);
         if (memorySet != null) {
             new Frame(memorySet);
         }
@@ -28,7 +28,7 @@ public class Main {
     }
 
     public static void testingEnviroment() {
-        MemorySet memory = new MemorySet(new Dimentions(2, 2));
+        MemorySet memory = new MemorySet(new Dimentions(9, 3));
         new Frame(memory);
     }
 

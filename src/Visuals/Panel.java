@@ -6,9 +6,7 @@ import Memory.MemorySet;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 public class Panel extends JPanel {
     private final MemorySet memorySet;
@@ -36,6 +34,7 @@ public class Panel extends JPanel {
         buttonY = STARTING_Y;
         setLayout(null);
         setFont(getFont().deriveFont(Font.BOLD, 14f));
+        setFocusable(true);
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -44,6 +43,24 @@ public class Panel extends JPanel {
             }
         });
 
+        addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                interaction.numbers(e);
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+
+        createButton("Save", e -> interaction.save());
         createButton("Check Accuracy", e -> interaction.checkAccuracy());
         createButton("Autosolve - testing only!", e -> interaction.autoSolve());
         createButton("Check for Errors - testing only!", e -> interaction.checkForErrors());

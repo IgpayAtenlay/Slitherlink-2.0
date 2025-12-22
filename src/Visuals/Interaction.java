@@ -2,15 +2,20 @@ package Visuals;
 
 import Enums.CardinalDirection;
 import Enums.Line;
+import Enums.Number;
 import ErrorChecking.Errors;
 import Memory.Coords;
 import Memory.MemorySet;
+import PuzzleLoading.Write;
 
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+
 
 public class Interaction {
     private final MemorySet memorySet;
     private final Panel panel;
+    static private String mode = "default";
 
     public Interaction(MemorySet memorySet, Panel panel) {
         this.memorySet = memorySet;
@@ -38,10 +43,28 @@ public class Interaction {
             }
         }
         Line currentLine = memorySet.getVisible().getLine(true, squareIndex, direction);
-        memorySet.getVisible().setLine(true, currentLine.cycle(), squareIndex, direction, true);
+        if (mode == "default") {
+            memorySet.getVisible().setLine(true, currentLine.cycle(), squareIndex, direction, true);
+        } else if (mode == "empty") {
+            memorySet.getVisible().setNumber(Number.EMPTY, squareIndex, true);
+        } else {
+            memorySet.getVisible().setNumber(Number.getNumber(Integer.parseInt(mode)), squareIndex, true);
+        }
+
         panel.repaint();
     }
+    public void numbers(KeyEvent e) {
+        char keyChar = e.getKeyChar();
+        switch (keyChar) {
+            case '0', '1', '2', '3' -> mode = String.valueOf(keyChar);
+            case java.awt.event.KeyEvent.VK_BACK_SPACE -> mode = "empty";
+            default -> mode = "default";
+        }
+    }
 
+    public void save() {
+        Write.write(memorySet);
+    }
     public void checkAccuracy() {
         panel.toggleCheckAccuracy();
         panel.repaint();
