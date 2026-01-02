@@ -12,8 +12,12 @@ import java.awt.event.*;
 public class Puzzle extends JPanel {
     private final MemorySet memorySet;
     public Visuals.Interactions.Puzzle puzzleInteractions;
-    private final Visuals.Frame frame;
+    private final Frame frame;
+
     private boolean checkAccuracy;
+    private JLabel errorChecking;
+    private JLabel completionChecking;
+
     private static final int DOT_DIAMETER = 6;
     private static final int STARTING_X = 20;
     private static final int STARTING_Y = 20;
@@ -24,15 +28,15 @@ public class Puzzle extends JPanel {
     private static final Color INCORRECT_COLOR = Color.RED;
     private static final int BUTTON_GAP = 5;
 
-    private final int buttonX;
-    private int buttonY;
+    private final int componentX;
+    private int componentY;
 
     public Puzzle(MemorySet memorySet, Frame frame) {
         this.memorySet = memorySet;
         this.frame = frame;
         this.puzzleInteractions = new Visuals.Interactions.Puzzle(memorySet, this);
-        buttonX = STARTING_X * 2 + memorySet.getVisible().getDimentions().xSize * LINE_SIZE;
-        buttonY = STARTING_Y;
+        componentX = STARTING_X * 2 + memorySet.getVisible().getDimentions().xSize * LINE_SIZE;
+        componentY = STARTING_Y;
         setLayout(null);
         setFont(getFont().deriveFont(Font.BOLD, 14f));
         setFocusable(true);
@@ -63,16 +67,15 @@ public class Puzzle extends JPanel {
 
         createButton("Save", e -> puzzleInteractions.save());
         createButton("Check Accuracy", e -> puzzleInteractions.checkAccuracy());
-        createButton("Autosolve - testing only!", e -> puzzleInteractions.autoSolve());
-        createButton("Print autosolve - testing only!", e -> puzzleInteractions.printAutoSolve());
+        createButton("Show Solution", e -> puzzleInteractions.autoSolve());
         createButton("Autosolve - one step", e -> puzzleInteractions.autoSolveOneStep());
-        createButton("Check for Errors - testing only!", e -> puzzleInteractions.checkForErrors());
-        createButton("Check for Completetion - testing only!", e -> puzzleInteractions.checkForCompletetion());
         createButton("Fill in Highlight - not implimented", e -> puzzleInteractions.fillInHighlight());
         createButton("Undo", e -> puzzleInteractions.undo());
         createButton("50 Undo", e -> puzzleInteractions.undo(50));
         createButton("Redo", e -> puzzleInteractions.redo());
         createButton("50 Redo", e -> puzzleInteractions.redo(50));
+        errorChecking = createLabeledButton("Check for Errors", e -> puzzleInteractions.checkForErrors());
+        completionChecking = createLabeledButton("Check for Completetion", e -> puzzleInteractions.checkForCompletetion());
     }
 
     @Override
@@ -267,9 +270,32 @@ public class Puzzle extends JPanel {
         JButton checkAccuracy = new JButton(text);
         int buttonHeight = getFont().getSize() + 2;
         int buttonWidth = getFontMetrics(getFont()).stringWidth(text) + 50;
-        checkAccuracy.setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
+        checkAccuracy.setBounds(componentX, componentY, buttonWidth, buttonHeight);
         checkAccuracy.addActionListener(l);
         add(checkAccuracy);
-        buttonY += buttonHeight + BUTTON_GAP;
+        componentY += buttonHeight + BUTTON_GAP;
+    }
+    public JLabel createLabeledButton(String buttonText, ActionListener l) {
+        JButton checkAccuracy = new JButton(buttonText);
+        int buttonHeight = getFont().getSize() + 2;
+        int buttonWidth = getFontMetrics(getFont()).stringWidth(buttonText) + 50;
+        checkAccuracy.setBounds(componentX, componentY, buttonWidth, buttonHeight);
+        checkAccuracy.addActionListener(l);
+        add(checkAccuracy);
+
+        JLabel label = new JLabel();
+        label.setBounds(componentX + buttonWidth + 10, componentY, 100, buttonHeight);
+        label.setFont(getFont());
+        add(label);
+
+        componentY += buttonHeight + BUTTON_GAP;
+        return label;
+    }
+
+    public void setErrorChecking(boolean hasError) {
+        this.errorChecking.setText(hasError ? "Error" : "No Error");
+    }
+    public void setCompletionChecking(boolean isComplete) {
+        this.completionChecking.setText(isComplete ? "Complete" : "Not Complete");
     }
 }

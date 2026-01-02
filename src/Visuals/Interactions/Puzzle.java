@@ -6,7 +6,6 @@ import Enums.Line;
 import Enums.Number;
 import ErrorChecking.Errors;
 import Memory.Coords;
-import Memory.Memory;
 import Memory.MemorySet;
 import PuzzleLoading.Write;
 import SolvingActions.Control;
@@ -17,29 +16,29 @@ import java.awt.event.MouseEvent;
 
 public class Puzzle {
     private final MemorySet memorySet;
-    private final Visuals.Panel.Puzzle puzzle;
+    private final Visuals.Panel.Puzzle panel;
     static private String mode = "default";
 
-    public Puzzle(MemorySet memorySet, Visuals.Panel.Puzzle puzzle) {
+    public Puzzle(MemorySet memorySet, Visuals.Panel.Puzzle panel) {
         this.memorySet = memorySet;
-        this.puzzle = puzzle;
+        this.panel = panel;
     }
 
     public void click(MouseEvent e) {
         Coords clickCoords = new Coords(e.getX(), e.getY());
-        Coords squareIndex = puzzle.getSquareIndex(clickCoords);
-        Coords dotCoords = puzzle.getDotCoords(squareIndex);
+        Coords squareIndex = panel.getSquareIndex(clickCoords);
+        Coords dotCoords = panel.getDotCoords(squareIndex);
         Coords relativeCoords = new Coords(clickCoords.x - dotCoords.x, clickCoords.y - dotCoords.y);
 
         CardinalDirection direction;
         if (relativeCoords.x > relativeCoords.y) {
-            if (relativeCoords.x + relativeCoords.y > puzzle.getLineSize()) {
+            if (relativeCoords.x + relativeCoords.y > panel.getLineSize()) {
                 direction = CardinalDirection.EAST;
             } else {
                 direction = CardinalDirection.NORTH;
             }
         } else {
-            if (relativeCoords.x + relativeCoords.y > puzzle.getLineSize()) {
+            if (relativeCoords.x + relativeCoords.y > panel.getLineSize()) {
                 direction = CardinalDirection.SOUTH;
             } else {
                 direction = CardinalDirection.WEST;
@@ -54,7 +53,7 @@ public class Puzzle {
             memorySet.getVisible().setNumber(Number.getNumber(Integer.parseInt(mode)), squareIndex, true);
         }
 
-        puzzle.repaint();
+        panel.repaint();
     }
     public void numbers(KeyEvent e) {
         char keyChar = e.getKeyChar();
@@ -69,8 +68,8 @@ public class Puzzle {
         Write.write(memorySet);
     }
     public void checkAccuracy() {
-        puzzle.toggleCheckAccuracy();
-        puzzle.repaint();
+        panel.toggleCheckAccuracy();
+        panel.repaint();
     }
     public void autoSolve() {
         // testing only!!!
@@ -83,43 +82,33 @@ public class Puzzle {
         }
         memorySet.autoSolve(false);
         memorySet.linesCalculationToVisible();
-        puzzle.repaint();
-    }
-    public void printAutoSolve() {
-        Memory testMemory = memorySet.getVisible().copy();
-        Control.autoSolve(testMemory, false);
+        panel.repaint();
     }
     public void autoSolveOneStep() {
         Control.oneRoundAutosolve(memorySet.getVisible(), false, 0);
-        puzzle.repaint();
+        panel.repaint();
     }
     public void checkForErrors() {
-        if (Errors.hasErrors(memorySet.getVisible())) {
-            System.out.println("Error");
-        } else {
-            System.out.println("No errors");
-        }
+        panel.setErrorChecking(Errors.hasErrors(memorySet.getVisible()));
+        panel.repaint();
     }
     public void checkForCompletetion() {
-        if (Complete.isComplete(memorySet.getVisible())) {
-            System.out.println("Complete");
-        } else {
-            System.out.println("Not Complete");
-        }
+        panel.setCompletionChecking(Complete.isComplete(memorySet.getVisible()));
+        panel.repaint();
     }
     public void fillInHighlight() {
         // don't do this
     }
     public void undo(int reps) {
         memorySet.getVisible().undo(reps);
-        puzzle.repaint();
+        panel.repaint();
     }
     public void undo() {
         undo(1);
     }
     public void redo(int reps) {
         memorySet.getVisible().redo(reps);
-        puzzle.repaint();
+        panel.repaint();
     }
     public void redo() {
         redo(1);
