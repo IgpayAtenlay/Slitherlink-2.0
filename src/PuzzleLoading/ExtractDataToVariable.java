@@ -9,9 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class ExtractDataToVariable {
-    public static List<TextData> extract(String fileName) {
-        String filePath = "public/puzzles/pdf/" + fileName + ".pdf"; // Replace with your PDF file path
-
+    public static List<TextData> extract(String filePath) {
         try (PDDocument document = Loader.loadPDF(new File(filePath))) {
             if (!document.isEncrypted()) { // Ensure the document is not encrypted
                 PDFTextStripperLocations pdfStripper = new PDFTextStripperLocations();

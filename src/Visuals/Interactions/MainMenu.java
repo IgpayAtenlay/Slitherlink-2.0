@@ -1,6 +1,7 @@
 package Visuals.Interactions;
 
 import Memory.MemorySet;
+import PuzzleLoading.PDFtoFile;
 import PuzzleLoading.Read;
 import Visuals.Frame;
 import Visuals.Panel.Puzzle;
@@ -8,6 +9,9 @@ import Visuals.Panel.Puzzle;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -36,6 +40,14 @@ public class MainMenu {
             if (memorySet != null) {
                 frame.switchPanel(new Puzzle(memorySet, frame));
             }
+        }
+    }
+    public void importPDFs() {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get("public/puzzles/pdf"), "*.pdf")) {
+            for (Path path : stream) {
+                PDFtoFile.write(String.valueOf(path));
+            }
+        } catch (IOException ignore) {
         }
     }
 }

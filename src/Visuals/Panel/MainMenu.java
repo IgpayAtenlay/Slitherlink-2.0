@@ -25,6 +25,7 @@ public class MainMenu extends JPanel {
         createText("Main Menu");
 
         createButton("Load", e -> mainMenuInteractions.load());
+        createButton("Import PDFs", e -> mainMenuInteractions.importPDFs());
     }
 
     public void createText(String text) {
