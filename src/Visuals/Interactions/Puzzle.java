@@ -6,8 +6,10 @@ import Enums.Line;
 import Enums.Number;
 import ErrorChecking.Errors;
 import Memory.Coords;
+import Memory.Memory;
 import Memory.MemorySet;
 import PuzzleLoading.Write;
+import SolvingActions.Control;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -81,6 +83,14 @@ public class Puzzle {
         }
         memorySet.autoSolve(false);
         memorySet.linesCalculationToVisible();
+        puzzle.repaint();
+    }
+    public void printAutoSolve() {
+        Memory testMemory = memorySet.getVisible().copy();
+        Control.autoSolve(testMemory, false);
+    }
+    public void autoSolveOneStep() {
+        Control.oneRoundAutosolve(memorySet.getVisible(), false, 0);
         puzzle.repaint();
     }
     public void checkForErrors() {
