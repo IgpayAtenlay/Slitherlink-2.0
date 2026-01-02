@@ -17,7 +17,6 @@ public class MainMenu {
         this.frame = frame;
     }
     public void load() {
-//        frame.switchPanel(new LoadingScreen(frame));
         JFileChooser fileChooser = new JFileChooser(new File("public/puzzles"));
         fileChooser.setFileFilter(new FileNameExtensionFilter(
                 "JSON Files", "json"
