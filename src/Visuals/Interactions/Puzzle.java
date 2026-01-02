@@ -6,8 +6,10 @@ import Enums.Line;
 import Enums.Number;
 import ErrorChecking.Errors;
 import Memory.Coords;
+import Memory.Memory;
 import Memory.MemorySet;
 import PuzzleLoading.Write;
+import SolvingActions.AdjacentBlocks;
 import SolvingActions.Control;
 
 import java.awt.event.KeyEvent;
@@ -96,8 +98,17 @@ public class Puzzle {
         panel.setCompletionChecking(Complete.isComplete(memorySet.getVisible()));
         panel.repaint();
     }
-    public void fillInHighlight() {
-        // don't do this
+    public void highlight() {
+        Memory visible = memorySet.getVisible();
+        int changes;
+        do {
+            changes = visible.getNumChanges();
+            for (Coords coords : visible.getDimentions().allSquareCoords()) {
+                AdjacentBlocks.createHighlight(visible, coords);
+            }
+        } while (changes != visible.getNumChanges());
+
+        panel.repaint();
     }
     public void undo(int reps) {
         memorySet.getVisible().undo(reps);
