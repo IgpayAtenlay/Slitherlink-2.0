@@ -5,10 +5,13 @@ import Visuals.Frame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 public class LoadingScreen extends JPanel {
     public Visuals.Interactions.LoadingScreen loadingScreenInteractions;
@@ -27,8 +30,9 @@ public class LoadingScreen extends JPanel {
         loadingScreenInteractions = new Visuals.Interactions.LoadingScreen(frame);
 
         createText("Loading");
+        createButton("Import PDFs", e -> loadingScreenInteractions.importPDFs());
 
-        loadingButton();
+        sortedLoadingButtons();
     }
 
     public void createText(String text) {
@@ -38,12 +42,34 @@ public class LoadingScreen extends JPanel {
         componentY += 40;
         add(heading);
     }
+    public void createButton(String text, ActionListener l) {
+        JButton checkAccuracy = new JButton(text);
+        int buttonHeight = getFont().getSize() + 2;
+        int buttonWidth = getFontMetrics(getFont()).stringWidth(text) + 50;
+        checkAccuracy.setBounds(componentX, componentY, buttonWidth, buttonHeight);
+        checkAccuracy.addActionListener(l);
+        add(checkAccuracy);
+        componentY += buttonHeight + BUTTON_GAP;
+    }
 
-    public void loadingButton() {
-        Path folder = Paths.get("public/puzzles/json");
+    public void sortedLoadingButtons() {
+        Path folder = Paths.get("public/puzzles/customPuzzles");
 
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(folder, "*.json")) {
+            ArrayList<Path> files = new ArrayList<>();
+
             for (Path file : stream) {
+                files.add(file);
+            }
+
+            files.sort(Comparator.comparing(
+                    p -> p.getFileName().toString(),
+                    Comparator.comparingInt(s -> Integer.parseInt(
+                            s.replaceAll("\\D+", "")
+                    ))
+            ));
+
+            for (Path file : files) {
                 String filename = String.valueOf(file.getFileName());
                 if (filename.endsWith(".json")) {
                     filename = filename.substring(0, filename.length() - 5);

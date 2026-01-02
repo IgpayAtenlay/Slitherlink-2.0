@@ -15,7 +15,6 @@ import java.util.Arrays;
 public class JsonConverter {
     public static String javaToJson(MemorySet memorySet) {
         return "{" +
-                "\n    \"puzzleName\": \"" + memorySet.getPuzzleName() + "\"," +
                 "\n    \"visible\": " + memorySet.getVisible().getJson().replace("\n", "\n    ") + "," +
                 "\n    \"calculation\": " + memorySet.getCalculation().getJson().replace("\n", "\n    ") +
                 "\n}";
@@ -27,16 +26,9 @@ public class JsonConverter {
             return Arrays.toString(a).replace(", ", "\", \"").replace("[", "[\"").replace("]", "\"]");
         }
     }
-    public static MemorySet jsonToMemorySet(ArrayList<String> json) {
+    public static MemorySet jsonToMemorySet(ArrayList<String> json, String filePath) {
         // grab puzzlename
         String puzzleName = null;
-        for (String string : json) {
-            if (string.contains("\"puzzleName\":")) {
-                int startingIndex = string.indexOf("\"puzzleName\":") + 15;
-                int endingIndex = string.length() - 2;
-                puzzleName = string.substring(startingIndex, endingIndex);
-            }
-        }
         int leadingSpaces = -2;
         int startingIndex = -1;
         int endingIndex = -1;
@@ -79,7 +71,7 @@ public class JsonConverter {
             }
             calculation = jsonToMemory(calculationList);
         }
-        return new MemorySet(visible, calculation, puzzleName);
+        return new MemorySet(visible, calculation, filePath);
     }
     public static Memory jsonToMemory(ArrayList<String> json) {
         int xSize = 0;

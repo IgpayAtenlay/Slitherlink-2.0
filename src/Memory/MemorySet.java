@@ -5,20 +5,20 @@ import Enums.CardinalDirection;
 import Enums.Number;
 
 public class MemorySet {
-    private String puzzleName;
+    private final String filePath;
     private final Memory visible;
     private final Memory calculation;
 
-    public MemorySet(Memory visible, Memory calculation, String puzzleName) {
+    public MemorySet(Memory visible, Memory calculation, String filePath) {
         this.visible = visible;
         this.calculation = calculation;
-        this.puzzleName = puzzleName;
+        this.filePath = filePath;
     }
     public MemorySet(Memory visible, Memory calculation) {
-        this(visible, calculation, "New Puzzle");
+        this(visible, calculation, "customPuzzles/newPuzzle.json");
     }
-    public MemorySet(Memory memory) {
-        this(memory, memory.copy());
+    public MemorySet(Memory memory, String filePath) {
+        this(memory, memory.copy(), filePath);
     }
     public MemorySet(Dimentions dimentions) {
         this(new Memory(dimentions), new Memory(dimentions.copy()));
@@ -49,8 +49,8 @@ public class MemorySet {
     public Memory getCalculation() {
         return calculation;
     }
-    public String getPuzzleName() {
-        return puzzleName;
+    public String getFilePath() {
+        return filePath;
     }
     public void setNumber(Number number, Coords coords) {
         visible.setNumber(number, coords, true);

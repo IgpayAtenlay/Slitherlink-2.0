@@ -16,4 +16,10 @@ public class LoadingScreen {
             frame.switchPanel(new Puzzle(memorySet, frame));
         }
     }
+    public void importPDFs() {
+//        make the PDFs into files
+
+//        reload page
+        frame.switchPanel(new Visuals.Panel.LoadingScreen(frame));
+    }
 }

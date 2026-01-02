@@ -21,7 +21,10 @@ public class CamelCase {
 
         String result = input
                 .replaceAll("([a-z])([A-Z])", "$1 $2")   // space before capitals
-                .replaceAll("([A-Z])([A-Z][a-z])", "$1 $2"); // ABCWord → ABC Word
+                .replaceAll("([A-Z])([A-Z][a-z])", "$1 $2") // ABCWord → ABC Word
+                .replaceAll("([0-9])([A-Z, a-z])", "$1 $2")
+                .replaceAll("([A-Z, a-z])([0-9])", "$1 $2")
+                .replaceAll("(#)", " $1");
 
         return result.substring(0, 1).toUpperCase() + result.substring(1);
     }

@@ -11,8 +11,9 @@ import java.util.Scanner;
 
 public class Read {
     public static MemorySet read(String fileName) {
+        String filePath = "customPuzzles/" + CamelCase.convertToCamelCase(fileName) + ".json";
         try {
-            File myObj = new File("public/puzzles/json/" + CamelCase.convertToCamelCase(fileName) + ".json");
+            File myObj = new File("public/puzzles/" + filePath);
             Scanner myReader = new Scanner(myObj);
             ArrayList<String> json = new ArrayList<>();
             while (myReader.hasNextLine()) {
@@ -21,7 +22,7 @@ public class Read {
                 System.out.println(data);
             }
             myReader.close();
-            return JsonConverter.jsonToMemorySet(json);
+            return JsonConverter.jsonToMemorySet(json, filePath);
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
