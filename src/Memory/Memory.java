@@ -194,6 +194,15 @@ public class Memory {
 
         return totalLines;
     }
+    public int getNumLines(Coords coords) {
+        int numLines = 0;
+        for (CardinalDirection direction : CardinalDirection.values()) {
+            if (getLine(true, coords, direction) == Line.LINE) {
+                numLines++;
+            }
+        }
+        return numLines;
+    }
     public Diagonal getDiagonal(boolean square, Coords coords, DiagonalDirection direction) {
         int i = Indexes.diagonal(square, coords, direction, dimentions);
         if (i < 0 || i >= diagonals.length) {

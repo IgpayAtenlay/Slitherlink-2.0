@@ -25,7 +25,7 @@ public class MainMenu extends JPanel {
         createText("Main Menu");
 
         createButton("New 20x20 Puzzle", e -> mainMenuInteractions.newPuzzle(20, 20));
-        createButton("Generate Puzzle", e -> mainMenuInteractions.generatePuzzle(20, 20));
+        createButton("Generate Puzzle", e -> mainMenuInteractions.generatePuzzle(7, 7));
         createButton("Load", e -> mainMenuInteractions.load());
         createButton("Import PDFs", e -> mainMenuInteractions.importPDFs());
     }

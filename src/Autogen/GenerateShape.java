@@ -1,4 +1,4 @@
-package Autogen.Shape;
+package Autogen;
 
 import Enums.CardinalDirection;
 import Enums.DiagonalDirection;
@@ -52,6 +52,13 @@ public class GenerateShape {
                         possibleDirections.add(coordToTest.addDirection(direction));
                     }
                 }
+            }
+        }
+
+        for (int x = 0; x < puzzle.getDimentions().xSize; x++) {
+            for (int y = 0; y < puzzle.getDimentions().ySize; y++) {
+                Coords currentCoords = new Coords(x, y);
+                puzzle.setHighlight(Highlight.OUTSIDE, currentCoords, false);
             }
         }
     }

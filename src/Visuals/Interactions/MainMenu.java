@@ -1,6 +1,7 @@
 package Visuals.Interactions;
 
 import Autogen.Generate;
+import Memory.Coords;
 import Memory.Dimentions;
 import Memory.MemorySet;
 import PuzzleLoading.PDFtoFile;
@@ -58,7 +59,13 @@ public class MainMenu {
     }
     public void generatePuzzle(int xSize, int ySize) {
         MemorySet memorySet = new MemorySet(new Dimentions(xSize, ySize));
-        Generate.generate(memorySet.getVisible());
+        Generate.generate(memorySet.getCalculation());
+        for (int x = 0; x < memorySet.getCalculation().getDimentions().xSize; x++) {
+            for (int y = 0; y < memorySet.getCalculation().getDimentions().ySize; y++) {
+                Coords currentCoord = new Coords(x, y);
+                memorySet.getVisible().setNumber(memorySet.getCalculation().getNumber(currentCoord), currentCoord, true);
+            }
+        }
         frame.switchPanel(new Puzzle(memorySet, frame));
     }
 }
