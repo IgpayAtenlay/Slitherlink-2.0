@@ -18,7 +18,7 @@ public class Control {
     }
 
     public static int oneRoundAutosolve(Memory memory, boolean guessAndCheck, int roundNum) {
-        System.out.println("starting autoSolve round " + roundNum);
+//        System.out.println("starting autoSolve round " + roundNum);
         int startingChanges = memory.getNumChanges();
 
         SingleBlock.run(memory);
@@ -35,10 +35,8 @@ public class Control {
                 GuessAndCheck.run(memory);
             }
         }
-//            System.out.println("Autosolve ------------------------");
-//            memory.print();
-//            System.out.println("-------------------------");
-        System.out.println("autoSolve round " + roundNum + " finished");
+
+//        System.out.println("autoSolve round " + roundNum + " finished");
 //            System.out.println("changes: " + (memory.getNumChanges() - startingChanges));+
         return startingChanges;
     }
