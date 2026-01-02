@@ -15,5 +15,6 @@ public class Generate {
             }
         }
         TrimNumbers.trim(memorySet.getVisible());
+        memorySet.getVisible().clearMemory();
     }
 }

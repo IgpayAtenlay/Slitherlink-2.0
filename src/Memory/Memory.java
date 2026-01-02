@@ -361,4 +361,8 @@ public class Memory {
         undo.push(changes);
         redo.empty();
     }
+    public void clearMemory() {
+        undo.clear();
+        redo.clear();
+    }
 }

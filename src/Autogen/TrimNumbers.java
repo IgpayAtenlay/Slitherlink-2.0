@@ -22,8 +22,6 @@ public class TrimNumbers {
             Control.autoSolve(testPuzzle, false);
             if (Complete.isComplete(testPuzzle)) {
                 puzzle.setNumber(Number.EMPTY, testCoords, true);
-            } else {
-                System.out.println("Can't remove " + testCoords);
             }
         }
     }
