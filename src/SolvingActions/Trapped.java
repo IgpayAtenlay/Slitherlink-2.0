@@ -26,18 +26,23 @@ public class Trapped {
     }
 
     public static void checkTrapped(Memory memory, Coords emptyCoord) {
-        for (CardinalDirection cardinalDirection : CardinalDirection.values()) {
+        for (CardinalDirection cardinalDirection : new CardinalDirection[] {CardinalDirection.NORTH, CardinalDirection.EAST}) {
             // two of same highlight with empty inbetween
             Coords startLocation = emptyCoord.addDirection(cardinalDirection);
             Coords endLocation = emptyCoord.addDirection(cardinalDirection.getOpposite());
             if (memory.getHighlight(startLocation) == memory.getHighlight(endLocation)) {
 //                System.out.println(emptyCoord + " surrounded by highlights");
-                Highlight highlight = memory.getHighlight(startLocation);
+
                 // see if they are part of the same group
+                Highlight highlight = memory.getHighlight(startLocation);
                 boolean[][] visitied = new boolean[memory.getDimentions().xSize + 2][memory.getDimentions().ySize + 2];
+                visitied[emptyCoord.x + 1][emptyCoord.y + 1] = true;
+
                 ArrayDeque<Coords> queue = new ArrayDeque<>();
                 queue.add(startLocation);
+
                 boolean sameGroup = false;
+
                 while (queue.size() > 0 && !sameGroup) {
                     Coords currentLocation = queue.remove();
                     for (CardinalDirection direction : CardinalDirection.values()) {
@@ -59,6 +64,7 @@ public class Trapped {
                     }
                 }
 //                System.out.println(sameGroup);
+
                 // see if there is an oposite highlight
                 if (sameGroup) {
                     boolean highlightOneFound = false;
@@ -66,42 +72,43 @@ public class Trapped {
 
                     queue = new ArrayDeque<>();
                     queue.add(emptyCoord.addDirection(cardinalDirection.getClockwise()));
-                    while (queue.size() > 0 && !highlightOneFound) {
+                    while (queue.size() > 0) {
                         Coords currentLocation = queue.remove();
-                        for (CardinalDirection direction : CardinalDirection.values()) {
-                            Coords newLocation = currentLocation.addDirection(direction);
-                            if (
-                                    newLocation.x >= -1 && newLocation.x <= memory.getDimentions().xSize &&
-                                    newLocation.y >= -1 && newLocation.y <= memory.getDimentions().ySize &&
-                                    !visitied[newLocation.x + 1][newLocation.y + 1]
-                            ) {
-                                if (highlight.getOpposite() == memory.getHighlight(newLocation)) {
-                                    highlightOneFound = true;
-                                    break;
-                                }
-                                if (Highlight.EMPTY == memory.getHighlight(newLocation)) {
+                        if (highlight.getOpposite() == memory.getHighlight(currentLocation)) {
+                            highlightOneFound = true;
+                            break;
+                        }
+                        if (Highlight.EMPTY == memory.getHighlight(currentLocation)) {
+                            for (CardinalDirection direction : CardinalDirection.values()) {
+                                Coords newLocation = currentLocation.addDirection(direction);
+                                if (
+                                        newLocation.x >= -1 && newLocation.x <= memory.getDimentions().xSize &&
+                                                newLocation.y >= -1 && newLocation.y <= memory.getDimentions().ySize &&
+                                                !visitied[newLocation.x + 1][newLocation.y + 1]
+                                ) {
                                     queue.add(newLocation);
                                     visitied[newLocation.x + 1][newLocation.y + 1] = true;
                                 }
                             }
                         }
                     }
+
                     queue = new ArrayDeque<>();
                     queue.add(emptyCoord.addDirection(cardinalDirection.getCounterClockwise()));
-                    while (queue.size() > 0 && !highlightTwoFound) {
+                    while (queue.size() > 0) {
                         Coords currentLocation = queue.remove();
-                        for (CardinalDirection direction : CardinalDirection.values()) {
-                            Coords newLocation = currentLocation.addDirection(direction);
-                            if (
-                                    newLocation.x >= -1 && newLocation.x <= memory.getDimentions().xSize &&
-                                            newLocation.y >= -1 && newLocation.y <= memory.getDimentions().ySize &&
-                                            !visitied[newLocation.x + 1][newLocation.y + 1]
-                            ) {
-                                if (highlight.getOpposite() == memory.getHighlight(newLocation)) {
-                                    highlightTwoFound = true;
-                                    break;
-                                }
-                                if (Highlight.EMPTY == memory.getHighlight(newLocation)) {
+                        if (highlight.getOpposite() == memory.getHighlight(currentLocation)) {
+                            highlightTwoFound = true;
+                            break;
+                        }
+                        if (Highlight.EMPTY == memory.getHighlight(currentLocation)) {
+                            for (CardinalDirection direction : CardinalDirection.values()) {
+                                Coords newLocation = currentLocation.addDirection(direction);
+                                if (
+                                        newLocation.x >= -1 && newLocation.x <= memory.getDimentions().xSize &&
+                                                newLocation.y >= -1 && newLocation.y <= memory.getDimentions().ySize &&
+                                                !visitied[newLocation.x + 1][newLocation.y + 1]
+                                ) {
                                     queue.add(newLocation);
                                     visitied[newLocation.x + 1][newLocation.y + 1] = true;
                                 }
