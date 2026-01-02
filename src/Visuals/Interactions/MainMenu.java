@@ -1,9 +1,7 @@
 package Visuals.Interactions;
 
-import Memory.MemorySet;
-import PuzzleLoading.Read;
 import Visuals.Frame;
-import Visuals.Panel.Puzzle;
+import Visuals.Panel.LoadingScreen;
 
 public class MainMenu {
     private final Frame frame;
@@ -11,9 +9,6 @@ public class MainMenu {
         this.frame = frame;
     }
     public void load() {
-        MemorySet memorySet = Read.read("example");
-        if (memorySet != null) {
-            frame.switchPanel(new Puzzle(memorySet, frame));
-        }
+        frame.switchPanel(new LoadingScreen(frame));
     }
 }

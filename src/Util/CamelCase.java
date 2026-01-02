@@ -15,4 +15,14 @@ public class CamelCase {
         string = string.replace(" ", "");
         return string;
     }
+
+    public static String camelToUpper(String input) {
+        if (input == null || input.isEmpty()) return input;
+
+        String result = input
+                .replaceAll("([a-z])([A-Z])", "$1 $2")   // space before capitals
+                .replaceAll("([A-Z])([A-Z][a-z])", "$1 $2"); // ABCWord → ABC Word
+
+        return result.substring(0, 1).toUpperCase() + result.substring(1);
+    }
 }

@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class Read {
     public static MemorySet read(String fileName) {
         try {
-            File myObj = new File("public/puzzles/" + CamelCase.convertToCamelCase(fileName) + ".json");
+            File myObj = new File("public/puzzles/json/" + CamelCase.convertToCamelCase(fileName) + ".json");
             Scanner myReader = new Scanner(myObj);
             ArrayList<String> json = new ArrayList<>();
             while (myReader.hasNextLine()) {
