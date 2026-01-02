@@ -9,7 +9,7 @@ import Memory.Memory;
 
 public class PointActions {
     static public void run(Memory memory) {
-        System.out.println("starting " + PointActions.class.getSimpleName());
+//        System.out.println("starting " + PointActions.class.getSimpleName());
         int startingChanges = memory.getNumChanges();
 
         for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
@@ -23,8 +23,8 @@ public class PointActions {
             }
         }
 
-        System.out.println(PointActions.class.getSimpleName() + " finished");
-        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
+//        System.out.println(PointActions.class.getSimpleName() + " finished");
+//        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
     }
 
     public static void fillSides(Memory memory, Coords coords) {

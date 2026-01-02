@@ -8,7 +8,7 @@ import Memory.Memory;
 
 public class NumberErrors {
     public static boolean run(Memory memory) {
-        System.out.println("starting " + NumberErrors.class.getSimpleName());
+//        System.out.println("starting " + NumberErrors.class.getSimpleName());
 
         for (int x = 0; x < memory.getDimentions().xSize; x++) {
             for (int y = 0; y < memory.getDimentions().ySize; y++) {
@@ -33,7 +33,7 @@ public class NumberErrors {
             }
         }
 
-        System.out.println(NumberErrors.class.getSimpleName() + " finished");
+//        System.out.println(NumberErrors.class.getSimpleName() + " finished");
         return false;
     }
 }

@@ -8,7 +8,7 @@ import Memory.Memory;
 
 public class LineIntoBlock {
     static public void run(Memory memory) {
-        System.out.println("starting " + LineIntoBlock.class.getSimpleName());
+//        System.out.println("starting " + LineIntoBlock.class.getSimpleName());
         int startingChanges = memory.getNumChanges();
 
         for (int x = 0; x < memory.getDimentions().xSize; x++) {
@@ -21,8 +21,8 @@ public class LineIntoBlock {
             }
         }
 
-        System.out.println(LineIntoBlock.class.getSimpleName() + " finished");
-        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
+//        System.out.println(LineIntoBlock.class.getSimpleName() + " finished");
+//        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
     }
 
     static public void lineIntoTwo(Memory memory, Coords coords) {

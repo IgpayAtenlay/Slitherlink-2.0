@@ -9,7 +9,7 @@ import java.util.ArrayDeque;
 
 public class Trapped {
     static public void run(Memory memory) {
-        System.out.println("starting " + Trapped.class.getSimpleName());
+//        System.out.println("starting " + Trapped.class.getSimpleName());
         int startingChanges = memory.getNumChanges();
 
         for (int x = 0; x < memory.getDimentions().xSize; x++) {
@@ -21,8 +21,8 @@ public class Trapped {
             }
         }
 
-        System.out.println(Trapped.class.getSimpleName() + " finished");
-        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
+//        System.out.println(Trapped.class.getSimpleName() + " finished");
+//        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
     }
 
     public static void checkTrapped(Memory memory, Coords emptyCoord) {
@@ -31,7 +31,7 @@ public class Trapped {
             Coords startLocation = emptyCoord.addDirection(cardinalDirection);
             Coords endLocation = emptyCoord.addDirection(cardinalDirection.getOpposite());
             if (memory.getHighlight(startLocation) == memory.getHighlight(endLocation)) {
-                System.out.println(emptyCoord + " surrounded by highlights");
+//                System.out.println(emptyCoord + " surrounded by highlights");
                 Highlight highlight = memory.getHighlight(startLocation);
                 // see if they are part of the same group
                 boolean[][] visitied = new boolean[memory.getDimentions().xSize + 2][memory.getDimentions().ySize + 2];
@@ -58,7 +58,7 @@ public class Trapped {
                         }
                     }
                 }
-                System.out.println(sameGroup);
+//                System.out.println(sameGroup);
                 // see if there is an oposite highlight
                 if (sameGroup) {
                     boolean highlightOneFound = false;

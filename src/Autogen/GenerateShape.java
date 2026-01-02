@@ -55,11 +55,8 @@ public class GenerateShape {
             }
         }
 
-        for (int x = 0; x < puzzle.getDimentions().xSize; x++) {
-            for (int y = 0; y < puzzle.getDimentions().ySize; y++) {
-                Coords currentCoords = new Coords(x, y);
-                puzzle.setHighlight(Highlight.OUTSIDE, currentCoords, false);
-            }
+        for (Coords coords : puzzle.getDimentions().allSquareCoords()) {
+            puzzle.setHighlight(Highlight.OUTSIDE, coords, false);
         }
     }
 }

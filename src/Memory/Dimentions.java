@@ -1,5 +1,7 @@
 package Memory;
 
+import java.util.ArrayList;
+
 public class Dimentions {
     public final int xSize;
     public final int ySize;
@@ -13,5 +15,14 @@ public class Dimentions {
     }
     public String toString() {
         return "(" + xSize + ", " + ySize + ")";
+    }
+    public ArrayList<Coords> allSquareCoords() {
+        ArrayList<Coords> coordsList = new ArrayList<>();
+        for (int x = 0; x < xSize; x++) {
+            for (int y = 0; y < ySize; y++) {
+                coordsList.add(new Coords(x, y));
+            }
+        }
+        return coordsList;
     }
 }

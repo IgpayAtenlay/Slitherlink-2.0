@@ -17,7 +17,7 @@ public class Read {
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 json.add(data);
-                System.out.println(data);
+//                System.out.println(data);
             }
             myReader.close();
             return JsonConverter.jsonToMemorySet(json, filePath);

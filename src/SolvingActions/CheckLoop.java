@@ -8,7 +8,7 @@ import Memory.Loop;
 
 public class CheckLoop {
     static public void run(Memory memory) {
-        System.out.println("starting " + CheckLoop.class.getSimpleName());
+//        System.out.println("starting " + CheckLoop.class.getSimpleName());
         int startingChanges = memory.getNumChanges();
 
         int totalLines = memory.getNumLines();
@@ -19,8 +19,8 @@ public class CheckLoop {
             }
         }
 
-        System.out.println(CheckLoop.class.getSimpleName() + " finished");
-        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
+//        System.out.println(CheckLoop.class.getSimpleName() + " finished");
+//        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
     }
     public static void checkLoop(Memory memory, Coords coords, int totalLines) {
         Loop loop = memory.getLoop(coords);

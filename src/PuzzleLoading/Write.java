@@ -15,7 +15,6 @@ public class Write {
             FileWriter myWriter = new FileWriter(file);
             myWriter.write(JsonConverter.javaToJson(memorySet));
             myWriter.close();
-            System.out.println("Successfully wrote to the file.");
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();

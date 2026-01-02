@@ -1,5 +1,6 @@
 package SolvingActions;
 
+import CompletetionChecking.Complete;
 import Enums.CardinalDirection;
 import Enums.Line;
 import ErrorChecking.Errors;
@@ -8,7 +9,7 @@ import Memory.Memory;
 
 public class GuessAndCheck {
     static public void run(Memory memory) {
-        System.out.println("starting " + GuessAndCheck.class.getSimpleName());
+//        System.out.println("starting " + GuessAndCheck.class.getSimpleName());
         int startingChanges = memory.getNumChanges();
 
         for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
@@ -19,8 +20,8 @@ public class GuessAndCheck {
                         for (Line line : new Line[] {Line.LINE, Line.X}) {
                             guess(memory, coords, direction, line);
                             if (memory.getNumChanges() - startingChanges > 0) {
-                                System.out.println(GuessAndCheck.class.getSimpleName() + " finished");
-                                System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
+//                                System.out.println(GuessAndCheck.class.getSimpleName() + " finished");
+//                                System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
                                 return;
                             }
                         }
@@ -29,8 +30,8 @@ public class GuessAndCheck {
             }
         }
 
-        System.out.println(GuessAndCheck.class.getSimpleName() + " finished");
-        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
+//        System.out.println(GuessAndCheck.class.getSimpleName() + " finished");
+//        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
     }
 
     public static void guess(Memory memory, Coords coords, CardinalDirection direction, Line line) {
@@ -40,7 +41,7 @@ public class GuessAndCheck {
         if (Errors.hasErrors(workingMemory)) {
             memory.setLine(true, line.getOpposite(), coords, direction, false);
             return;
-        } else if (Errors.isComplete(workingMemory)) {
+        } else if (Complete.isComplete(workingMemory)) {
             memory.setLine(true, line, coords, direction, false);
             return;
         }
@@ -48,7 +49,7 @@ public class GuessAndCheck {
         if (Errors.hasErrors(workingMemory)) {
             memory.setLine(true, line.getOpposite(), coords, direction, false);
             return;
-        } else if (Errors.isComplete(workingMemory)) {
+        } else if (Complete.isComplete(workingMemory)) {
             memory.setLine(true, line, coords, direction, false);
             return;
         }

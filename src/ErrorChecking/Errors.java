@@ -1,8 +1,5 @@
 package ErrorChecking;
 
-import CompletetionChecking.LoopCompletetion;
-import CompletetionChecking.NumberCompletetion;
-import CompletetionChecking.PointCompletetion;
 import Memory.Memory;
 
 public class Errors {
@@ -21,17 +18,5 @@ public class Errors {
         }
         System.out.println("No errors");
         return false;
-    }
-    public static boolean isComplete(Memory memory) {
-        if (!NumberCompletetion.run(memory)) {
-            return false;
-        }
-        if (!PointCompletetion.run(memory)) {
-            return false;
-        }
-        if (!LoopCompletetion.run(memory)) {
-            return false;
-        }
-        return true;
     }
 }

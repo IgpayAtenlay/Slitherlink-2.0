@@ -8,7 +8,7 @@ import Memory.Memory;
 public class SingleBlock {
     
     public static void run(Memory memory) {
-        System.out.println("starting " + SingleBlock.class.getSimpleName());
+//        System.out.println("starting " + SingleBlock.class.getSimpleName());
         
         int startingChanges = memory.getNumChanges();
 
@@ -40,8 +40,8 @@ public class SingleBlock {
             }
         }
 
-        System.out.println(SingleBlock.class.getSimpleName() + " finished");
-        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
+//        System.out.println(SingleBlock.class.getSimpleName() + " finished");
+//        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
     }
 
     public static void populateDiagonalsOne(Memory memory, Coords coords) {

@@ -7,7 +7,7 @@ import Memory.Memory;
 
 public class LineErrors {
     public static boolean run(Memory memory) {
-        System.out.println("starting " + LineErrors.class.getSimpleName());
+//        System.out.println("starting " + LineErrors.class.getSimpleName());
 
         for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
             for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
@@ -29,7 +29,7 @@ public class LineErrors {
             }
         }
 
-        System.out.println(LineErrors.class.getSimpleName() + " finished");
+//        System.out.println(LineErrors.class.getSimpleName() + " finished");
         return false;
     }
 }

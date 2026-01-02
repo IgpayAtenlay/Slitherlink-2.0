@@ -2,13 +2,12 @@ package CompletetionChecking;
 
 import Enums.CardinalDirection;
 import Enums.Line;
-import ErrorChecking.LoopErrors;
 import Memory.Coords;
 import Memory.Memory;
 
 public class LoopCompletetion {
     static public boolean run(Memory memory) {
-        System.out.println("starting " + LoopErrors.class.getSimpleName());
+//        System.out.println("starting " + LoopCompletetion.class.getSimpleName());
 
         int totalLines = memory.getNumLines();
 
@@ -17,13 +16,13 @@ public class LoopCompletetion {
                 Coords coords = new Coords(x, y);
                 if (hasLine(memory, coords)) {
                     boolean isGoodLoop = isGoodLoop(memory, coords, totalLines);
-                    System.out.println(LoopErrors.class.getSimpleName() + " finished");
+//                    System.out.println(LoopCompletetion.class.getSimpleName() + " finished");
                     return isGoodLoop;
                 }
             }
         }
 
-        System.out.println(LoopErrors.class.getSimpleName() + " finished");
+//        System.out.println(LoopCompletetion.class.getSimpleName() + " finished");
         return true;
     }
 

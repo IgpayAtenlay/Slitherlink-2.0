@@ -4,13 +4,13 @@ import Memory.Memory;
 
 public class Control {
     public static void autoSolve(Memory memory, boolean guessAndCheck) {
-        System.out.println("starting autoSolve");
+//        System.out.println("starting autoSolve");
         int roundNum = 0;
         int startingChanges = memory.getNumChanges();
-        System.out.println(startingChanges);
+//        System.out.println(startingChanges);
         int roundChanges;
         do {
-            System.out.println("starting autoSolve round " + roundNum);
+//            System.out.println("starting autoSolve round " + roundNum);
             roundChanges = memory.getNumChanges();
 
             SingleBlock.run(memory);
@@ -27,13 +27,15 @@ public class Control {
                     GuessAndCheck.run(memory);
                 }
             }
-
-            System.out.println("autoSolve round " + roundNum++ + " finished");
-            System.out.println("changes: " + (memory.getNumChanges() - roundChanges));
+//            System.out.println("Autosolve ------------------------");
+//            memory.print();
+//            System.out.println("-------------------------");
+//            System.out.println("autoSolve round " + roundNum++ + " finished");
+//            System.out.println("changes: " + (memory.getNumChanges() - roundChanges));
         } while (roundChanges != memory.getNumChanges());
 
 
-        System.out.println("autoSolve finished");
-        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
+//        System.out.println("autoSolve finished");
+//        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
     }
 }

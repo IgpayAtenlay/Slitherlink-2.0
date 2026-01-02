@@ -7,7 +7,7 @@ import Memory.Memory;
 
 public class AdjacentBlocks {
     static public void run(Memory memory) {
-        System.out.println("starting " + AdjacentBlocks.class.getSimpleName());
+//        System.out.println("starting " + AdjacentBlocks.class.getSimpleName());
         int startingChanges = memory.getNumChanges();
 
         for (int x = 0; x < memory.getDimentions().xSize; x++) {
@@ -27,8 +27,8 @@ public class AdjacentBlocks {
             }
         }
 
-        System.out.println(AdjacentBlocks.class.getSimpleName() + " finished");
-        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
+//        System.out.println(AdjacentBlocks.class.getSimpleName() + " finished");
+//        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
     }
 
     static public void doubleThrees(Memory memory, Coords coords) {

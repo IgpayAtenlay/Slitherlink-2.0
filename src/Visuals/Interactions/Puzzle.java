@@ -1,5 +1,6 @@
 package Visuals.Interactions;
 
+import CompletetionChecking.Complete;
 import Enums.CardinalDirection;
 import Enums.Line;
 import Enums.Number;
@@ -70,7 +71,6 @@ public class Puzzle {
         puzzle.repaint();
     }
     public void autoSolve() {
-        System.out.println("autosolve button");
         // testing only!!!
         for (int y = 0; y < memorySet.getCalculation().getDimentions().ySize + 1; y++) {
             for (int x = 0; x < memorySet.getCalculation().getDimentions().xSize + 1; x++) {
@@ -91,7 +91,7 @@ public class Puzzle {
         }
     }
     public void checkForCompletetion() {
-        if (Errors.isComplete(memorySet.getVisible())) {
+        if (Complete.isComplete(memorySet.getVisible())) {
             System.out.println("Complete");
         } else {
             System.out.println("Not Complete");
