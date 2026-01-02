@@ -87,7 +87,7 @@ public class Puzzle {
         panel.repaint();
     }
     public void autoSolveOneStep() {
-        Control.oneRoundAutosolve(memorySet.getVisible(), false, 0);
+        Control.oneRoundAutosolve(memorySet.getVisible(), false);
         panel.repaint();
     }
     public void checkForErrors() {
