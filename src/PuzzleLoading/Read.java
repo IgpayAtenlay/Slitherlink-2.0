@@ -1,7 +1,6 @@
 package PuzzleLoading;
 
 import Memory.MemorySet;
-import Util.CamelCase;
 import Util.JsonConverter;
 
 import java.io.File;
@@ -10,8 +9,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Read {
-    public static MemorySet read(String fileName) {
-        String filePath = "customPuzzles/" + CamelCase.convertToCamelCase(fileName) + ".json";
+    public static MemorySet read(String filePath) {
         try {
             File myObj = new File("public/puzzles/" + filePath);
             Scanner myReader = new Scanner(myObj);
