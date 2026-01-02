@@ -1,5 +1,6 @@
 package Visuals.Interactions;
 
+import Memory.Dimentions;
 import Memory.MemorySet;
 import PuzzleLoading.PDFtoFile;
 import PuzzleLoading.Read;
@@ -49,5 +50,9 @@ public class MainMenu {
             }
         } catch (IOException ignore) {
         }
+    }
+    public void newPuzzle(int xSize, int ySize) {
+        MemorySet memorySet = new MemorySet(new Dimentions(xSize, ySize));
+        frame.switchPanel(new Puzzle(memorySet, frame));
     }
 }
