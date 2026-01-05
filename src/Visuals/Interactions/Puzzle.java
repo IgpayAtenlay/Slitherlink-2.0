@@ -23,6 +23,8 @@ public class Puzzle {
     private final MemorySet memorySet;
     private final Visuals.Panel.Puzzle panel;
     private Line recentLine = Line.EMPTY;
+    private Highlight recentHighlight = Highlight.EMPTY;
+    private Number recentNumber = Number.EMPTY;
 
     public Puzzle(MemorySet memorySet, Visuals.Panel.Puzzle panel) {
         this.memorySet = memorySet;
@@ -66,16 +68,33 @@ public class Puzzle {
 
         panel.repaint();
     }
-    public void numbers(int keyCode, Point mouseCoords) {
+    public void numbers(int keyCode, Point mouseCoords, boolean initial) {
         Coords squareIndex = panel.getSquareIndex(mouseCoords);
         Coords dotCoords = panel.getNorthWestDotCoords(squareIndex);
         Coords relativeCoords = new Coords(mouseCoords.x - dotCoords.x, mouseCoords.y - dotCoords.y);
         switch (keyCode) {
-            case KeyEvent.VK_0, KeyEvent.VK_1, KeyEvent.VK_2, KeyEvent.VK_3 -> memorySet.getVisible().setNumber(Number.getNumber(Integer.parseInt(KeyEvent.getKeyText(keyCode))), squareIndex, true);
-            case KeyEvent.VK_BACK_SPACE -> memorySet.getVisible().setNumber(Number.EMPTY, squareIndex, true);
-            case KeyEvent.VK_I -> memorySet.getVisible().setHighlight(Highlight.INSIDE, squareIndex, true);
-            case KeyEvent.VK_O -> memorySet.getVisible().setHighlight(Highlight.OUTSIDE, squareIndex, true);
-            case KeyEvent.VK_P -> memorySet.getVisible().setHighlight(Highlight.EMPTY, squareIndex, true);
+            case KeyEvent.VK_0, KeyEvent.VK_1, KeyEvent.VK_2, KeyEvent.VK_3 -> {
+                Number currentNum = Number.getNumber(Integer.parseInt(KeyEvent.getKeyText(keyCode)));
+                if (initial) {
+                    if (memorySet.getVisible().getNumber(squareIndex) == currentNum) {
+                        recentNumber = Number.EMPTY;
+                    } else {
+                        recentNumber = currentNum;
+                    }
+                }
+                memorySet.getVisible().setNumber(recentNumber, squareIndex, true);
+            }
+            case KeyEvent.VK_I, KeyEvent.VK_O -> {
+                Highlight currentHighlight = keyCode == KeyEvent.VK_I ? Highlight.INSIDE : Highlight.OUTSIDE;
+                if (initial) {
+                    if (memorySet.getVisible().getHighlight(squareIndex) == currentHighlight) {
+                        recentHighlight = Highlight.EMPTY;
+                    } else {
+                        recentHighlight = currentHighlight;
+                    }
+                }
+                memorySet.getVisible().setHighlight(recentHighlight, squareIndex, true);
+            }
             default -> {}
         }
 

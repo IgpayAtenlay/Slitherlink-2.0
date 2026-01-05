@@ -98,8 +98,10 @@ public class Puzzle extends JPanel {
         Action keyPressedAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                stopKeyTimer();
-                startKeyTimer(keyCode);
+                if (keyCharacter != keyCode) {
+                    stopKeyTimer();
+                    startKeyTimer(keyCode);
+                }
             }
         };
         
@@ -121,16 +123,17 @@ public class Puzzle extends JPanel {
         inputMap.put(keyReleasedStroke, releasedActionKey);
         actionMap.put(releasedActionKey, keyReleasedAction);
     }
-    private void performKeyAction(int keyCode) {
+    private void performKeyAction(int keyCode, boolean initial) {
         Point mouseLocationScreen = MouseInfo.getPointerInfo().getLocation();
         Point panelLocation = getLocationOnScreen();
         Point mouseLocationPanel = new Point(mouseLocationScreen.x - panelLocation.x, mouseLocationScreen.y - panelLocation.y);
-        puzzleInteractions.numbers(keyCode, mouseLocationPanel);
+        puzzleInteractions.numbers(keyCode, mouseLocationPanel, initial);
     }
     private void startKeyTimer(int keyCode) {
         stopKeyTimer();
-        keyTimer = new Timer(50, evt -> performKeyAction(keyCode));
-        keyTimer.setInitialDelay(0);
+        performKeyAction(keyCode, true);
+        keyTimer = new Timer(50, evt -> performKeyAction(keyCode, false));
+        keyTimer.setInitialDelay(50);
         keyCharacter = keyCode;
         keyTimer.start();
     }
