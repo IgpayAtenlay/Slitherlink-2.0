@@ -12,14 +12,13 @@ import PuzzleLoading.Write;
 import SolvingActions.AdjacentBlocks;
 import SolvingActions.Control;
 
-import java.awt.event.KeyEvent;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 
 public class Puzzle {
     private final MemorySet memorySet;
     private final Visuals.Panel.Puzzle panel;
-    static private String mode = "default";
 
     public Puzzle(MemorySet memorySet, Visuals.Panel.Puzzle panel) {
         this.memorySet = memorySet;
@@ -27,43 +26,29 @@ public class Puzzle {
     }
 
     public void click(MouseEvent e) {
-        Coords clickCoords = new Coords(e.getX(), e.getY());
-        Coords squareIndex = panel.getSquareIndex(clickCoords);
-        Coords dotCoords = panel.getDotCoords(squareIndex);
-        Coords relativeCoords = new Coords(clickCoords.x - dotCoords.x, clickCoords.y - dotCoords.y);
+        Point clickCoords = e.getPoint();
 
-        CardinalDirection direction;
-        if (relativeCoords.x > relativeCoords.y) {
-            if (relativeCoords.x + relativeCoords.y > panel.getLineSize()) {
-                direction = CardinalDirection.EAST;
-            } else {
-                direction = CardinalDirection.NORTH;
-            }
-        } else {
-            if (relativeCoords.x + relativeCoords.y > panel.getLineSize()) {
-                direction = CardinalDirection.SOUTH;
-            } else {
-                direction = CardinalDirection.WEST;
-            }
-        }
+        Coords squareIndex = panel.getSquareIndex(clickCoords);
+        CardinalDirection direction = panel.getLineDirection(clickCoords);
+
         Line currentLine = memorySet.getVisible().getLine(true, squareIndex, direction);
-        if (mode == "default") {
-            memorySet.getVisible().setLine(true, currentLine.cycle(), squareIndex, direction, true);
-        } else if (mode == "empty") {
-            memorySet.getVisible().setNumber(Number.EMPTY, squareIndex, true);
-        } else {
-            memorySet.getVisible().setNumber(Number.getNumber(Integer.parseInt(mode)), squareIndex, true);
-        }
+        memorySet.getVisible().setLine(true, currentLine.cycle(), squareIndex, direction, true);
 
         panel.repaint();
     }
-    public void numbers(KeyEvent e) {
-        char keyChar = e.getKeyChar();
+    public void numbers(char keyChar, Point mouseCoords) {
+        Coords squareIndex = panel.getSquareIndex(mouseCoords);
+        Coords dotCoords = panel.getNorthWestDotCoords(squareIndex);
+        Coords relativeCoords = new Coords(mouseCoords.x - dotCoords.x, mouseCoords.y - dotCoords.y);
         switch (keyChar) {
-            case '0', '1', '2', '3' -> mode = String.valueOf(keyChar);
-            case java.awt.event.KeyEvent.VK_BACK_SPACE -> mode = "empty";
-            default -> mode = "default";
+            case '0', '1', '2', '3' -> {
+                memorySet.getVisible().setNumber(Number.getNumber(Integer.parseInt(String.valueOf(keyChar))), squareIndex, true);
+            }
+            case java.awt.event.KeyEvent.VK_BACK_SPACE -> memorySet.getVisible().setNumber(Number.EMPTY, squareIndex, true);
+            default -> {}
         }
+
+        panel.repaint();
     }
 
     public void save() {

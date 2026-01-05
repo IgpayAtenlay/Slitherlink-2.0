@@ -48,22 +48,8 @@ public class Puzzle extends JPanel {
             }
         });
 
-        addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                puzzleInteractions.numbers(e);
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-
-            }
-        });
+        // Use InputMap and ActionMap to handle keys even when panel doesn't have focus
+        setupKeyBindings();
 
         createButton("Save", e -> puzzleInteractions.save());
         createButton("Check Accuracy", e -> puzzleInteractions.checkAccuracy());
@@ -76,6 +62,30 @@ public class Puzzle extends JPanel {
         createButton("50 Redo", e -> puzzleInteractions.redo(50));
         errorChecking = createLabeledButton("Check for Errors", e -> puzzleInteractions.checkForErrors());
         completionChecking = createLabeledButton("Check for Completetion", e -> puzzleInteractions.checkForCompletetion());
+    }
+
+    private void setupKeyBindings() {
+        InputMap inputMap = getInputMap(WHEN_IN_FOCUSED_WINDOW);
+        ActionMap actionMap = getActionMap();
+
+        for (int i = 32; i <= 126; i++) {
+            final char c = (char) i;
+            KeyStroke keyStroke = KeyStroke.getKeyStroke(c);
+            String actionKey = "keyTyped_" + c;
+
+            Action keyTypedAction = new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Point mouseLocationScreen = MouseInfo.getPointerInfo().getLocation();
+                    Point panelLocation = getLocationOnScreen();
+                    Point mouseLocationPanel = new Point(mouseLocationScreen.x - panelLocation.x, mouseLocationScreen.y - panelLocation.y);
+                    puzzleInteractions.numbers(c, mouseLocationPanel);
+                }
+            };
+            
+            inputMap.put(keyStroke, actionKey);
+            actionMap.put(actionKey, keyTypedAction);
+        }
     }
 
     @Override
@@ -96,7 +106,7 @@ public class Puzzle extends JPanel {
     private void drawDots(Graphics g) {
         for (int y = 0; y < memorySet.getVisible().getDimentions().ySize + 1; y++) {
             for (int x = 0; x < memorySet.getVisible().getDimentions().xSize + 1; x++) {
-                Coords dotCoords = getDotCoords(new Coords(x, y));
+                Coords dotCoords = getNorthWestDotCoords(new Coords(x, y));
                 g.fillOval(dotCoords.x - DOT_DIAMETER / 2,
                         dotCoords.y - DOT_DIAMETER / 2,
                         DOT_DIAMETER,
@@ -137,16 +147,16 @@ public class Puzzle extends JPanel {
                 }
 
                 if (eastLine == Line.LINE && x != memorySet.getVisible().getDimentions().xSize) {
-                    g.drawLine(getDotCoords(coords).x,
-                            getDotCoords(coords).y,
-                            getDotCoords(coords.addDirection(CardinalDirection.EAST)).x,
-                            getDotCoords(coords.addDirection(CardinalDirection.EAST)).y);
+                    g.drawLine(getNorthWestDotCoords(coords).x,
+                            getNorthWestDotCoords(coords).y,
+                            getNorthWestDotCoords(coords.addDirection(CardinalDirection.EAST)).x,
+                            getNorthWestDotCoords(coords.addDirection(CardinalDirection.EAST)).y);
                 } else if (eastLine == Line.X && x != memorySet.getVisible().getDimentions().xSize) {
                     String text = Line.X.toString();
                     int textWidth = g.getFontMetrics().stringWidth(text);
                     g.drawString(text,
                             getSquareCenterCoords(coords).x - textWidth / 2,
-                            getDotCoords(coords).y + (int) (getFont().getSize() / HEIGHT_OFFSET));
+                            getNorthWestDotCoords(coords).y + (int) (getFont().getSize() / HEIGHT_OFFSET));
                 }
 
                 if (checkAccuracy) {
@@ -160,15 +170,15 @@ public class Puzzle extends JPanel {
                 }
 
                 if (southLine == Line.LINE && y != memorySet.getVisible().getDimentions().ySize) {
-                    g.drawLine(getDotCoords(coords).x,
-                            getDotCoords(coords).y,
-                            getDotCoords(coords.addDirection(CardinalDirection.SOUTH)).x,
-                            getDotCoords(coords.addDirection(CardinalDirection.SOUTH)).y);
+                    g.drawLine(getNorthWestDotCoords(coords).x,
+                            getNorthWestDotCoords(coords).y,
+                            getNorthWestDotCoords(coords.addDirection(CardinalDirection.SOUTH)).x,
+                            getNorthWestDotCoords(coords.addDirection(CardinalDirection.SOUTH)).y);
                 } else if (southLine == Line.X && y != memorySet.getVisible().getDimentions().ySize) {
                     String text = Line.X.toString();
                     int textWidth = g.getFontMetrics().stringWidth(text);
                     g.drawString(text,
-                            getDotCoords(coords).x - textWidth / 2,
+                            getNorthWestDotCoords(coords).x - textWidth / 2,
                             getSquareCenterCoords(coords).y + (int) (getFont().getSize() / HEIGHT_OFFSET));
                 }
             }
@@ -187,8 +197,8 @@ public class Puzzle extends JPanel {
                     } else if (highlight == Highlight.OUTSIDE) {
                         g.setColor(new Color(198, 255, 255));
                     }
-                    g.fillRect(getDotCoords(coords).x,
-                            getDotCoords(coords).y,
+                    g.fillRect(getNorthWestDotCoords(coords).x,
+                            getNorthWestDotCoords(coords).y,
                             LINE_SIZE,
                             LINE_SIZE);
                 }
@@ -206,23 +216,23 @@ public class Puzzle extends JPanel {
                     Coords end = null;
                     switch (diagonalDirection) {
                         case NORTHEAST -> {
-                            Coords dotCoords = getDotCoords(coords.addDirection(CardinalDirection.EAST));
+                            Coords dotCoords = getNorthWestDotCoords(coords.addDirection(CardinalDirection.EAST));
                             start = new Coords(dotCoords.x - LINE_SIZE / 4, dotCoords.y);
                             end = new Coords(dotCoords.x, dotCoords.y + LINE_SIZE / 4);
 
                         }
                         case SOUTHEAST -> {
-                            Coords dotCoords = getDotCoords(coords.addDirection(DiagonalDirection.SOUTHEAST));
+                            Coords dotCoords = getNorthWestDotCoords(coords.addDirection(DiagonalDirection.SOUTHEAST));
                             start = new Coords(dotCoords.x - LINE_SIZE / 4, dotCoords.y);
                             end = new Coords(dotCoords.x, dotCoords.y - LINE_SIZE / 4);
                         }
                         case SOUTHWEST -> {
-                            Coords dotCoords = getDotCoords(coords.addDirection(CardinalDirection.SOUTH));
+                            Coords dotCoords = getNorthWestDotCoords(coords.addDirection(CardinalDirection.SOUTH));
                             start = new Coords(dotCoords.x + LINE_SIZE / 4, dotCoords.y);
                             end = new Coords(dotCoords.x, dotCoords.y - LINE_SIZE / 4);
                         }
                         case NORTHWEST -> {
-                            Coords dotCoords = getDotCoords(coords);
+                            Coords dotCoords = getNorthWestDotCoords(coords);
                             start = new Coords(dotCoords.x + LINE_SIZE / 4, dotCoords.y);
                             end = new Coords(dotCoords.x, dotCoords.y + LINE_SIZE / 4);
                         }
@@ -249,14 +259,35 @@ public class Puzzle extends JPanel {
         }
     }
 
-    public Coords getDotCoords(Coords coords) {
+    public Coords getNorthWestDotCoords(Coords coords) {
         return new Coords(STARTING_X + LINE_SIZE * coords.x, STARTING_Y + LINE_SIZE * coords.y);
     }
     public Coords getSquareCenterCoords(Coords coords) {
         return new Coords(STARTING_X + LINE_SIZE / 2 + coords.x * LINE_SIZE, STARTING_Y + LINE_SIZE / 2 + coords.y * LINE_SIZE);
     }
-    public Coords getSquareIndex(Coords coords) {
+    public Coords getSquareIndex(Point coords) {
         return new Coords((coords.x - STARTING_X) / LINE_SIZE, (coords.y - STARTING_Y) / LINE_SIZE);
+    }
+    public CardinalDirection getLineDirection(Point clickCoords) {
+        Coords squareIndex = getSquareIndex(clickCoords);
+        Coords northWestDotCoords = getNorthWestDotCoords(squareIndex);
+        Coords relativeCoords = new Coords(clickCoords.x - northWestDotCoords.x, clickCoords.y - northWestDotCoords.y);
+
+        CardinalDirection direction;
+        if (relativeCoords.x > relativeCoords.y) {
+            if (relativeCoords.x + relativeCoords.y > getLineSize()) {
+                direction = CardinalDirection.EAST;
+            } else {
+                direction = CardinalDirection.NORTH;
+            }
+        } else {
+            if (relativeCoords.x + relativeCoords.y > getLineSize()) {
+                direction = CardinalDirection.SOUTH;
+            } else {
+                direction = CardinalDirection.WEST;
+            }
+        }
+        return direction;
     }
     public int getLineSize() {
         return LINE_SIZE;
