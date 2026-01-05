@@ -7,7 +7,10 @@ import Visuals.Frame;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Puzzle extends JPanel {
     private final MemorySet memorySet;
@@ -70,22 +73,30 @@ public class Puzzle extends JPanel {
 
         for (int i = 32; i <= 126; i++) {
             final char c = (char) i;
-            KeyStroke keyStroke = KeyStroke.getKeyStroke(c);
-            String actionKey = "keyTyped_" + c;
-
-            Action keyTypedAction = new AbstractAction() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    Point mouseLocationScreen = MouseInfo.getPointerInfo().getLocation();
-                    Point panelLocation = getLocationOnScreen();
-                    Point mouseLocationPanel = new Point(mouseLocationScreen.x - panelLocation.x, mouseLocationScreen.y - panelLocation.y);
-                    puzzleInteractions.numbers(c, mouseLocationPanel);
-                }
-            };
-            
-            inputMap.put(keyStroke, actionKey);
-            actionMap.put(actionKey, keyTypedAction);
+            setupKeyBinding(c, inputMap, actionMap);
         }
+        for (char c : new char[] {
+                java.awt.event.KeyEvent.VK_BACK_SPACE
+        }) {
+            setupKeyBinding(c, inputMap, actionMap);
+        }
+    }
+    private void setupKeyBinding(char c, InputMap inputMap, ActionMap actionMap) {
+        KeyStroke keyStroke = KeyStroke.getKeyStroke(c);
+        String actionKey = "keyTyped_" + c;
+
+        Action keyTypedAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Point mouseLocationScreen = MouseInfo.getPointerInfo().getLocation();
+                Point panelLocation = getLocationOnScreen();
+                Point mouseLocationPanel = new Point(mouseLocationScreen.x - panelLocation.x, mouseLocationScreen.y - panelLocation.y);
+                puzzleInteractions.numbers(c, mouseLocationPanel);
+            }
+        };
+
+        inputMap.put(keyStroke, actionKey);
+        actionMap.put(actionKey, keyTypedAction);
     }
 
     @Override
