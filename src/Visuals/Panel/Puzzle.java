@@ -17,6 +17,8 @@ public class Puzzle extends JPanel {
     private boolean checkAccuracy;
     private JLabel errorChecking;
     private JLabel completionChecking;
+    private Timer keyTimer = null;
+    private char keyCharacter = 0;
 
     private static final int DOT_DIAMETER = 6;
     private static final int STARTING_X = 20;
@@ -61,12 +63,14 @@ public class Puzzle extends JPanel {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
+                stopKeyTimer();
                 puzzleInteractions.click(e);
             }
         });
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
+                stopKeyTimer();
                 puzzleInteractions.drag(e);
             }
         });
@@ -86,21 +90,60 @@ public class Puzzle extends JPanel {
         }
     }
     private void setupKeyBinding(char c, InputMap inputMap, ActionMap actionMap) {
-        KeyStroke keyStroke = KeyStroke.getKeyStroke(c);
-        String actionKey = "keyTyped_" + c;
-
-        Action keyTypedAction = new AbstractAction() {
+        // Key pressed - start dragging
+        KeyStroke keyPressedStroke = KeyStroke.getKeyStroke(c);
+        String pressedActionKey = "keyPressed_" + c;
+        
+        Action keyPressedAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Point mouseLocationScreen = MouseInfo.getPointerInfo().getLocation();
-                Point panelLocation = getLocationOnScreen();
-                Point mouseLocationPanel = new Point(mouseLocationScreen.x - panelLocation.x, mouseLocationScreen.y - panelLocation.y);
-                puzzleInteractions.numbers(c, mouseLocationPanel);
+                stopKeyTimer();
+                startKeyTimer(c);
+            }
+        };
+        
+        // Key released - stop dragging
+        KeyStroke keyReleasedStroke = KeyStroke.getKeyStroke(c, 0, true);
+        String releasedActionKey = "keyReleased_" + c;
+        
+        Action keyReleasedAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (keyCharacter == c) {
+                    stopKeyTimer();
+                }
             }
         };
 
-        inputMap.put(keyStroke, actionKey);
-        actionMap.put(actionKey, keyTypedAction);
+        inputMap.put(keyPressedStroke, pressedActionKey);
+        actionMap.put(pressedActionKey, keyPressedAction);
+        inputMap.put(keyReleasedStroke, releasedActionKey);
+        actionMap.put(releasedActionKey, keyReleasedAction);
+    }
+    private void performKeyAction(char c) {
+        Point mouseLocationScreen = MouseInfo.getPointerInfo().getLocation();
+        Point panelLocation = getLocationOnScreen();
+        Point mouseLocationPanel = new Point(mouseLocationScreen.x - panelLocation.x, mouseLocationScreen.y - panelLocation.y);
+        puzzleInteractions.numbers(c, mouseLocationPanel);
+    }
+    private void startKeyTimer(char c) {
+        stopKeyTimer();
+        keyTimer = new Timer(50, evt -> performKeyAction(c));
+        keyTimer.setInitialDelay(0);
+        keyCharacter = c;
+        keyTimer.start();
+    }
+    private void stopKeyTimer() {
+        if (keyTimer != null) {
+            keyCharacter = 0;
+            keyTimer.stop();
+            keyTimer = null;
+        }
+    }
+    @Override
+    public void removeNotify() {
+        super.removeNotify();
+        stopKeyTimer();
     }
 
     @Override
