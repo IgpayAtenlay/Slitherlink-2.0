@@ -351,6 +351,15 @@ public class Puzzle extends JPanel {
         }
         return direction;
     }
+    public boolean nearCenterEdge(Coords clickCoords) {
+        Coords squareIndex = getSquareIndex(clickCoords);
+        Coords squareCenterCoords = getSquareCenterCoords(squareIndex);
+        Coords relativeCoords = new Coords(Math.abs(clickCoords.x - squareCenterCoords.x), Math.abs(clickCoords.y - squareCenterCoords.y));
+
+        boolean xEdge = relativeCoords.x >= getLineSize() / 2 - getLineSize() / 6;
+        boolean yEdge = relativeCoords.y >= getLineSize() / 2 - getLineSize() / 6;
+        return xEdge && !yEdge || !xEdge && yEdge;
+    }
     public DiagonalDirection getCornerDirection(Coords clickCoords) {
         Coords squareIndex = getSquareIndex(clickCoords);
         Coords squareCenter = getSquareCenterCoords(squareIndex);

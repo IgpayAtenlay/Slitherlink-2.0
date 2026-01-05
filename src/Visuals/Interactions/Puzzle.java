@@ -59,12 +59,15 @@ public class Puzzle {
     public void drag(MouseEvent e) {
         Coords clickCoords = new Coords(e.getPoint());
 
-        Coords squareIndex = panel.getSquareIndex(clickCoords);
-        CardinalDirection direction = panel.getLineDirection(clickCoords);
+        boolean nearEdge = panel.nearCenterEdge(clickCoords);
+        if (nearEdge) {
+            Coords squareIndex = panel.getSquareIndex(clickCoords);
+            CardinalDirection direction = panel.getLineDirection(clickCoords);
 
-        memorySet.getVisible().setLine(true, recentLine, squareIndex, direction, true);
+            memorySet.getVisible().setLine(true, recentLine, squareIndex, direction, true);
 
-        panel.repaint();
+            panel.repaint();
+        }
     }
     public void numbers(int keyCode, Coords mouseCoords, boolean initial) {
         Coords squareIndex = panel.getSquareIndex(mouseCoords);
