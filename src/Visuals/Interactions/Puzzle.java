@@ -15,6 +15,7 @@ import SolvingActions.Control;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 
@@ -65,16 +66,16 @@ public class Puzzle {
 
         panel.repaint();
     }
-    public void numbers(char keyChar, Point mouseCoords) {
+    public void numbers(int keyCode, Point mouseCoords) {
         Coords squareIndex = panel.getSquareIndex(mouseCoords);
         Coords dotCoords = panel.getNorthWestDotCoords(squareIndex);
         Coords relativeCoords = new Coords(mouseCoords.x - dotCoords.x, mouseCoords.y - dotCoords.y);
-        switch (keyChar) {
-            case '0', '1', '2', '3' -> memorySet.getVisible().setNumber(Number.getNumber(Integer.parseInt(String.valueOf(keyChar))), squareIndex, true);
-            case java.awt.event.KeyEvent.VK_BACK_SPACE -> memorySet.getVisible().setNumber(Number.EMPTY, squareIndex, true);
-            case 'i' -> memorySet.getVisible().setHighlight(Highlight.INSIDE, squareIndex, true);
-            case 'o' -> memorySet.getVisible().setHighlight(Highlight.OUTSIDE, squareIndex, true);
-            case 'p' -> memorySet.getVisible().setHighlight(Highlight.EMPTY, squareIndex, true);
+        switch (keyCode) {
+            case KeyEvent.VK_0, KeyEvent.VK_1, KeyEvent.VK_2, KeyEvent.VK_3 -> memorySet.getVisible().setNumber(Number.getNumber(Integer.parseInt(KeyEvent.getKeyText(keyCode))), squareIndex, true);
+            case KeyEvent.VK_BACK_SPACE -> memorySet.getVisible().setNumber(Number.EMPTY, squareIndex, true);
+            case KeyEvent.VK_I -> memorySet.getVisible().setHighlight(Highlight.INSIDE, squareIndex, true);
+            case KeyEvent.VK_O -> memorySet.getVisible().setHighlight(Highlight.OUTSIDE, squareIndex, true);
+            case KeyEvent.VK_P -> memorySet.getVisible().setHighlight(Highlight.EMPTY, squareIndex, true);
             default -> {}
         }
 
