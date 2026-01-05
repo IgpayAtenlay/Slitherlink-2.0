@@ -44,14 +44,7 @@ public class Puzzle extends JPanel {
         setFont(getFont().deriveFont(Font.BOLD, 14f));
         setFocusable(true);
 
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                puzzleInteractions.click(e);
-            }
-        });
-
-        // Use InputMap and ActionMap to handle keys even when panel doesn't have focus
+        setupMouseControls();
         setupKeyBindings();
 
         createButton("Save", e -> puzzleInteractions.save());
@@ -67,6 +60,14 @@ public class Puzzle extends JPanel {
         completionChecking = createLabeledButton("Check for Completetion", e -> puzzleInteractions.checkForCompletetion());
     }
 
+    private void setupMouseControls() {
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                puzzleInteractions.click(e);
+            }
+        });
+    }
     private void setupKeyBindings() {
         InputMap inputMap = getInputMap(WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = getActionMap();

@@ -2,6 +2,7 @@ package Visuals.Interactions;
 
 import CompletetionChecking.Complete;
 import Enums.CardinalDirection;
+import Enums.Highlight;
 import Enums.Line;
 import Enums.Number;
 import ErrorChecking.Errors;
@@ -12,6 +13,7 @@ import PuzzleLoading.Write;
 import SolvingActions.AdjacentBlocks;
 import SolvingActions.Control;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 
@@ -32,7 +34,20 @@ public class Puzzle {
         CardinalDirection direction = panel.getLineDirection(clickCoords);
 
         Line currentLine = memorySet.getVisible().getLine(true, squareIndex, direction);
-        memorySet.getVisible().setLine(true, currentLine.cycle(), squareIndex, direction, true);
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            if (currentLine == Line.LINE) {
+                memorySet.getVisible().setLine(true, Line.EMPTY, squareIndex, direction, true);
+            } else {
+                memorySet.getVisible().setLine(true, Line.LINE, squareIndex, direction, true);
+            }
+        } else if (SwingUtilities.isRightMouseButton(e)) {
+            if (currentLine == Line.X) {
+                memorySet.getVisible().setLine(true, Line.EMPTY, squareIndex, direction, true);
+            } else {
+                memorySet.getVisible().setLine(true, Line.X, squareIndex, direction, true);
+            }
+        }
+
 
         panel.repaint();
     }
@@ -41,10 +56,11 @@ public class Puzzle {
         Coords dotCoords = panel.getNorthWestDotCoords(squareIndex);
         Coords relativeCoords = new Coords(mouseCoords.x - dotCoords.x, mouseCoords.y - dotCoords.y);
         switch (keyChar) {
-            case '0', '1', '2', '3' -> {
-                memorySet.getVisible().setNumber(Number.getNumber(Integer.parseInt(String.valueOf(keyChar))), squareIndex, true);
-            }
+            case '0', '1', '2', '3' -> memorySet.getVisible().setNumber(Number.getNumber(Integer.parseInt(String.valueOf(keyChar))), squareIndex, true);
             case java.awt.event.KeyEvent.VK_BACK_SPACE -> memorySet.getVisible().setNumber(Number.EMPTY, squareIndex, true);
+            case 'i' -> memorySet.getVisible().setHighlight(Highlight.INSIDE, squareIndex, true);
+            case 'o' -> memorySet.getVisible().setHighlight(Highlight.OUTSIDE, squareIndex, true);
+            case 'p' -> memorySet.getVisible().setHighlight(Highlight.EMPTY, squareIndex, true);
             default -> {}
         }
 
