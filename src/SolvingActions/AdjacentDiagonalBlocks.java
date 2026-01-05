@@ -1,6 +1,6 @@
 package SolvingActions;
 
-import Enums.Diagonal;
+import Enums.Corner;
 import Enums.DiagonalDirection;
 import Enums.Line;
 import Enums.Number;
@@ -35,7 +35,7 @@ public class AdjacentDiagonalBlocks {
                 // check if there is a nearby EitherOr
                 Coords thirdLocation = coords.addDirection(diagonalDirection.getCardinalDirections()[0]);
                 DiagonalDirection cornerToCheck = diagonalDirection.getCounterClockwise();
-                if (memory.getDiagonal(true, thirdLocation, cornerToCheck) == Diagonal.BOTH_OR_NEITHER) {
+                if (memory.getCorner(true, thirdLocation, cornerToCheck) == Corner.BOTH_OR_NEITHER) {
                     memory.setLine(true, Line.X, thirdLocation, cornerToCheck.getCardinalDirections()[0], false);
                     memory.setLine(true, Line.X, thirdLocation, cornerToCheck.getCardinalDirections()[1], false);
                 }

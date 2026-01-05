@@ -22,7 +22,7 @@ public class Puzzle {
     private Line recentLine = Line.EMPTY;
     private Highlight recentHighlight = Highlight.EMPTY;
     private Number recentNumber = Number.EMPTY;
-    private Diagonal recentDiagonal = Diagonal.EMPTY;
+    private Corner recentCorner = Corner.EMPTY;
 
     public Puzzle(MemorySet memorySet, Visuals.Panel.Puzzle panel) {
         this.memorySet = memorySet;
@@ -94,22 +94,22 @@ public class Puzzle {
                 memorySet.getVisible().setHighlight(recentHighlight, squareIndex, true);
             }
             default -> {
-                Diagonal currentDiagonal = switch (keyCode) {
-                    case KeyEvent.VK_W -> Diagonal.BOTH_OR_NEITHER;
-                    case KeyEvent.VK_S -> Diagonal.EXACTLY_ONE;
-                    case KeyEvent.VK_A -> Diagonal.AT_LEAST_ONE;
-                    case KeyEvent.VK_D -> Diagonal.AT_MOST_ONE;
-                    default -> Diagonal.EMPTY;
+                Corner currentCorner = switch (keyCode) {
+                    case KeyEvent.VK_W -> Corner.BOTH_OR_NEITHER;
+                    case KeyEvent.VK_S -> Corner.EXACTLY_ONE;
+                    case KeyEvent.VK_A -> Corner.AT_LEAST_ONE;
+                    case KeyEvent.VK_D -> Corner.AT_MOST_ONE;
+                    default -> Corner.EMPTY;
                 };
-                if (currentDiagonal == Diagonal.EMPTY) return;
+                if (currentCorner == Corner.EMPTY) return;
                 if (initial) {
-                    if (memorySet.getVisible().getDiagonal(true, squareIndex, cornerDirection) == currentDiagonal) {
-                        recentDiagonal = Diagonal.EMPTY;
+                    if (memorySet.getVisible().getCorner(true, squareIndex, cornerDirection) == currentCorner) {
+                        recentCorner = Corner.EMPTY;
                     } else {
-                        recentDiagonal = currentDiagonal;
+                        recentCorner = currentCorner;
                     }
                 }
-                memorySet.getVisible().setDiagonal(true, recentDiagonal, squareIndex, cornerDirection, true);
+                memorySet.getVisible().setCorner(true, recentCorner, squareIndex, cornerDirection, true);
             }
         }
 

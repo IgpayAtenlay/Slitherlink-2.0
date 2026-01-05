@@ -273,7 +273,7 @@ public class Puzzle extends JPanel {
             for (int x = 0; x < memorySet.getVisible().getDimentions().xSize; x++) {
                 Coords coords = new Coords(x, y);
                 for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
-                    Diagonal diagonal = memorySet.getVisible().getDiagonal(true, coords, diagonalDirection);
+                    Corner corner = memorySet.getVisible().getCorner(true, coords, diagonalDirection);
                     Coords start = null;
                     Coords end = null;
                     switch (diagonalDirection) {
@@ -300,7 +300,7 @@ public class Puzzle extends JPanel {
                         }
                     }
 
-                    switch (diagonal) {
+                    switch (corner) {
                         case EXACTLY_ONE -> {
                             g.drawLine(start.x, start.y, end.x, end.y);
                         }

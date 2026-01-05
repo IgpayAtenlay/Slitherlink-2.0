@@ -1,6 +1,6 @@
 package Enums;
 
-public enum Diagonal {
+public enum Corner {
     EMPTY,
     EXACTLY_ONE,
     BOTH_OR_NEITHER,

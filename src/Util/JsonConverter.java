@@ -1,6 +1,6 @@
 package Util;
 
-import Enums.Diagonal;
+import Enums.Corner;
 import Enums.Highlight;
 import Enums.Line;
 import Enums.Number;
@@ -79,7 +79,7 @@ public class JsonConverter {
         Line[] lines = new Line[0];
         Number[] numbers = new Number[0];
         Highlight[] highlights = new Highlight[0];
-        Diagonal[] diagonals = new Diagonal[0];
+        Corner[] corners = new Corner[0];
         Loop[] loops;
         for (String string : json) {
             String text = "\"xSize\": ";
@@ -107,13 +107,13 @@ public class JsonConverter {
                 String result = string.substring(string.indexOf(text) + text.length(), string.length() - 1);
                 highlights = (Highlight[]) jsonToArray("highlights", result);
             }
-            text = "\"diagonals\": ";
+            text = "\"corners\": ";
             if (string.contains(text)) {
                 String result = string.substring(string.indexOf(text) + text.length(), string.length() - 1);
-                diagonals = (Diagonal[]) jsonToArray("diagonals", result);
+                corners = (Corner[]) jsonToArray("corners", result);
             }
         }
-        return new Memory(new Dimentions(xSize, ySize), lines, numbers, highlights, diagonals);
+        return new Memory(new Dimentions(xSize, ySize), lines, numbers, highlights, corners);
     }
     public static Object[] jsonToArray(String type, String json) {
         String[] split = json.split("\", \"");
@@ -142,12 +142,12 @@ public class JsonConverter {
                 }
                 return highlights;
             }
-            case "diagonals": {
-                Diagonal[] diagonals = new Diagonal[split.length];
+            case "corners": {
+                Corner[] corners = new Corner[split.length];
                 for (int i = 0; i < split.length; i++) {
-                    diagonals[i] = Diagonal.valueOf(split[i]);
+                    corners[i] = Corner.valueOf(split[i]);
                 }
-                return diagonals;
+                return corners;
             }
             case "loops": {
 

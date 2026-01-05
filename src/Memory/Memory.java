@@ -13,23 +13,23 @@ public class Memory {
     private final Line[] lines;
     private final Number[] numbers;
     private final Highlight[] highlights;
-    private final Diagonal[] diagonals;
+    private final Corner[] corners;
     private final Loop[] loops;
     private final Stack<Changes> undo;
     private final Stack<Changes> redo;
 
-    public Memory(Dimentions dimentions, Line[] lines, Number[] numbers, Highlight[] highlights, Diagonal[] diagonals, Loop[] loops, Stack<Changes> undo, Stack<Changes> redo) {
+    public Memory(Dimentions dimentions, Line[] lines, Number[] numbers, Highlight[] highlights, Corner[] corners, Loop[] loops, Stack<Changes> undo, Stack<Changes> redo) {
         this.dimentions = dimentions;
         this.lines = lines;
         this.numbers = numbers;
         this.highlights = highlights;
-        this.diagonals = diagonals;
+        this.corners = corners;
         this.loops = loops;
         this.undo = undo;
         this.redo = redo;
     }
-    public Memory(Dimentions dimentions, Line[] lines, Number[] numbers, Highlight[] highlights, Diagonal[] diagonals) {
-        this(dimentions, lines, numbers, highlights, diagonals,
+    public Memory(Dimentions dimentions, Line[] lines, Number[] numbers, Highlight[] highlights, Corner[] corners) {
+        this(dimentions, lines, numbers, highlights, corners,
                 new Loop[(dimentions.xSize + 1) * (dimentions.ySize + 1)],
                 new Stack<>(),
                 new Stack<>()
@@ -41,13 +41,13 @@ public class Memory {
                 new Line[dimentions.xSize * (dimentions.ySize + 1) + dimentions.ySize * (dimentions.xSize + 1)],
                 new Number[dimentions.xSize * dimentions.ySize],
                 new Highlight[dimentions.xSize * dimentions.ySize],
-                new Diagonal[(dimentions.xSize + 1) * (dimentions.ySize + 1) * 4],
+                new Corner[(dimentions.xSize + 1) * (dimentions.ySize + 1) * 4],
                 new Loop[(dimentions.xSize + 1) * (dimentions.ySize + 1)],
                 new Stack<>(),
                 new Stack<>()
         );
         Arrays.fill(lines, Line.EMPTY);
-        Arrays.fill(diagonals, Diagonal.EMPTY);
+        Arrays.fill(corners, Corner.EMPTY);
         Arrays.fill(highlights, Highlight.EMPTY);
         Arrays.fill(numbers, Number.EMPTY);
     }
@@ -74,7 +74,7 @@ public class Memory {
                 lines.clone(),
                 numbers.clone(),
                 highlights.clone(),
-                diagonals.clone(),
+                corners.clone(),
                 loops,
                 undo,
                 redo
@@ -95,7 +95,7 @@ public class Memory {
                 "\n    \"lines\": " + JsonConverter.javaToJson(lines) + "," +
                 "\n    \"numbers\": " + JsonConverter.javaToJson(numbers) + "," +
                 "\n    \"highlights\": " + JsonConverter.javaToJson(highlights) + "," +
-                "\n    \"diagonals\": " + JsonConverter.javaToJson(diagonals) + "," +
+                "\n    \"corners\": " + JsonConverter.javaToJson(corners) + "," +
                 "\n    \"loops\": " + JsonConverter.javaToJson(loops) +
                 "\n}";
     }
@@ -203,30 +203,30 @@ public class Memory {
         }
         return numLines;
     }
-    public Diagonal getDiagonal(boolean square, Coords coords, DiagonalDirection direction) {
+    public Corner getCorner(boolean square, Coords coords, DiagonalDirection direction) {
         int i = Indexes.diagonal(square, coords, direction, dimentions);
-        if (i < 0 || i >= diagonals.length) {
-            return Diagonal.BOTH_OR_NEITHER;
+        if (i < 0 || i >= corners.length) {
+            return Corner.BOTH_OR_NEITHER;
         } else {
-            return diagonals[i];
+            return corners[i];
         }
     }
-    public void setDiagonal(boolean square, Diagonal diagonal, Coords coords, DiagonalDirection direction, boolean override) {
+    public void setCorner(boolean square, Corner corner, Coords coords, DiagonalDirection direction, boolean override) {
         int i = Indexes.diagonal(square, coords, direction, dimentions);
-        if (i < 0 || i > diagonals.length) {
+        if (i < 0 || i > corners.length) {
             return;
         }
-        if (diagonals[i] != diagonal) {
-            if (diagonals[i] == Diagonal.EMPTY ||
+        if (corners[i] != corner) {
+            if (corners[i] == Corner.EMPTY ||
                     override ||
-                    ((diagonals[i] == Diagonal.AT_LEAST_ONE || diagonals[i] == Diagonal.AT_MOST_ONE) && (diagonal == Diagonal.EXACTLY_ONE || diagonal == Diagonal.BOTH_OR_NEITHER))
+                    ((corners[i] == Corner.AT_LEAST_ONE || corners[i] == Corner.AT_MOST_ONE) && (corner == Corner.EXACTLY_ONE || corner == Corner.BOTH_OR_NEITHER))
             ) {
 //            System.out.println("changing diagonal " + i + " to " + diagonal);
-                change(new DiagonalChange(diagonal, diagonals[i], i));
-                diagonals[i] = diagonal;
-            } else if ((diagonals[i] == Diagonal.AT_LEAST_ONE && diagonal == Diagonal.AT_MOST_ONE) || (diagonal == Diagonal.AT_LEAST_ONE && diagonals[i] == Diagonal.AT_MOST_ONE)) {
-                change(new DiagonalChange(Diagonal.EXACTLY_ONE, diagonals[i], i));
-                diagonals[i] = Diagonal.EXACTLY_ONE;
+                change(new CornerChange(corner, corners[i], i));
+                corners[i] = corner;
+            } else if ((corners[i] == Corner.AT_LEAST_ONE && corner == Corner.AT_MOST_ONE) || (corner == Corner.AT_LEAST_ONE && corners[i] == Corner.AT_MOST_ONE)) {
+                change(new CornerChange(Corner.EXACTLY_ONE, corners[i], i));
+                corners[i] = Corner.EXACTLY_ONE;
             }
         }
     }
@@ -332,8 +332,8 @@ public class Memory {
                     lines[change.index] = ((LineChange) change).previous;
                 } else if (change instanceof NumberChange) {
                     numbers[change.index] = ((NumberChange) change).previous;
-                } else if (change instanceof DiagonalChange) {
-                    diagonals[change.index] = ((DiagonalChange) change).previous;
+                } else if (change instanceof CornerChange) {
+                    corners[change.index] = ((CornerChange) change).previous;
                 } else if (change instanceof HighlightChange) {
                     highlights[change.index] = ((HighlightChange) change).previous;
                 }
@@ -349,8 +349,8 @@ public class Memory {
                     lines[change.index] = ((LineChange) change).current;
                 } else if (change instanceof NumberChange) {
                     numbers[change.index] = ((NumberChange) change).current;
-                } else if (change instanceof DiagonalChange) {
-                    diagonals[change.index] = ((DiagonalChange) change).current;
+                } else if (change instanceof CornerChange) {
+                    corners[change.index] = ((CornerChange) change).current;
                 } else if (change instanceof HighlightChange) {
                     highlights[change.index] = ((HighlightChange) change).current;
                 }
