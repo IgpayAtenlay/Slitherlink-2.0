@@ -124,9 +124,9 @@ public class Puzzle extends JPanel {
         actionMap.put(releasedActionKey, keyReleasedAction);
     }
     private void performKeyAction(int keyCode, boolean initial) {
-        Point mouseLocationScreen = MouseInfo.getPointerInfo().getLocation();
-        Point panelLocation = getLocationOnScreen();
-        Point mouseLocationPanel = new Point(mouseLocationScreen.x - panelLocation.x, mouseLocationScreen.y - panelLocation.y);
+        Coords mouseLocationScreen = new Coords(MouseInfo.getPointerInfo().getLocation());
+        Coords panelLocation = new Coords(getLocationOnScreen());
+        Coords mouseLocationPanel = new Coords(mouseLocationScreen.x - panelLocation.x, mouseLocationScreen.y - panelLocation.y);
         puzzleInteractions.numbers(keyCode, mouseLocationPanel, initial);
     }
     private void startKeyTimer(int keyCode) {
@@ -327,10 +327,10 @@ public class Puzzle extends JPanel {
     public Coords getSquareCenterCoords(Coords coords) {
         return new Coords(STARTING_X + LINE_SIZE / 2 + coords.x * LINE_SIZE, STARTING_Y + LINE_SIZE / 2 + coords.y * LINE_SIZE);
     }
-    public Coords getSquareIndex(Point coords) {
-        return new Coords((coords.x - STARTING_X) / LINE_SIZE, (coords.y - STARTING_Y) / LINE_SIZE);
+    public Coords getSquareIndex(Coords clickCoords) {
+        return new Coords((clickCoords.x - STARTING_X) / LINE_SIZE, (clickCoords.y - STARTING_Y) / LINE_SIZE);
     }
-    public CardinalDirection getLineDirection(Point clickCoords) {
+    public CardinalDirection getLineDirection(Coords clickCoords) {
         Coords squareIndex = getSquareIndex(clickCoords);
         Coords northWestDotCoords = getNorthWestDotCoords(squareIndex);
         Coords relativeCoords = new Coords(clickCoords.x - northWestDotCoords.x, clickCoords.y - northWestDotCoords.y);
@@ -351,6 +351,27 @@ public class Puzzle extends JPanel {
         }
         return direction;
     }
+    public DiagonalDirection getCornerDirection(Coords clickCoords) {
+        Coords squareIndex = getSquareIndex(clickCoords);
+        Coords squareCenter = getSquareCenterCoords(squareIndex);
+        Coords relativeCoords = new Coords(clickCoords.x - squareCenter.x, clickCoords.y - squareCenter.y);
+        DiagonalDirection direction;
+        if (relativeCoords.x > 0) {
+            if (relativeCoords.y > 0) {
+                direction = DiagonalDirection.SOUTHEAST;
+            } else {
+                direction = DiagonalDirection.NORTHEAST;
+            }
+        } else {
+            if (relativeCoords.y > 0) {
+                direction = DiagonalDirection.SOUTHWEST;
+            } else {
+                direction = DiagonalDirection.NORTHWEST;
+            }
+        }
+        return direction;
+    }
+
     public int getLineSize() {
         return LINE_SIZE;
     }

@@ -3,6 +3,8 @@ package Memory;
 import Enums.CardinalDirection;
 import Enums.DiagonalDirection;
 
+import java.awt.*;
+
 public class Coords {
     public final int x;
     public final int y;
@@ -10,6 +12,10 @@ public class Coords {
     public Coords(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+    public Coords(Point point) {
+        this.x = point.x;
+        this.y = point.y;
     }
     public Coords copy() {
         return new Coords(x, y);

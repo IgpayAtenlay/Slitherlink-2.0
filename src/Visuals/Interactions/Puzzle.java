@@ -1,10 +1,8 @@
 package Visuals.Interactions;
 
 import CompletetionChecking.Complete;
-import Enums.CardinalDirection;
-import Enums.Highlight;
-import Enums.Line;
 import Enums.Number;
+import Enums.*;
 import ErrorChecking.Errors;
 import Memory.Coords;
 import Memory.Memory;
@@ -14,7 +12,6 @@ import SolvingActions.AdjacentBlocks;
 import SolvingActions.Control;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
@@ -25,6 +22,7 @@ public class Puzzle {
     private Line recentLine = Line.EMPTY;
     private Highlight recentHighlight = Highlight.EMPTY;
     private Number recentNumber = Number.EMPTY;
+    private Diagonal recentDiagonal = Diagonal.EMPTY;
 
     public Puzzle(MemorySet memorySet, Visuals.Panel.Puzzle panel) {
         this.memorySet = memorySet;
@@ -32,7 +30,7 @@ public class Puzzle {
     }
 
     public void click(MouseEvent e) {
-        Point clickCoords = e.getPoint();
+        Coords clickCoords = new Coords(e.getPoint());
 
         Coords squareIndex = panel.getSquareIndex(clickCoords);
         CardinalDirection direction = panel.getLineDirection(clickCoords);
@@ -59,7 +57,7 @@ public class Puzzle {
         panel.repaint();
     }
     public void drag(MouseEvent e) {
-        Point clickCoords = e.getPoint();
+        Coords clickCoords = new Coords(e.getPoint());
 
         Coords squareIndex = panel.getSquareIndex(clickCoords);
         CardinalDirection direction = panel.getLineDirection(clickCoords);
@@ -68,10 +66,10 @@ public class Puzzle {
 
         panel.repaint();
     }
-    public void numbers(int keyCode, Point mouseCoords, boolean initial) {
+    public void numbers(int keyCode, Coords mouseCoords, boolean initial) {
         Coords squareIndex = panel.getSquareIndex(mouseCoords);
-        Coords dotCoords = panel.getNorthWestDotCoords(squareIndex);
-        Coords relativeCoords = new Coords(mouseCoords.x - dotCoords.x, mouseCoords.y - dotCoords.y);
+        DiagonalDirection cornerDirection = panel.getCornerDirection(mouseCoords);
+
         switch (keyCode) {
             case KeyEvent.VK_0, KeyEvent.VK_1, KeyEvent.VK_2, KeyEvent.VK_3 -> {
                 Number currentNum = Number.getNumber(Integer.parseInt(KeyEvent.getKeyText(keyCode)));
@@ -95,7 +93,24 @@ public class Puzzle {
                 }
                 memorySet.getVisible().setHighlight(recentHighlight, squareIndex, true);
             }
-            default -> {}
+            default -> {
+                Diagonal currentDiagonal = switch (keyCode) {
+                    case KeyEvent.VK_W -> Diagonal.BOTH_OR_NEITHER;
+                    case KeyEvent.VK_S -> Diagonal.EXACTLY_ONE;
+                    case KeyEvent.VK_A -> Diagonal.AT_LEAST_ONE;
+                    case KeyEvent.VK_D -> Diagonal.AT_MOST_ONE;
+                    default -> Diagonal.EMPTY;
+                };
+                if (currentDiagonal == Diagonal.EMPTY) return;
+                if (initial) {
+                    if (memorySet.getVisible().getDiagonal(true, squareIndex, cornerDirection) == currentDiagonal) {
+                        recentDiagonal = Diagonal.EMPTY;
+                    } else {
+                        recentDiagonal = currentDiagonal;
+                    }
+                }
+                memorySet.getVisible().setDiagonal(true, recentDiagonal, squareIndex, cornerDirection, true);
+            }
         }
 
         panel.repaint();
