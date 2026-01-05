@@ -21,6 +21,7 @@ import java.awt.event.MouseEvent;
 public class Puzzle {
     private final MemorySet memorySet;
     private final Visuals.Panel.Puzzle panel;
+    private Line recentLine = Line.EMPTY;
 
     public Puzzle(MemorySet memorySet, Visuals.Panel.Puzzle panel) {
         this.memorySet = memorySet;
@@ -37,17 +38,30 @@ public class Puzzle {
         if (SwingUtilities.isLeftMouseButton(e)) {
             if (currentLine == Line.LINE) {
                 memorySet.getVisible().setLine(true, Line.EMPTY, squareIndex, direction, true);
+                recentLine = Line.EMPTY;
             } else {
                 memorySet.getVisible().setLine(true, Line.LINE, squareIndex, direction, true);
+                recentLine = Line.LINE;
             }
         } else if (SwingUtilities.isRightMouseButton(e)) {
             if (currentLine == Line.X) {
                 memorySet.getVisible().setLine(true, Line.EMPTY, squareIndex, direction, true);
+                recentLine = Line.EMPTY;
             } else {
                 memorySet.getVisible().setLine(true, Line.X, squareIndex, direction, true);
+                recentLine = Line.X;
             }
         }
 
+        panel.repaint();
+    }
+    public void drag(MouseEvent e) {
+        Point clickCoords = e.getPoint();
+
+        Coords squareIndex = panel.getSquareIndex(clickCoords);
+        CardinalDirection direction = panel.getLineDirection(clickCoords);
+
+        memorySet.getVisible().setLine(true, recentLine, squareIndex, direction, true);
 
         panel.repaint();
     }
