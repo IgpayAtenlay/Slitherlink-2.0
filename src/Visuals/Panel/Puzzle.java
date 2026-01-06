@@ -52,10 +52,8 @@ public class Puzzle extends JPanel {
         createButton("Show Solution", e -> puzzleInteractions.autoSolve());
         createButton("Autosolve - one step", e -> puzzleInteractions.autoSolveOneStep());
         createButton("Highlight", e -> puzzleInteractions.highlight());
-        createButton("Undo", e -> puzzleInteractions.undo());
-        createButton("50 Undo", e -> puzzleInteractions.undo(50));
-        createButton("Redo", e -> puzzleInteractions.redo());
-        createButton("50 Redo", e -> puzzleInteractions.redo(50));
+        oneVarButton("Undo", "1", num -> puzzleInteractions.undo(num), true);
+        oneVarButton("Redo", "1", num -> puzzleInteractions.redo(num), true);
         errorChecking = createLabeledButton("Check for Errors", e -> puzzleInteractions.checkForErrors());
         completionChecking = createLabeledButton("Check for Completetion", e -> puzzleInteractions.checkForCompletetion());
     }
@@ -414,6 +412,48 @@ public class Puzzle extends JPanel {
 
         componentY += buttonHeight + BUTTON_GAP;
         return label;
+    }
+    @FunctionalInterface
+    interface StringInterface {
+        void activate(String string);
+    }
+    interface IntInterface {
+        void activate(int num);
+    }
+    public void oneVarButton(String text, String defaultText, StringInterface stringInterface) {
+        JTextField field = new JTextField(defaultText, 10);
+        JButton button = new JButton(text);
+
+        int fieldWidth = getFontMetrics(getFont()).stringWidth("20") + 5;
+        int buttonWidth = getFontMetrics(getFont()).stringWidth(text) + 50;
+        int buttonHeight = getFont().getSize() + 2;
+
+        int currentX = componentX;
+
+        field.setBounds(currentX, componentY, fieldWidth, buttonHeight);
+        currentX += fieldWidth + BUTTON_GAP;
+        button.setBounds(currentX, componentY, buttonWidth, buttonHeight);
+
+        button.addActionListener(e -> {
+            try {
+                stringInterface.activate(field.getText());
+            } catch (Exception ignored) {
+            }
+        });
+
+        add(field);
+        add(button);
+        componentY += buttonHeight + BUTTON_GAP;
+    }
+    public void oneVarButton(String text, String defaultText, IntInterface intInterface, boolean positive) {
+        oneVarButton(text, defaultText, string -> {
+            try {
+                int num = Integer.parseInt(string);
+                if (positive && num < 0) return;
+                intInterface.activate(num);
+            } catch (Exception ignored) {
+            }
+        });
     }
 
     public void setErrorChecking(boolean hasError) {
