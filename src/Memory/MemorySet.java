@@ -1,8 +1,11 @@
 package Memory;
 
-import SolvingActions.Control;
 import Enums.CardinalDirection;
 import Enums.Number;
+import SolvingActions.Control;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class MemorySet {
     private final String filePath;
@@ -51,6 +54,11 @@ public class MemorySet {
     }
     public String getFilePath() {
         return filePath;
+    }
+    public String getFolderPath() {
+        Path path = Paths.get("public/puzzles/" + getFilePath());
+        Path folder = path.getParent();
+        return folder.toString();
     }
     public void setNumber(Number number, Coords coords) {
         visible.setNumber(number, coords, true);

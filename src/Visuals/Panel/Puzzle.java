@@ -47,6 +47,7 @@ public class Puzzle extends JPanel {
         setupKeyBindings();
 
         createButton("Save", e -> puzzleInteractions.save());
+        createButton("Save As", e -> puzzleInteractions.saveAs());
         createButton("Check Accuracy", e -> puzzleInteractions.checkAccuracy());
         createButton("Show Solution", e -> puzzleInteractions.autoSolve());
         createButton("Autosolve - one step", e -> puzzleInteractions.autoSolveOneStep());

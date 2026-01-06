@@ -12,8 +12,12 @@ import SolvingActions.AdjacentBlocks;
 import SolvingActions.Control;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 public class Puzzle {
@@ -121,6 +125,45 @@ public class Puzzle {
 
     public void save() {
         Write.write(memorySet);
+    }
+    public void saveAs() {
+        String origionalFolder = memorySet.getFolderPath();
+        JFileChooser fileChooser = new JFileChooser(new File(origionalFolder));
+        fileChooser.setFileFilter(new FileNameExtensionFilter(
+                "JSON Files", "json"
+        ));
+
+        int result = fileChooser.showSaveDialog(panel);
+
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            String absolutePath = selectedFile.getAbsolutePath();
+
+            if (!absolutePath.toLowerCase().endsWith(".json")) {
+                selectedFile = new File(absolutePath + ".json");
+            }
+
+            if (selectedFile.exists()) {
+                int choice = JOptionPane.showConfirmDialog(
+                        panel,
+                        "File already exists. Overwrite?",
+                        "Confirm Save",
+                        JOptionPane.YES_NO_OPTION
+                );
+
+                if (choice != JOptionPane.YES_OPTION) {
+                    return;
+                }
+            }
+
+            Path base = Paths.get("").toAbsolutePath();
+            Path target = selectedFile.toPath().toAbsolutePath();
+            String finalPath = String.valueOf(base.relativize(target));
+
+            System.out.println(finalPath);
+
+            Write.write(memorySet, finalPath);
+        }
     }
     public void checkAccuracy() {
         panel.toggleCheckAccuracy();
