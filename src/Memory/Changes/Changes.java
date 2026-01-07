@@ -1,4 +1,4 @@
-package Memory;
+package Memory.Changes;
 
 public class Changes {
     public final int index;

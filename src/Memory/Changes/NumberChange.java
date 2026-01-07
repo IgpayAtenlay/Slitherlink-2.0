@@ -1,4 +1,4 @@
-package Memory;
+package Memory.Changes;
 
 import Enums.Number;
 

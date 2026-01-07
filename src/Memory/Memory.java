@@ -2,6 +2,7 @@ package Memory;
 
 import Enums.Number;
 import Enums.*;
+import Memory.Changes.*;
 import Util.Indexes;
 import Util.JsonConverter;
 

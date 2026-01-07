@@ -1,9 +1,8 @@
-package Memory;
+package Memory.Changes;
 
 import Enums.Line;
 
 public class LineChange extends Changes {
-
     public final Line current;
     public final Line previous;
 
