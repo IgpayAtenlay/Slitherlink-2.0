@@ -15,6 +15,7 @@ import java.util.Arrays;
 public class JsonConverter {
     public static String javaToJson(MemorySet memorySet) {
         return "{" +
+                "\n    \"start\": " + memorySet.getStart().getJson().replace("\n", "\n    ") + "," +
                 "\n    \"visible\": " + memorySet.getVisible().getJson().replace("\n", "\n    ") + "," +
                 "\n    \"calculation\": " + memorySet.getCalculation().getJson().replace("\n", "\n    ") +
                 "\n}";
@@ -27,51 +28,46 @@ public class JsonConverter {
         }
     }
     public static MemorySet jsonToMemorySet(ArrayList<String> json, String filePath) {
-        // grab puzzlename
-        String puzzleName = null;
+        Memory visible = jsonToMemory("visible", json);
+        Memory calculation = jsonToMemory("calculation", json);
+        Memory start = jsonToMemory("start", json);
+
+        if (visible == null && start != null) {
+            visible = start.copy();
+        }
+        if (calculation == null && visible != null) {
+            calculation = visible.copy();
+        }
+        if (start == null && visible != null) {
+            start = visible.copy();
+        }
+
+        return new MemorySet(visible, calculation, start, filePath);
+    }
+    public static Memory jsonToMemory(String target, ArrayList<String> json) {
         int leadingSpaces = -2;
         int startingIndex = -1;
         int endingIndex = -1;
+
         for (int i = 0; i < json.size(); i++) {
             String string = json.get(i);
-            if (string.contains("\"visible\":")) {
-                leadingSpaces = string.indexOf("\"visible\":");
+            if (string.contains("\"" + target + "\":")) {
+                leadingSpaces = string.indexOf("\"" + target + "\":");
                 startingIndex = i;
             } else if (string.indexOf("}") == leadingSpaces) {
                 endingIndex = i;
                 break;
             }
         }
-        Memory visible = null;
+
         if (startingIndex != -1 && endingIndex != -1) {
-            ArrayList<String> visibleList = new ArrayList<>();
+            ArrayList<String> list = new ArrayList<>();
             for (int i = startingIndex + 1; i < endingIndex; i++) {
-                visibleList.add(json.get(i));
+                list.add(json.get(i));
             }
-            visible = jsonToMemory(visibleList);
+            return jsonToMemory(list);
         }
-        leadingSpaces = -2;
-        startingIndex = -1;
-        endingIndex = -1;
-        for (int i = 0; i < json.size(); i++) {
-            String string = json.get(i);
-            if (string.contains("\"visible\":")) {
-                leadingSpaces = string.indexOf("\"visible\":");
-                startingIndex = i;
-            } else if (string.indexOf("}") == leadingSpaces) {
-                endingIndex = i;
-                break;
-            }
-        }
-        Memory calculation = null;
-        if (startingIndex != -1 && endingIndex != -1) {
-            ArrayList<String> calculationList = new ArrayList<>();
-            for (int i = startingIndex + 1; i < endingIndex; i++) {
-                calculationList.add(json.get(i));
-            }
-            calculation = jsonToMemory(calculationList);
-        }
-        return new MemorySet(visible, calculation, filePath);
+        return null;
     }
     public static Memory jsonToMemory(ArrayList<String> json) {
         int xSize = 0;

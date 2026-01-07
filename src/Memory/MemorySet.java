@@ -11,23 +11,28 @@ public class MemorySet {
     private final String filePath;
     private final Memory visible;
     private final Memory calculation;
+    private final Memory start;
 
-    public MemorySet(Memory visible, Memory calculation, String filePath) {
+    public MemorySet(Memory visible, Memory calculation, Memory start, String filePath) {
         this.visible = visible;
         this.calculation = calculation;
+        this.start = start;
         this.filePath = filePath;
     }
-    public MemorySet(Memory visible, Memory calculation) {
-        this(visible, calculation, "customPuzzles/newPuzzle.json");
+    public MemorySet(Memory visible, Memory calculation, Memory start) {
+        this(visible, calculation, start, "customPuzzles/newPuzzle.json");
     }
     public MemorySet(Memory memory, String filePath) {
-        this(memory, memory.copy(), filePath);
+        this(memory, memory.copy(), memory.copy(), filePath);
+    }
+    public MemorySet(Memory memory) {
+        this(memory, memory.copy(), memory.copy());
     }
     public MemorySet(Dimentions dimentions) {
-        this(new Memory(dimentions), new Memory(dimentions.copy()));
+        this(new Memory(dimentions));
     }
     public MemorySet copy() {
-        return new MemorySet(visible.copy(), calculation.copy());
+        return new MemorySet(visible.copy(), calculation.copy(), start.copy(), filePath);
     }
 
     public void autoSolve(boolean guessAndCheck) {
@@ -46,6 +51,9 @@ public class MemorySet {
         visible.print();
     }
 
+    public Memory getStart() {
+        return start;
+    }
     public Memory getVisible() {
         return visible;
     }
