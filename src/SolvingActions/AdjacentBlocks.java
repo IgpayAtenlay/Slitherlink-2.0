@@ -7,71 +7,63 @@ import Memory.Memory;
 
 public class AdjacentBlocks {
     static public void run(Memory memory) {
-//        System.out.println("starting " + AdjacentBlocks.class.getSimpleName());
-        int startingChanges = memory.getNumChanges();
-
-        for (int x = 0; x < memory.getDimentions().xSize; x++) {
-            for (int y = 0; y < memory.getDimentions().ySize; y++) {
-                Coords coords = new Coords(x, y);
-                switch (memory.getNumber(coords)) {
-                    case THREE -> doubleThrees(memory, coords);
-                    case TWO -> twoSandwich(memory, coords);
-                }
-
-                if (memory.getHighlight(coords) == Highlight.EMPTY) {
-                    createHighlight(memory, coords);
-                }
-                if (memory.getHighlight(coords) != Highlight.EMPTY) {
-                    useHighlight(memory, coords);
-                }
-            }
+        for (Coords coords : memory.getDimentions().allSquareCoords()) {
+            doubleThrees(memory, coords);
+            twoBetweenIdenticalHighlights(memory, coords);
+            lineExtendsHighlight(memory, coords);
+            separateHighlightsWithLines(memory, coords);
         }
-
-//        System.out.println(AdjacentBlocks.class.getSimpleName() + " finished");
-//        System.out.println("changes: " + (memory.getNumChanges() - startingChanges));
     }
 
     static public void doubleThrees(Memory memory, Coords coords) {
-        for (CardinalDirection direction : new CardinalDirection[] {CardinalDirection.EAST, CardinalDirection.SOUTH}) {
-            if (memory.getNumber(coords.addDirection(direction)) == Number.THREE) {
-                memory.setLine(true, Line.LINE, coords, direction.getOpposite(), false);
-                memory.setLine(true, Line.LINE, coords, direction, false);
-                memory.setLine(true, Line.LINE, coords.addDirection(direction), direction, false);
-                memory.setLine(true, Line.X, coords.addDirection(direction.getClockwise()), direction, false);
-                memory.setLine(true, Line.X, coords.addDirection(direction.getCounterClockwise()), direction, false);
+        if (memory.getNumber(coords) == Number.THREE) {
+            for (CardinalDirection direction : CardinalDirection.values()) {
+                if (memory.getNumber(coords.addDirection(direction)) == Number.THREE) {
+                    memory.setLine(true, Line.LINE, coords, direction.getOpposite(), false);
+                    memory.setLine(true, Line.LINE, coords, direction, false);
+                    memory.setLine(true, Line.X, coords.addDirection(direction.getClockwise()), direction, false);
+                }
             }
         }
     }
-    static public void createHighlight(Memory memory, Coords coords) {
-        for (CardinalDirection direction : CardinalDirection.values()) {
-            Highlight adjacentHighlight = memory.getHighlight(coords.addDirection(direction));
-            Line line = memory.getLine(true, coords, direction);
-            if (line == Line.LINE) {
-                memory.setHighlight(adjacentHighlight.getOpposite(), coords, false);
-            } else if (line == Line.X) {
-                memory.setHighlight(adjacentHighlight, coords, false);
+    static public void lineExtendsHighlight(Memory memory, Coords coords) {
+        if (memory.getHighlight(coords) == Highlight.EMPTY) {
+            for (CardinalDirection direction : CardinalDirection.values()) {
+                Highlight adjacentHighlight = memory.getHighlight(coords.addDirection(direction));
+                Line line = memory.getLine(true, coords, direction);
+                if (line == Line.LINE) {
+                    memory.setHighlight(adjacentHighlight.getOpposite(), coords, false);
+                } else if (line == Line.X) {
+                    memory.setHighlight(adjacentHighlight, coords, false);
+                }
             }
         }
     }
-    static public void useHighlight(Memory memory, Coords coords) {
+    static public void separateHighlightsWithLines(Memory memory, Coords coords) {
         Highlight currentHighlight = memory.getHighlight(coords);
-        for (CardinalDirection direction : CardinalDirection.values()) {
-            Highlight adjacentHighlight = memory.getHighlight(coords.addDirection(direction));
-            if (currentHighlight == adjacentHighlight) {
-                memory.setLine(true, Line.X, coords, direction, false);
-            } else if (currentHighlight != Highlight.EMPTY && adjacentHighlight != Highlight.EMPTY) {
-                memory.setLine(true, Line.LINE, coords, direction, false);
+        if (currentHighlight != Highlight.EMPTY) {
+            for (CardinalDirection direction : CardinalDirection.values()) {
+                Highlight adjacentHighlight = memory.getHighlight(coords.addDirection(direction));
+                if (currentHighlight == adjacentHighlight) {
+                    memory.setLine(true, Line.X, coords, direction, false);
+                } else if (currentHighlight.isOpposite(adjacentHighlight)) {
+                    memory.setLine(true, Line.LINE, coords, direction, false);
+                }
             }
         }
     }
-    static public void twoSandwich(Memory memory, Coords coords) {
-        for (CardinalDirection direction : new CardinalDirection[] {CardinalDirection.EAST, CardinalDirection.SOUTH}) {
-            if (
-                    memory.getHighlight(coords.addDirection(direction)) == memory.getHighlight(coords.addDirection(direction.getOpposite())) &&
-                    memory.getHighlight(coords.addDirection(direction)) != Highlight.EMPTY
-            ) {
-                for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
-                    memory.setCorner(true, Corner.EXACTLY_ONE, coords, diagonalDirection, false);
+    static public void twoBetweenIdenticalHighlights(Memory memory, Coords coords) {
+        if (memory.getNumber(coords) == Number.TWO) {
+            for (CardinalDirection direction : new CardinalDirection[] {CardinalDirection.EAST, CardinalDirection.SOUTH}) {
+                Highlight highlightDirectionOne = memory.getHighlight(coords.addDirection(direction));
+                Highlight highlightDirectionTwo = memory.getHighlight(coords.addDirection(direction.getOpposite()));
+                if (
+                        highlightDirectionOne == highlightDirectionTwo &&
+                        highlightDirectionOne != Highlight.EMPTY
+                ) {
+                    for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
+                        memory.setCorner(true, Corner.EXACTLY_ONE, coords, diagonalDirection, false);
+                    }
                 }
             }
         }

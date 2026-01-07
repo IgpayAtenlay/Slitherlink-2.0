@@ -14,4 +14,8 @@ public enum Highlight {
             case OUTSIDE -> INSIDE;
         };
     }
+    public boolean isOpposite(Highlight comparisionHighlight) {
+        if (this == EMPTY || comparisionHighlight == EMPTY) return false;
+        return getOpposite() == comparisionHighlight;
+    }
 }

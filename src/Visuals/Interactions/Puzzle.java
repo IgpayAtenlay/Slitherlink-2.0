@@ -203,7 +203,7 @@ public class Puzzle {
         do {
             changes = visible.getNumChanges();
             for (Coords coords : visible.getDimentions().allSquareCoords()) {
-                AdjacentBlocks.createHighlight(visible, coords);
+                AdjacentBlocks.lineExtendsHighlight(visible, coords);
             }
         } while (changes != visible.getNumChanges());
 
