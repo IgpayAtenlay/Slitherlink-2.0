@@ -52,8 +52,8 @@ public class Puzzle extends JPanel {
         createButton("Show Solution", e -> puzzleInteractions.autoSolve());
         createButton("Autosolve - one step", e -> puzzleInteractions.autoSolveOneStep());
         createButton("Highlight", e -> puzzleInteractions.highlight());
-        oneVarButton("Undo", "1", num -> puzzleInteractions.undo(num), true);
-        oneVarButton("Redo", "1", num -> puzzleInteractions.redo(num), true);
+        oneVarButton("Undo", "1", (IntInterface) num -> puzzleInteractions.undo(num));
+        oneVarButton("Redo", "1", (IntInterface) num -> puzzleInteractions.redo(num));
         createButton("Reset", e -> puzzleInteractions.reset());
         errorChecking = createLabeledButton("Check for Errors", e -> puzzleInteractions.checkForErrors());
         completionChecking = createLabeledButton("Check for Completetion", e -> puzzleInteractions.checkForCompletetion());
@@ -447,11 +447,10 @@ public class Puzzle extends JPanel {
         add(button);
         componentY += buttonHeight + BUTTON_GAP;
     }
-    public void oneVarButton(String text, String defaultText, IntInterface intInterface, boolean positive) {
-        oneVarButton(text, defaultText, string -> {
+    public void oneVarButton(String text, String defaultText, IntInterface intInterface) {
+        oneVarButton(text, defaultText, (StringInterface) string -> {
             try {
                 int num = Integer.parseInt(string);
-                if (positive && num < 0) return;
                 intInterface.activate(num);
             } catch (Exception ignored) {
             }

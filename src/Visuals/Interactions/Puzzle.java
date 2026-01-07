@@ -207,15 +207,19 @@ public class Puzzle {
         panel.repaint();
     }
     public void undo(int reps) {
-        memorySet.getVisible().undo(reps);
-        panel.repaint();
+        if (reps > 0) {
+            memorySet.getVisible().undo(reps);
+            panel.repaint();
+        }
     }
     public void undo() {
         undo(1);
     }
     public void redo(int reps) {
-        memorySet.getVisible().redo(reps);
-        panel.repaint();
+        if (reps > 0) {
+            memorySet.getVisible().redo(reps);
+            panel.repaint();
+        }
     }
     public void reset() {
         memorySet.reset();
