@@ -7,7 +7,7 @@ import ErrorChecking.Errors;
 import Memory.Coords;
 import Memory.Memory;
 import Memory.MemorySet;
-import PuzzleLoading.Write;
+import PuzzleLoading.MemoryToJsonFile;
 import SolvingActions.AdjacentBlocks;
 import SolvingActions.Control;
 
@@ -124,7 +124,7 @@ public class Puzzle {
     }
 
     public void save() {
-        Write.write(memorySet);
+        MemoryToJsonFile.write(memorySet);
     }
     public void saveAs() {
         String origionalFolder = memorySet.getFolderPath();
@@ -162,7 +162,7 @@ public class Puzzle {
 
             System.out.println(finalPath);
 
-            Write.write(memorySet, finalPath);
+            MemoryToJsonFile.write(memorySet, finalPath);
         }
     }
     public void checkAccuracy() {

@@ -8,18 +8,17 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Read {
+public class JsonFileToMemory {
     public static MemorySet read(String filePath) {
         try {
-            File myObj = new File("public/puzzles/" + filePath);
-            Scanner myReader = new Scanner(myObj);
+            File file = new File(filePath);
+            Scanner scanner = new Scanner(file);
             ArrayList<String> json = new ArrayList<>();
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
+            while (scanner.hasNextLine()) {
+                String data = scanner.nextLine();
                 json.add(data);
-//                System.out.println(data);
             }
-            myReader.close();
+            scanner.close();
             return JsonConverter.jsonToMemorySet(json, filePath);
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");

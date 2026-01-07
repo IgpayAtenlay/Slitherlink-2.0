@@ -3,8 +3,8 @@ package Visuals.Interactions;
 import Autogen.Generate;
 import Memory.Dimentions;
 import Memory.MemorySet;
-import PuzzleLoading.PDFtoFile;
-import PuzzleLoading.Read;
+import PuzzleLoading.PDFtoJson.PDFtoJsonFiles;
+import PuzzleLoading.JsonFileToMemory;
 import Visuals.Frame;
 import Visuals.Panel.Puzzle;
 
@@ -34,11 +34,11 @@ public class MainMenu {
             File selectedFile = fileChooser.getSelectedFile();
             String absolutePath = selectedFile.getAbsolutePath();
 
-            Path base = Paths.get("public/puzzles").toAbsolutePath();
+            Path base = Paths.get("").toAbsolutePath();
             Path target = Paths.get(absolutePath);
             String filename = String.valueOf(base.relativize(target));
 
-            MemorySet memorySet = Read.read(filename);
+            MemorySet memorySet = JsonFileToMemory.read(filename);
             if (memorySet != null) {
                 frame.switchPanel(new Puzzle(memorySet, frame));
             }
@@ -47,7 +47,7 @@ public class MainMenu {
     public void importPDFs() {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get("public/puzzles/pdf"), "*.pdf")) {
             for (Path path : stream) {
-                PDFtoFile.write(String.valueOf(path));
+                PDFtoJsonFiles.write(String.valueOf(path));
             }
         } catch (IOException ignore) {
         }

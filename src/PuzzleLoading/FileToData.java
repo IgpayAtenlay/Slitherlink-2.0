@@ -1,6 +1,6 @@
 package PuzzleLoading;
 
-import Enums.Difficulty;
+import PuzzleLoading.PDFtoJson.TextLocation;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
@@ -8,11 +8,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public class ExtractDataToVariable {
-    public static List<TextData> extract(String filePath) {
+public class FileToData {
+    public static List<TextLocation> extract(String filePath) {
         try (PDDocument document = Loader.loadPDF(new File(filePath))) {
-            if (!document.isEncrypted()) { // Ensure the document is not encrypted
-                PDFTextStripperLocations pdfStripper = new PDFTextStripperLocations();
+            if (!document.isEncrypted()) {
+                PDFTextStripperWithLocations pdfStripper = new PDFTextStripperWithLocations();
                 pdfStripper.getText(document);
                 return pdfStripper.getExtractedText();
             } else {
@@ -23,9 +23,6 @@ public class ExtractDataToVariable {
         }
 
         return null;
-    }
-    public static List<TextData> extract(Difficulty difficulty, int size, int volume, int book) {
-        return extract(difficulty.toString() + size + "Volume" + volume + "Book" + book);
     }
 }
 
