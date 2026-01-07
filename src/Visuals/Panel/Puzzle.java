@@ -51,7 +51,7 @@ public class Puzzle extends JPanel {
         createButton("Check Accuracy", e -> puzzleInteractions.checkAccuracy());
         createButton("Show Solution", e -> puzzleInteractions.autoSolve());
         createButton("Autosolve - one step", e -> puzzleInteractions.autoSolveOneStep());
-        createButton("Highlight", e -> puzzleInteractions.highlight());
+        createButton("Fill in Highlights", e -> puzzleInteractions.highlight());
         oneVarButton("Undo", "1", (IntInterface) num -> puzzleInteractions.undo(num));
         oneVarButton("Redo", "1", (IntInterface) num -> puzzleInteractions.redo(num));
         createButton("Reset", e -> puzzleInteractions.reset());
