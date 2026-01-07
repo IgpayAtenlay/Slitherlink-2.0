@@ -24,8 +24,8 @@ public class MainMenu extends JPanel {
 
         createText("Main Menu");
 
-        puzzleCreatorButton("New Puzzle", (x, y) -> mainMenuInteractions.newPuzzle(x, y));
-        puzzleCreatorButton("Generate Puzzle", (x, y) -> mainMenuInteractions.generatePuzzle(x, y));
+        puzzleCreatorButton("New Puzzle", 7, (x, y) -> mainMenuInteractions.newPuzzle(x, y));
+        puzzleCreatorButton("Generate Puzzle", 10, (x, y) -> mainMenuInteractions.generatePuzzle(x, y));
         createButton("Load", e -> mainMenuInteractions.load());
         createButton("Import PDFs", e -> mainMenuInteractions.importPDFs());
     }
@@ -51,9 +51,9 @@ public class MainMenu extends JPanel {
     interface PuzzleCreator {
         void create(int x, int y);
     }
-    public void puzzleCreatorButton(String text, PuzzleCreator puzzleCreator) {
-        JTextField field1 = new JTextField(10);
-        JTextField field2 = new JTextField(10);
+    public void puzzleCreatorButton(String text, int defaultNumber, PuzzleCreator puzzleCreator) {
+        JTextField field1 = new JTextField(Integer.toString(defaultNumber), 10);
+        JTextField field2 = new JTextField(Integer.toString(defaultNumber), 10);
         JLabel label = new JLabel("x");
         JButton button = new JButton(text);
 

@@ -11,10 +11,10 @@ public class Generate {
         for (int x = 0; x < memorySet.getCalculation().getDimentions().xSize; x++) {
             for (int y = 0; y < memorySet.getCalculation().getDimentions().ySize; y++) {
                 Coords currentCoord = new Coords(x, y);
-                memorySet.getVisible().setNumber(memorySet.getCalculation().getNumber(currentCoord), currentCoord, true);
+                memorySet.getStart().setNumber(memorySet.getCalculation().getNumber(currentCoord), currentCoord, true);
             }
         }
-        TrimNumbers.trim(memorySet.getVisible());
-        memorySet.getVisible().clearMemory();
+        TrimNumbers.trim(memorySet.getStart());
+        memorySet.reset();
     }
 }

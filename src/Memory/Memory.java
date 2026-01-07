@@ -365,4 +365,12 @@ public class Memory {
         undo.clear();
         redo.clear();
     }
+    public void copyMemory(Memory memory) {
+        System.arraycopy(memory.lines, 0, lines, 0, lines.length);
+        System.arraycopy(memory.numbers, 0, numbers, 0, numbers.length);
+        System.arraycopy(memory.highlights, 0, highlights, 0, highlights.length);
+        System.arraycopy(memory.corners, 0, corners, 0, corners.length);
+        System.arraycopy(memory.loops, 0, loops, 0, loops.length);
+        clearMemory();
+    }
 }

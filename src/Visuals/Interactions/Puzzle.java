@@ -217,6 +217,10 @@ public class Puzzle {
         memorySet.getVisible().redo(reps);
         panel.repaint();
     }
+    public void reset() {
+        memorySet.reset();
+        panel.repaint();
+    }
     public void redo() {
         redo(1);
     }
