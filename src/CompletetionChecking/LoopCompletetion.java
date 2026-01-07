@@ -6,23 +6,17 @@ import Memory.Coords;
 import Memory.Memory;
 
 public class LoopCompletetion {
-    static public boolean run(Memory memory) {
-//        System.out.println("starting " + LoopCompletetion.class.getSimpleName());
-
+    static public boolean hasExactlyOneLoop(Memory memory) {
         int totalLines = memory.getNumLines();
-
         for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
             for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
                 Coords coords = new Coords(x, y);
                 if (hasLine(memory, coords)) {
                     boolean isGoodLoop = isGoodLoop(memory, coords, totalLines);
-//                    System.out.println(LoopCompletetion.class.getSimpleName() + " finished");
                     return isGoodLoop;
                 }
             }
         }
-
-//        System.out.println(LoopCompletetion.class.getSimpleName() + " finished");
         return true;
     }
 

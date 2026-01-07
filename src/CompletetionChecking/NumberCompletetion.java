@@ -7,9 +7,7 @@ import Memory.Coords;
 import Memory.Memory;
 
 public class NumberCompletetion {
-    public static boolean run(Memory memory) {
-//        System.out.println("starting " + NumberCompletetion.class.getSimpleName());
-
+    public static boolean isCorrectNumbers(Memory memory) {
         for (int x = 0; x < memory.getDimentions().xSize; x++) {
             for (int y = 0; y < memory.getDimentions().ySize; y++) {
                 Coords coords = new Coords(x, y);
@@ -22,14 +20,11 @@ public class NumberCompletetion {
                         }
                     }
                     if (lines != memory.getNumber(coords).value) {
-//                        System.out.println(NumberCompletetion.class.getSimpleName() + " finished");
                         return false;
                     }
                 }
             }
         }
-
-//        System.out.println(NumberCompletetion.class.getSimpleName() + " finished");
         return true;
     }
 }
