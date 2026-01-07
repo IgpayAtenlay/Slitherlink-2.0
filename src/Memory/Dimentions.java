@@ -25,4 +25,13 @@ public class Dimentions {
         }
         return coordsList;
     }
+    public ArrayList<Coords> allPointCoords() {
+        ArrayList<Coords> coordsList = new ArrayList<>();
+        for (int y = 0; y < ySize + 1; y++) {
+            for (int x = 0; x < xSize + 1; x++) {
+                coordsList.add(new Coords(x, y));
+            }
+        }
+        return coordsList;
+    }
 }

@@ -88,6 +88,16 @@ public class Memory {
     public int getNumChanges() {
         return undo.size();
     }
+    public int getNumLines() {
+        int totalLines = 0;
+        for (Line line : lines) {
+            if (line == Line.LINE) {
+                totalLines++;
+            }
+        }
+
+        return totalLines;
+    }
 
     public String getJson() {
         return "{" +
@@ -100,69 +110,24 @@ public class Memory {
                 "\n    \"loops\": " + JsonConverter.javaToJson(loops) +
                 "\n}";
     }
-    public void print() {
-        for (int y = 0; y < dimentions.ySize; y++) {
-            System.out.print(". ");
-            for (int x = 0; x < dimentions.xSize; x++) {
-                System.out.print(getLine(true, new Coords(x, y), CardinalDirection.NORTH).toString(false));
-                System.out.print(" . ");
+
+    public int getNumLines(Coords coords) {
+        int numLines = 0;
+        for (CardinalDirection direction : CardinalDirection.values()) {
+            if (getLine(true, coords, direction) == Line.LINE) {
+                numLines++;
             }
-            System.out.println();
-
-            for (int x = 0; x < dimentions.xSize; x++) {
-                Coords coords = new Coords(x, y);
-                System.out.print(getLine(true, coords, CardinalDirection.WEST).toString(true) + " ");
-                System.out.print(getNumber(coords).toString(true) + " ");
-            }
-
-            System.out.print(getLine(true, new Coords(dimentions.xSize - 1, y), CardinalDirection.EAST).toString(true));
-            System.out.println();
-
         }
-        System.out.print(". ");
-        for (int x = 0; x < dimentions.xSize; x++) {
-            System.out.print(getLine(true, new Coords(x, dimentions.ySize - 1), CardinalDirection.SOUTH).toString(false));
-            System.out.print(" . ");
-        }
-        System.out.println();
+        return numLines;
     }
-    public void printNumbers() {
-        for (int y = 0; y < dimentions.ySize; y++) {
-            for (int x = 0; x < dimentions.xSize; x++) {
-                System.out.print(getNumber(new Coords(x, y)) + " ");
-            }
-            System.out.println();
+    public Line getLine(boolean square, Coords coords, CardinalDirection direction) {
+        int index = Indexes.line(square, coords, direction, dimentions);
+        if (index < 0 || index >= lines.length) {
+            return Line.X;
+        } else {
+            return lines[index];
         }
     }
-    public void printHighlight() {
-        for (int y = 0; y < dimentions.ySize; y++) {
-            System.out.print("     ");
-            for (int x = 0; x < dimentions.xSize; x++) {
-                System.out.print(getLine(true, new Coords(x, y), CardinalDirection.NORTH));
-                System.out.print("      ");
-            }
-            System.out.println();
-
-            for (int x = 0; x < dimentions.xSize; x++) {
-                Coords coords = new Coords(x, y);
-                System.out.print(getLine(true, coords, CardinalDirection.WEST));
-                System.out.print(getHighlight(coords));
-                System.out.print(" ");
-            }
-
-            System.out.print(getLine(true, new Coords(dimentions.xSize - 1, y), CardinalDirection.EAST));
-            System.out.println();
-
-        }
-        System.out.print("     ");
-        for (int x = 0; x < dimentions.xSize; x++) {
-            System.out.print(getLine(true, new Coords(x, dimentions.ySize - 1), CardinalDirection.SOUTH));
-            System.out.print("      ");
-        }
-        System.out.println();
-    }
-    
-    // setters and getters
     public void setLine(boolean square, Line line, Coords coords, CardinalDirection direction, boolean override) {
         int i = Indexes.line(square, coords, direction, new Dimentions(dimentions.xSize, dimentions.ySize));
         if (i < 0 || i > lines.length) {
@@ -176,33 +141,6 @@ public class Memory {
                 setLoop(square, coords, direction);
             }
         }
-    }
-    public Line getLine(boolean square, Coords coords, CardinalDirection direction) {
-        int index = Indexes.line(square, coords, direction, dimentions);
-        if (index < 0 || index >= lines.length) {
-            return Line.X;
-        } else {
-            return lines[index];
-        }
-    }
-    public int getNumLines() {
-        int totalLines = 0;
-        for (Line line : lines) {
-            if (line == Line.LINE) {
-                totalLines++;
-            }
-        }
-
-        return totalLines;
-    }
-    public int getNumLines(Coords coords) {
-        int numLines = 0;
-        for (CardinalDirection direction : CardinalDirection.values()) {
-            if (getLine(true, coords, direction) == Line.LINE) {
-                numLines++;
-            }
-        }
-        return numLines;
     }
     public Corner getCorner(boolean square, Coords coords, DiagonalDirection direction) {
         int i = Indexes.diagonal(square, coords, direction, dimentions);
@@ -231,6 +169,15 @@ public class Memory {
             }
         }
     }
+    public Highlight getHighlight(Coords coords) {
+        int x = coords.x;
+        int y = coords.y;
+        if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0) {
+            return highlights[x + y * dimentions.xSize];
+        } else {
+            return Highlight.OUTSIDE;
+        }
+    }
     public void setHighlight(Highlight highlight, Coords coords, boolean override) {
         int x = coords.x;
         int y = coords.y;
@@ -242,13 +189,13 @@ public class Memory {
             highlights[i] = highlight;
         }
     }
-    public Highlight getHighlight(Coords coords) {
+    public Number getNumber(Coords coords) {
         int x = coords.x;
         int y = coords.y;
         if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0) {
-            return highlights[x + y * dimentions.xSize];
+            return numbers[x + y * dimentions.xSize];
         } else {
-            return Highlight.OUTSIDE;
+            return Number.EMPTY;
         }
     }
     public void setNumber(Number number, Coords coords, boolean override) {
@@ -261,14 +208,11 @@ public class Memory {
             numbers[i] = number;
         }
     }
-    public Number getNumber(Coords coords) {
-        int x = coords.x;
-        int y = coords.y;
-        if (x < dimentions.xSize && y < dimentions.ySize && x >= 0 && y >= 0) {
-            return numbers[x + y * dimentions.xSize];
-        } else {
-            return Number.EMPTY;
+    public Loop getLoop(Coords coords) {
+        if (Indexes.point(coords, dimentions) < 0 || Indexes.point(coords, dimentions) >= loops.length) {
+            return null;
         }
+        return loops[Indexes.point(coords, dimentions)];
     }
     public void setLoop(boolean square, Coords coordOne, CardinalDirection direction) {
         if (square) {
@@ -283,7 +227,7 @@ public class Memory {
             if (Indexes.point(coordOne, dimentions) < 0 || Indexes.point(coordOne, dimentions) >= loops.length || Indexes.point(coordTwo, dimentions) < 0 || Indexes.point(coordTwo, dimentions) >= loops.length) {
                 return;
             }
-            if (loops[Indexes.point(coordOne, dimentions)] != null && loops[Indexes.point(coordOne, dimentions)].coords.equals(coordTwo)) {
+            if (loops[Indexes.point(coordOne, dimentions)] != null && loops[Indexes.point(coordOne, dimentions)].endPoint.equals(coordTwo)) {
                 loops[Indexes.point(coordOne, dimentions)] = null;
                 loops[Indexes.point(coordTwo, dimentions)] = null;
                 return;
@@ -300,28 +244,22 @@ public class Memory {
                 length += twoLoopEnd.length;
             }
 
-            Loop newOneLoop = new Loop(twoLoopEnd == null ? coordTwo : twoLoopEnd.coords, length);
-            Loop newTwoLoop = new Loop(oneLoopEnd == null ? coordOne : oneLoopEnd.coords, length);
+            Loop newOneLoop = new Loop(twoLoopEnd == null ? coordTwo : twoLoopEnd.endPoint, length);
+            Loop newTwoLoop = new Loop(oneLoopEnd == null ? coordOne : oneLoopEnd.endPoint, length);
 
             if (oneLoopEnd == null) {
                 loops[Indexes.point(coordOne, dimentions)] = newOneLoop;
             } else {
                 loops[Indexes.point(coordOne, dimentions)] = null;
-                loops[Indexes.point(oneLoopEnd.coords, dimentions)] = newOneLoop;
+                loops[Indexes.point(oneLoopEnd.endPoint, dimentions)] = newOneLoop;
             }
             if (twoLoopEnd == null) {
                 loops[Indexes.point(coordTwo, dimentions)] = newTwoLoop;
             } else {
                 loops[Indexes.point(coordTwo, dimentions)] = null;
-                loops[Indexes.point(twoLoopEnd.coords, dimentions)] = newTwoLoop;
+                loops[Indexes.point(twoLoopEnd.endPoint, dimentions)] = newTwoLoop;
             }
         }
-    }
-    public Loop getLoop(Coords coords) {
-        if (Indexes.point(coords, dimentions) < 0 || Indexes.point(coords, dimentions) >= loops.length) {
-            return null;
-        }
-        return loops[Indexes.point(coords, dimentions)];
     }
 
     public void undo(int reps) {

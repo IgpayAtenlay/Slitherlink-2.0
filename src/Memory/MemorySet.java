@@ -1,9 +1,5 @@
 package Memory;
 
-import Enums.CardinalDirection;
-import Enums.Number;
-import SolvingActions.Control;
-
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -19,14 +15,11 @@ public class MemorySet {
         this.start = start;
         this.filePath = filePath;
     }
-    public MemorySet(Memory visible, Memory calculation, Memory start) {
-        this(visible, calculation, start, "customPuzzles/newPuzzle.json");
-    }
     public MemorySet(Memory memory, String filePath) {
         this(memory, memory.copy(), memory.copy(), filePath);
     }
     public MemorySet(Memory memory) {
-        this(memory, memory.copy(), memory.copy());
+        this(memory, memory.copy(), memory.copy(), "customPuzzles/newPuzzle.json");
     }
     public MemorySet(Dimentions dimentions) {
         this(new Memory(dimentions));
@@ -38,21 +31,6 @@ public class MemorySet {
     public void reset() {
         visible.copyMemory(start);
         calculation.copyMemory(start);
-    }
-    public void autoSolve(boolean guessAndCheck) {
-        Control.autoSolve(calculation, guessAndCheck);
-    }
-    public void linesCalculationToVisible() {
-        for (int y = 0; y < calculation.getDimentions().ySize + 1; y++) {
-            for (int x = 0; x < calculation.getDimentions().xSize + 1; x++) {
-                Coords coords = new Coords(x, y);
-                visible.setLine(true, calculation.getLine(true, coords, CardinalDirection.NORTH), coords, CardinalDirection.NORTH, false);
-                visible.setLine(true, calculation.getLine(true, coords, CardinalDirection.WEST), coords, CardinalDirection.WEST, false);
-            }
-        }
-    }
-    public void print() {
-        visible.print();
     }
 
     public Memory getStart() {
@@ -71,9 +49,5 @@ public class MemorySet {
         Path path = Paths.get("public/puzzles/" + getFilePath());
         Path folder = path.getParent();
         return folder.toString();
-    }
-    public void setNumber(Number number, Coords coords) {
-        visible.setNumber(number, coords, true);
-        calculation.setNumber(number, coords, true);
     }
 }

@@ -1,18 +1,18 @@
 package Memory;
 
 public class Loop {
-    public final Coords coords;
+    public final Coords endPoint;
     public final int length;
-    public Loop(Coords coords, int length) {
-        this.coords = coords;
+    public Loop(Coords endPoint, int length) {
+        this.endPoint = endPoint;
         this.length = length;
     }
     public Loop copy() {
-        return new Loop(coords.copy(), length);
+        return new Loop(endPoint.copy(), length);
     }
 
     @Override
     public String toString() {
-        return coords.toString() + " length: " + length;
+        return endPoint.toString() + " length: " + length;
     }
 }

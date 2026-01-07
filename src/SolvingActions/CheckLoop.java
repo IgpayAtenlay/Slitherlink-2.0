@@ -26,7 +26,7 @@ public class CheckLoop {
         Loop loop = memory.getLoop(coords);
         if (loop != null && totalLines != loop.length && loop.length != 1) {
             for (CardinalDirection direction : CardinalDirection.values()) {
-                if (loop.coords.equals(coords.addDirection(direction))) {
+                if (loop.endPoint.equals(coords.addDirection(direction))) {
                     memory.setLine(false, Line.X, coords, direction, false);
                 }
             }

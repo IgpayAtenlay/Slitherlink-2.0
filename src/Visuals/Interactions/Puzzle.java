@@ -171,15 +171,26 @@ public class Puzzle {
     }
     public void autoSolve() {
         // testing only!!!
-        for (int y = 0; y < memorySet.getCalculation().getDimentions().ySize + 1; y++) {
-            for (int x = 0; x < memorySet.getCalculation().getDimentions().xSize + 1; x++) {
+        Memory calculation = memorySet.getCalculation();
+        Memory visible = memorySet.getVisible();
+
+        for (int y = 0; y < calculation.getDimentions().ySize + 1; y++) {
+            for (int x = 0; x < calculation.getDimentions().xSize + 1; x++) {
                 Coords coords = new Coords(x, y);
-                memorySet.getCalculation().setLine(true, memorySet.getVisible().getLine(true, coords, CardinalDirection.NORTH), coords, CardinalDirection.NORTH, true);
-                memorySet.getCalculation().setLine(true, memorySet.getVisible().getLine(true, coords, CardinalDirection.WEST), coords, CardinalDirection.WEST, true);
+                calculation.setLine(true, visible.getLine(true, coords, CardinalDirection.NORTH), coords, CardinalDirection.NORTH, true);
+                calculation.setLine(true, visible.getLine(true, coords, CardinalDirection.WEST), coords, CardinalDirection.WEST, true);
             }
         }
-        memorySet.autoSolve(false);
-        memorySet.linesCalculationToVisible();
+
+        Control.autoSolve(calculation, false);
+
+        for (int y = 0; y < calculation.getDimentions().ySize + 1; y++) {
+            for (int x = 0; x < calculation.getDimentions().xSize + 1; x++) {
+                Coords coords = new Coords(x, y);
+                visible.setLine(true, calculation.getLine(true, coords, CardinalDirection.NORTH), coords, CardinalDirection.NORTH, false);
+                visible.setLine(true, calculation.getLine(true, coords, CardinalDirection.WEST), coords, CardinalDirection.WEST, false);
+            }
+        }
         panel.repaint();
     }
     public void autoSolveOneStep() {
