@@ -58,6 +58,7 @@ public class Puzzle extends JPanel {
         createButton("50 Redo", e -> puzzleInteractions.redo(50));
         errorChecking = createLabeledButton("Check for Errors", e -> puzzleInteractions.checkForErrors());
         completionChecking = createLabeledButton("Check for Completetion", e -> puzzleInteractions.checkForCompletetion());
+        createButton("Back to menu", e -> this.frame.switchPanel(new MainMenu(this.frame)));
     }
 
     private void setupMouseControls() {
