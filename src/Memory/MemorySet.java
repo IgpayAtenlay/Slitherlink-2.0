@@ -35,6 +35,10 @@ public class MemorySet {
         return new MemorySet(visible.copy(), calculation.copy(), start.copy(), filePath);
     }
 
+    public void reset() {
+        visible.copyMemory(start);
+        calculation.copyMemory(start);
+    }
     public void autoSolve(boolean guessAndCheck) {
         Control.autoSolve(calculation, guessAndCheck);
     }

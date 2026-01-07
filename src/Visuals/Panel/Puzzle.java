@@ -54,6 +54,7 @@ public class Puzzle extends JPanel {
         createButton("Highlight", e -> puzzleInteractions.highlight());
         oneVarButton("Undo", "1", num -> puzzleInteractions.undo(num), true);
         oneVarButton("Redo", "1", num -> puzzleInteractions.redo(num), true);
+        createButton("Reset", e -> puzzleInteractions.reset());
         errorChecking = createLabeledButton("Check for Errors", e -> puzzleInteractions.checkForErrors());
         completionChecking = createLabeledButton("Check for Completetion", e -> puzzleInteractions.checkForCompletetion());
     }
