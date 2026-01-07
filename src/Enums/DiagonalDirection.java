@@ -9,15 +9,6 @@ public enum DiagonalDirection {
     DiagonalDirection() {
     }
 
-    public CardinalDirection[] getCardinalDirections() {
-        return switch (this) {
-            case NORTHEAST -> new CardinalDirection[] {CardinalDirection.NORTH, CardinalDirection.EAST};
-            case SOUTHEAST -> new CardinalDirection[] {CardinalDirection.EAST, CardinalDirection.SOUTH};
-            case SOUTHWEST -> new CardinalDirection[] {CardinalDirection.SOUTH, CardinalDirection.WEST};
-            case NORTHWEST -> new CardinalDirection[] {CardinalDirection.WEST, CardinalDirection.NORTH};
-        };
-    }
-
     public DiagonalDirection getOpposite() {
         return switch (this) {
             case NORTHEAST -> SOUTHWEST;
@@ -40,6 +31,15 @@ public enum DiagonalDirection {
             case SOUTHEAST -> NORTHEAST;
             case SOUTHWEST -> SOUTHEAST;
             case NORTHWEST -> SOUTHWEST;
+        };
+    }
+
+    public CardinalDirection[] getCardinalDirections() {
+        return switch (this) {
+            case NORTHEAST -> new CardinalDirection[] {CardinalDirection.NORTH, CardinalDirection.EAST};
+            case SOUTHEAST -> new CardinalDirection[] {CardinalDirection.EAST, CardinalDirection.SOUTH};
+            case SOUTHWEST -> new CardinalDirection[] {CardinalDirection.SOUTH, CardinalDirection.WEST};
+            case NORTHWEST -> new CardinalDirection[] {CardinalDirection.WEST, CardinalDirection.NORTH};
         };
     }
 }
