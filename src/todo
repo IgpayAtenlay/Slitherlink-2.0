@@ -3,3 +3,4 @@ fix loop errors
 make blind friendly - test with Momom
 add generic "changes" which capture the entire puzzle - for use with reset and items like autosolve steps
 change "show solution" to toggle temporarily showing the solution like "Check Accuracy" does (have these be mutually exclusive states)
+clean up solvingActions, util, and visuals
