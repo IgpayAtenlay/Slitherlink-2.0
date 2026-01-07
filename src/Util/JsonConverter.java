@@ -35,11 +35,11 @@ public class JsonConverter {
         if (visible == null && start != null) {
             visible = start.copy();
         }
-        if (calculation == null && visible != null) {
-            calculation = visible.copy();
-        }
         if (start == null && visible != null) {
             start = visible.copy();
+        }
+        if (calculation == null && start != null) {
+            calculation = start.copy();
         }
 
         return new MemorySet(visible, calculation, start, filePath);
