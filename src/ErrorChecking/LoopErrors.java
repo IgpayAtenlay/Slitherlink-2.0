@@ -6,10 +6,8 @@ import Memory.Coords;
 import Memory.Memory;
 
 public class LoopErrors {
-    static public boolean run(Memory memory) {
+    static public boolean hasLoopProblem(Memory memory) {
         // this doesn't work
-//        System.out.println("starting " + LoopErrors.class.getSimpleName());
-
         int totalLines = memory.getNumLines();
         boolean[][] visited = new boolean[memory.getDimentions().xSize + 1][memory.getDimentions().ySize + 1];
 
@@ -18,14 +16,11 @@ public class LoopErrors {
                 if (!visited[x][y]) {
                     visited[x][y] = true;
                     if (isThisLoopProblem(memory, new Coords(x, y), totalLines, visited)) {
-//                        System.out.println(LoopErrors.class.getSimpleName() + " finished");
                         return true;
                     }
                 }
             }
         }
-
-//        System.out.println(LoopErrors.class.getSimpleName() + " finished");
         return false;
     }
     public static boolean isThisLoopProblem(Memory memory, Coords start, int totalLines, boolean[][] visited) {
@@ -40,7 +35,6 @@ public class LoopErrors {
 
         Coords currentCoord = start.addDirection(exit);
 
-        // loop start
         if (linesInLoop == 2) {
             linesInLoop--;
             visited[currentCoord.x][currentCoord.y] = true;
