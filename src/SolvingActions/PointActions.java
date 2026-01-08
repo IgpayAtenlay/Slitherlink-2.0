@@ -83,12 +83,27 @@ public class PointActions {
         Line lineTwo = memory.getLine(false, coords, direction.getCardinalDirections()[1]);
 
         if (corner != Corner.EMPTY) {
-            if (corner == Corner.DIFFERENT) {
-                memory.setLine(false, lineOne.getOpposite(), coords, direction.getCardinalDirections()[1], false);
-                memory.setLine(false, lineTwo.getOpposite(), coords, direction.getCardinalDirections()[0], false);
-            } else if (corner == Corner.SAME) {
-                memory.setLine(false, lineOne, coords, direction.getCardinalDirections()[1], false);
-                memory.setLine(false, lineTwo, coords, direction.getCardinalDirections()[0], false);
+            switch (corner) {
+                case DIFFERENT -> {
+                    memory.setLine(false, lineTwo.getOpposite(), coords, direction.getCardinalDirections()[0], false);
+                    memory.setLine(false, lineOne.getOpposite(), coords, direction.getCardinalDirections()[1], false);
+                }
+                case SAME -> {
+                    memory.setLine(false, lineTwo, coords, direction.getCardinalDirections()[0], false);
+                    memory.setLine(false, lineOne, coords, direction.getCardinalDirections()[1], false);
+                }
+                case MAX_ONE -> {
+                    if (lineOne == Line.LINE || lineTwo == Line.LINE) {
+                        memory.setLine(false, Line.X, coords, direction.getCardinalDirections()[0], false);
+                        memory.setLine(false, Line.X, coords, direction.getCardinalDirections()[1], false);
+                    }
+                }
+                case MIN_ONE -> {
+                    if (lineOne == Line.X || lineTwo == Line.X) {
+                        memory.setLine(false, Line.LINE, coords, direction.getCardinalDirections()[0], false);
+                        memory.setLine(false, Line.LINE, coords, direction.getCardinalDirections()[1], false);
+                    }
+                }
             }
         }
     }

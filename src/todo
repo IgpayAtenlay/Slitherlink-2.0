@@ -1,6 +1,7 @@
 LOGIC
 solving actions, choose which ones to only run once
 create threeLoop rule (if there is a loop near a three, the side that would connect it must be a line)
+try to get rid of logic numbers (or determine it's impossible/too terrible)
 
 UI
 make blind friendly - test with Momom
@@ -10,7 +11,7 @@ have "check accuracy" auto solve puzzle before showing
 REFACTORING
 
 split solving actions into better (and more) classes
-clean up guess and check, single block, trapped, util, and visuals
+clean up guess and check, trapped, util, and visuals
 in solving actions, rename coords to make clear whether they are square or point coords
 
 TECH DEBT
