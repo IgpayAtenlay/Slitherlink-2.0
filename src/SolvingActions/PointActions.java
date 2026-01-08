@@ -1,9 +1,6 @@
 package SolvingActions;
 
-import Enums.CardinalDirection;
-import Enums.Corner;
-import Enums.DiagonalDirection;
-import Enums.Line;
+import Enums.*;
 import Memory.Coords;
 import Memory.Memory;
 
@@ -17,6 +14,7 @@ public class PointActions {
                 fillSameCornerPoint(memory, coords, direction);
                 cornersToLines(memory, coords, direction);
             }
+            differentCornerHighlight(memory, coords);
         }
     }
 
@@ -105,6 +103,16 @@ public class PointActions {
                     }
                 }
             }
+        }
+    }
+    public static void differentCornerHighlight(Memory memory, Coords coords) {
+        for (DiagonalDirection direction : DiagonalDirection.values()) {
+            if (memory.getCorner(false, coords, direction) != Corner.DIFFERENT) return;
+        }
+
+        for (DiagonalDirection direction : DiagonalDirection.values()) {
+            Highlight highlight = memory.getHighlight(coords.pointToSquare(direction));
+            memory.setHighlight(highlight.getOpposite(), coords.pointToSquare(direction.getOpposite()), false);
         }
     }
 }
