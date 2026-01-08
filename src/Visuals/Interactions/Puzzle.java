@@ -103,10 +103,10 @@ public class Puzzle {
             }
             default -> {
                 Corner currentCorner = switch (keyCode) {
-                    case KeyEvent.VK_W -> Corner.BOTH_OR_NEITHER;
-                    case KeyEvent.VK_S -> Corner.EXACTLY_ONE;
-                    case KeyEvent.VK_A -> Corner.AT_LEAST_ONE;
-                    case KeyEvent.VK_D -> Corner.AT_MOST_ONE;
+                    case KeyEvent.VK_W -> Corner.SAME;
+                    case KeyEvent.VK_S -> Corner.DIFFERENT;
+                    case KeyEvent.VK_A -> Corner.MIN_ONE;
+                    case KeyEvent.VK_D -> Corner.MAX_ONE;
                     default -> Corner.EMPTY;
                 };
                 if (currentCorner == Corner.EMPTY) return;

@@ -31,7 +31,7 @@ public class AdjacentDiagonalBlocks {
                 if (memory.getNumber(coords.addDirection(diagonalDirection)) == Number.THREE) {
                     Coords cornerCoords = coords.addDirection(diagonalDirection.getCardinalDirections()[0]);
                     DiagonalDirection farCorner = diagonalDirection.getCounterClockwise();
-                    if (memory.getCorner(true, cornerCoords, farCorner) == Corner.BOTH_OR_NEITHER) {
+                    if (memory.getCorner(true, cornerCoords, farCorner) == Corner.SAME) {
                         memory.setLine(true, Line.X, cornerCoords, farCorner.getCardinalDirections()[0], false);
                         memory.setLine(true, Line.X, cornerCoords, farCorner.getCardinalDirections()[1], false);
                     }

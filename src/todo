@@ -10,11 +10,6 @@ REFACTORING
 
 split solving actions into better (and more) classes
 clean up guess and check, single block, trapped, util, and visuals
-rename
-    at least one -> min one
-    at most one -> max one
-    both or neither -> same
-    either or -> different
 
 TECH DEBT
 

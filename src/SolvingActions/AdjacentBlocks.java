@@ -62,7 +62,7 @@ public class AdjacentBlocks {
                         highlightDirectionOne != Highlight.EMPTY
                 ) {
                     for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
-                        memory.setCorner(true, Corner.EXACTLY_ONE, coords, diagonalDirection, false);
+                        memory.setCorner(true, Corner.DIFFERENT, coords, diagonalDirection, false);
                     }
                 }
             }

@@ -149,7 +149,7 @@ public class Memory {
     public Corner getCorner(boolean square, Coords coords, DiagonalDirection direction) {
         int i = Indexes.diagonal(square, coords, direction, dimentions);
         if (i < 0 || i >= corners.length) {
-            return Corner.BOTH_OR_NEITHER;
+            return Corner.SAME;
         } else {
             return corners[i];
         }
@@ -162,14 +162,14 @@ public class Memory {
         if (corners[i] != corner) {
             if (corners[i] == Corner.EMPTY ||
                     override ||
-                    ((corners[i] == Corner.AT_LEAST_ONE || corners[i] == Corner.AT_MOST_ONE) && (corner == Corner.EXACTLY_ONE || corner == Corner.BOTH_OR_NEITHER))
+                    ((corners[i] == Corner.MIN_ONE || corners[i] == Corner.MAX_ONE) && (corner == Corner.DIFFERENT || corner == Corner.SAME))
             ) {
 //            System.out.println("changing diagonal " + i + " to " + diagonal);
                 change(new CornerChange(corner, corners[i], i));
                 corners[i] = corner;
-            } else if ((corners[i] == Corner.AT_LEAST_ONE && corner == Corner.AT_MOST_ONE) || (corner == Corner.AT_LEAST_ONE && corners[i] == Corner.AT_MOST_ONE)) {
-                change(new CornerChange(Corner.EXACTLY_ONE, corners[i], i));
-                corners[i] = Corner.EXACTLY_ONE;
+            } else if ((corners[i] == Corner.MIN_ONE && corner == Corner.MAX_ONE) || (corner == Corner.MIN_ONE && corners[i] == Corner.MAX_ONE)) {
+                change(new CornerChange(Corner.DIFFERENT, corners[i], i));
+                corners[i] = Corner.DIFFERENT;
             }
         }
     }
