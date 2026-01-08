@@ -2,8 +2,13 @@ package Enums;
 
 public enum Corner {
     EMPTY,
-    MIN_ONE,
-    DIFFERENT,
     MAX_ONE,
-    SAME
+    DIFFERENT,
+    MIN_ONE,
+    SAME;
+    Corner() {
+    }
+    public boolean atLeastOne() {
+        return this == DIFFERENT || this == MIN_ONE;
+    }
 }

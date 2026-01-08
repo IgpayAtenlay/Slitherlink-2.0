@@ -13,9 +13,8 @@ public class PointActions {
             fillLinesOnPoint(memory, coords);
             for (DiagonalDirection direction : DiagonalDirection.values()) {
                 linesToCorners(memory, coords, direction);
-                copyCornersAcrossPoint(memory, coords, direction);
-                fillSameCorner(memory, coords, direction);
-                minOneCornerAdjacentToMaxOneCorner(memory, coords, direction);
+                cornersAcrossPoint(memory, coords, direction);
+                fillSameCornerPoint(memory, coords, direction);
                 cornersToLines(memory, coords, direction);
             }
         }
@@ -57,27 +56,25 @@ public class PointActions {
             memory.setCorner(false, Corner.MAX_ONE, coords, direction, false);
         }
     }
-    public static void copyCornersAcrossPoint(Memory memory, Coords coords, DiagonalDirection direction) {
+    public static void cornersAcrossPoint(Memory memory, Coords coords, DiagonalDirection direction) {
         Corner corner = memory.getCorner(false, coords, direction);
         switch (corner) {
             case SAME, DIFFERENT -> memory.setCorner(false, corner, coords, direction.getOpposite(), false);
             case MIN_ONE -> memory.setCorner(false, Corner.MAX_ONE, coords, direction.getOpposite(), false);
+            case MAX_ONE -> {
+                if (
+                    memory.getCorner(false, coords, direction.getClockwise()).atLeastOne() ||
+                    memory.getCorner(false, coords, direction.getCounterClockwise()).atLeastOne()
+                ) {
+                    memory.setCorner(false, Corner.MIN_ONE, coords, direction.getOpposite(), false);
+                }
+            }
         }
     }
-    public static void fillSameCorner(Memory memory, Coords coords, DiagonalDirection direction) {
+    public static void fillSameCornerPoint(Memory memory, Coords coords, DiagonalDirection direction) {
         if (memory.getCorner(false, coords, direction) == Corner.SAME) {
             memory.setCorner(false, Corner.MAX_ONE, coords, direction.getClockwise(), false);
             memory.setCorner(false, Corner.MAX_ONE, coords, direction.getCounterClockwise(), false);
-        }
-    }
-    public static void minOneCornerAdjacentToMaxOneCorner(Memory memory, Coords coords, DiagonalDirection direction) {
-        Corner corner = memory.getCorner(false, coords, direction);
-        if (corner == Corner.MIN_ONE || corner == Corner.DIFFERENT) {
-            if (memory.getCorner(false, coords, direction.getClockwise()) == Corner.MAX_ONE) {
-                memory.setCorner(false, Corner.MIN_ONE, coords, direction.getCounterClockwise(), false);
-            } else if (memory.getCorner(false, coords, direction.getCounterClockwise()) == Corner.MAX_ONE) {
-                memory.setCorner(false, Corner.MIN_ONE, coords, direction.getClockwise(), false);
-            }
         }
     }
     public static void cornersToLines(Memory memory, Coords coords, DiagonalDirection direction) {

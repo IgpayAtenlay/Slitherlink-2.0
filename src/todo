@@ -1,5 +1,6 @@
 LOGIC
 solving actions, choose which ones to only run once
+create threeLoop rule (if there is a loop near a three, the side that would connect it must be a line)
 
 UI
 make blind friendly - test with Momom
@@ -10,6 +11,7 @@ REFACTORING
 
 split solving actions into better (and more) classes
 clean up guess and check, single block, trapped, util, and visuals
+in solving actions, rename coords to make clear whether they are square or point coords
 
 TECH DEBT
 
