@@ -7,7 +7,7 @@ import Enums.Number;
 import Memory.Coords;
 import Memory.Memory;
 
-public class AdjacentDiagonalBlocks {
+public class DiagonalBlocks {
     static public void run(Memory memory) {
         for (Coords coords : memory.getDimentions().allSquareCoords()) {
             diagonalThrees(memory, coords);

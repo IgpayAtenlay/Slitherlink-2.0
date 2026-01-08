@@ -21,7 +21,7 @@ public class Control {
             case 0 -> SingleBlock.run(memory);
             case 1 -> PointActions.run(memory);
             case 2 -> AdjacentBlocks.run(memory);
-            case 3 -> AdjacentDiagonalBlocks.run(memory);
+            case 3 -> DiagonalBlocks.run(memory);
             default -> {
                 LineIntoBlock.run(memory);
                 CheckLoop.run(memory);
