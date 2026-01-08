@@ -105,8 +105,8 @@ public class Puzzle {
                 Corner currentCorner = switch (keyCode) {
                     case KeyEvent.VK_W -> Corner.SAME;
                     case KeyEvent.VK_S -> Corner.DIFFERENT;
-                    case KeyEvent.VK_A -> Corner.MIN_ONE;
-                    case KeyEvent.VK_D -> Corner.MAX_ONE;
+                    case KeyEvent.VK_A -> Corner.MAX_ONE;
+                    case KeyEvent.VK_D -> Corner.MIN_ONE;
                     default -> Corner.EMPTY;
                 };
                 if (currentCorner == Corner.EMPTY) return;
