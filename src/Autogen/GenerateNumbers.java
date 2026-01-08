@@ -9,7 +9,7 @@ public class GenerateNumbers {
         for (int x = 0; x < puzzle.getDimentions().xSize; x++) {
             for (int y = 0; y < puzzle.getDimentions().ySize; y++) {
                 Coords currentCoords = new Coords(x, y);
-                puzzle.setNumber(Number.getNumber(puzzle.getNumLines(currentCoords)), currentCoords, true);
+                puzzle.setNumber(Number.getNumber(puzzle.getNumOfLines(currentCoords)), currentCoords, true);
             }
         }
     }

@@ -27,6 +27,7 @@ public class Puzzle {
     private Highlight recentHighlight = Highlight.EMPTY;
     private Number recentNumber = Number.EMPTY;
     private Corner recentCorner = Corner.EMPTY;
+    private int autoSolveStep = 0;
 
     public Puzzle(MemorySet memorySet, Visuals.Panel.Puzzle panel) {
         this.memorySet = memorySet;
@@ -186,7 +187,7 @@ public class Puzzle {
         panel.repaint();
     }
     public void autoSolveOneStep() {
-        Control.oneRoundAutosolve(memorySet.getVisible(), false);
+        autoSolveStep = Control.oneRoundAutosolve(memorySet.getVisible(), false, autoSolveStep);
         panel.repaint();
     }
     public void checkForErrors() {

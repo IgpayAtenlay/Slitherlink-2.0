@@ -8,7 +8,7 @@ import Memory.Memory;
 public class LoopErrors {
     static public boolean hasLoopProblem(Memory memory) {
         // this doesn't work
-        int totalLines = memory.getNumLines();
+        int totalLines = memory.getNumOfLines();
         boolean[][] visited = new boolean[memory.getDimentions().xSize + 1][memory.getDimentions().ySize + 1];
 
         for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {

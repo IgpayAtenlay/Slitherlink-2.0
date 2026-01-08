@@ -7,7 +7,7 @@ import Memory.Memory;
 
 public class LoopCompletetion {
     static public boolean hasExactlyOneLoop(Memory memory) {
-        int totalLines = memory.getNumLines();
+        int totalLines = memory.getNumOfLines();
         for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
             for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
                 Coords coords = new Coords(x, y);

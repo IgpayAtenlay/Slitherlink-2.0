@@ -18,6 +18,7 @@ public class Memory {
     private final Loop[] loops;
     private final Stack<Changes> undo;
     private final Stack<Changes> redo;
+    private int numOfLines;
 
     public Memory(Dimentions dimentions, Line[] lines, Number[] numbers, Highlight[] highlights, Corner[] corners, Loop[] loops, Stack<Changes> undo, Stack<Changes> redo) {
         this.dimentions = dimentions;
@@ -28,6 +29,13 @@ public class Memory {
         this.loops = loops;
         this.undo = undo;
         this.redo = redo;
+
+        this.numOfLines = 0;
+        for (Line line : lines) {
+            if (line == Line.LINE) {
+                this.numOfLines++;
+            }
+        }
     }
     public Memory(Dimentions dimentions, Line[] lines, Number[] numbers, Highlight[] highlights, Corner[] corners) {
         this(dimentions, lines, numbers, highlights, corners,
@@ -88,15 +96,17 @@ public class Memory {
     public int getNumChanges() {
         return undo.size();
     }
-    public int getNumLines() {
-        int totalLines = 0;
-        for (Line line : lines) {
-            if (line == Line.LINE) {
-                totalLines++;
+    public int getNumOfLines() {
+        return numOfLines;
+    }
+    public int getNumOfLines(Coords coords) {
+        int numLines = 0;
+        for (CardinalDirection direction : CardinalDirection.values()) {
+            if (getLine(true, coords, direction) == Line.LINE) {
+                numLines++;
             }
         }
-
-        return totalLines;
+        return numLines;
     }
 
     public String getJson() {
@@ -111,15 +121,6 @@ public class Memory {
                 "\n}";
     }
 
-    public int getNumLines(Coords coords) {
-        int numLines = 0;
-        for (CardinalDirection direction : CardinalDirection.values()) {
-            if (getLine(true, coords, direction) == Line.LINE) {
-                numLines++;
-            }
-        }
-        return numLines;
-    }
     public Line getLine(boolean square, Coords coords, CardinalDirection direction) {
         int index = Indexes.line(square, coords, direction, dimentions);
         if (index < 0 || index >= lines.length) {
@@ -129,16 +130,19 @@ public class Memory {
         }
     }
     public void setLine(boolean square, Line line, Coords coords, CardinalDirection direction, boolean override) {
-        int i = Indexes.line(square, coords, direction, new Dimentions(dimentions.xSize, dimentions.ySize));
+        int i = Indexes.line(square, coords, direction, dimentions);
         if (i < 0 || i > lines.length) {
             return;
         }
         if (lines[i] != line && (lines[i] == Line.EMPTY || override)) {
-//            System.out.println("changing " + coords + " " + direction + " to " + line);
             change(new LineChange(line, lines[i], i));
+            if (lines[i] == Line.LINE) {
+                numOfLines--;
+            }
             lines[i] = line;
             if (line == Line.LINE) {
                 setLoop(square, coords, direction);
+                numOfLines++;
             }
         }
     }
