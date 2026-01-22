@@ -8,7 +8,7 @@ public class Frame extends JFrame {
     private JPanel panel = null;
 
     public Frame() {
-        super("Slitherlink Solver 3.0");
+        super("Slitherlink Solver 2.0");
         switchPanel(new MainMenu(this));
         setSize(1000, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
