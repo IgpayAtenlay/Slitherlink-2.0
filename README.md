@@ -1,10 +1,14 @@
-# Slitherlink Solver 3.0
+# Slitherlink Solver
 
-A comprehensive Java-based Slitherlink puzzle solver and editor with an intuitive graphical interface. Create, solve, and play Slitherlink puzzles with advanced solving algorithms and interactive features.
+A comprehensive Slitherlink puzzle solver and editor with an intuitive graphical interface. Create, solve, and play Slitherlink puzzles with advanced solving algorithms and interactive features.
+
+This project uses a constraint satisfaction techniques to automatically solve puzzles rapidly. It also generates puzzles using a breath first search to carve out the path of the puzzle.
+
+## What is Slitherlink?
+
+Slitherlink is a paper-and-pencil logic puzzle similar to Sodoku. The goal is to draw a single, non-intersecting loop that connects dots in a grid. Each numbered cell indicates how many of its four sides are part of the loop.
 
 ## Overview
-
-Slitherlink is a logic puzzle where you draw a single, non-intersecting loop that connects dots in a grid. Each numbered cell indicates how many of its four sides are part of the loop.
 
 This application provides:
 - **Interactive puzzle solving** with mouse and keyboard controls
@@ -36,7 +40,7 @@ This application provides:
 
 - **Java**: JDK 8 or higher
 - **Libraries**:
-  - Apache PDFBox 3.0.4 (included in `src/PuzzleLoading/pdfbox-app-3.0.4.jar`)
+  - Apache PDFBox 3.0.4
 
 ## Installation
 
@@ -86,7 +90,7 @@ Use your IDE's run configuration.
 
 ## Solving Algorithms
 
-The solver uses a multi-stage approach:
+The solver addresses this constraint satisfaction problem using a multi-stage approach:
 
 1. **Single Block Logic**: Analyzes individual cells based on their numbers
 2. **Point Actions**: Processes intersection points and corner constraints
@@ -97,13 +101,54 @@ The solver uses a multi-stage approach:
 7. **Trapped Detection**: Identifies cells that must be inside/outside the loop
 8. **Guess-and-Check**: Advanced technique for difficult puzzles (optional)
 
+## Puzzle Generation
+
+The application includes an automatic puzzle generator that creates valid, solvable Slitherlink puzzles. The generation process works in three stages:
+
+### 1. Shape Generation
+The generator starts by creating a random valid loop shape using breadth-first search:
+- Begins from a random starting cell
+- Uses breadth-first search to mark cells as INSIDE or OUTSIDE the loop
+- Ensures the shape is connected and valid (no isolated diagonal cells)
+- Validates that diagonal neighbors are properly connected through cardinal directions
+
+### 2. Line and Number Generation
+Based on the generated shape, the system creates the loop and assigns numbers:
+- **Line placement**: Edges between cells with opposite highlights (INSIDE/OUTSIDE) become lines; edges between same-highlight cells are marked as X
+- **Number assignment**: Each cell's number is set to match the count of lines surrounding it (0-3)
+
+### 3. Number Trimming
+To create a solvable puzzle with minimal clues, the generator removes unnecessary numbers:
+- Tests each number in random order
+- Temporarily removes a number and attempts to solve the puzzle using the auto-solver
+- If the puzzle can still be solved without that number, it is permanently removed
+- Continues until all numbers have been tested
+- Results in a minimal puzzle with only the essential clues needed for a unique solution
+
+### Usage
+To generate a puzzle:
+1. Select **Generate Puzzle** from the main menu
+2. Specify the desired grid dimensions (e.g., 7x7, 20x20)
+3. The generator will create a new puzzle automatically
+4. You can then save the puzzle or start solving it immediately
+
+**Note**: Generation time increases with puzzle size, as the trimming process requires solving the puzzle multiple times to verify each number's necessity.
+
 ## Contributing
 
 This is a personal project, but suggestions and improvements are welcome!
 
 ## License
 
-This project is provided as-is for educational and personal use.
+Released under MIT License
+
+Copyright (c) 2026 Melissa Cron.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ## Notes
 
