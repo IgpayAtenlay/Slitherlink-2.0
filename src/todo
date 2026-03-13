@@ -1,6 +1,7 @@
 LOGIC
-solving actions, choose which ones to only run once
-create threeLoop rule (if there is a loop near a three, the side that would connect it must be a line)
+some solving actions only run once
+solving actions based on item being changed
+focus on probable and empty items
 try to get rid of logic numbers (or determine it's impossible/too terrible)
 
 UI
@@ -20,3 +21,9 @@ TECH DEBT
 add generic "changes" which capture the entire puzzle - for use with reset and items like autosolve steps
 make loop successfully track deleted lines
 fix loop errors
+
+TESTING
+add tests
+
+BUGS
+20x20 puzzles don't generate correctly
