@@ -211,6 +211,9 @@ public class Memory {
             numbers[i] = number;
         }
     }
+    public Loop getLoop(Coords coords, DiagonalDirection direction) {
+        return getLoop(coords.squareToPoint(direction));
+    }
     public Loop getLoop(Coords coords) {
         if (Indexes.point(coords, dimentions) < 0 || Indexes.point(coords, dimentions) >= loops.length) {
             return null;

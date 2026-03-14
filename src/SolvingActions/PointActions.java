@@ -7,38 +7,38 @@ import Memory.Memory;
 public class PointActions {
     static public void run(Memory memory) {
         for (Coords coords : memory.getDimentions().allPointCoords()) {
-            fillLinesOnPoint(memory, coords);
+//            fillLinesOnPoint(memory, coords);
             for (DiagonalDirection direction : DiagonalDirection.values()) {
 //                linesToCorners(memory, coords, direction);
 //                cornersAcrossPoint(memory, coords, direction);
 //                fillSameCornerPoint(memory, coords, direction);
-                cornersToLines(memory, coords, direction);
+//                cornersToLines(memory, coords, direction);
             }
             differentCornerHighlight(memory, coords);
         }
     }
 
-    public static void fillLinesOnPoint(Memory memory, Coords coords) {
-        int xs = 0;
-        int lines = 0;
-        for (CardinalDirection direction : CardinalDirection.values()) {
-            if (memory.getLine(false, coords, direction) == Line.LINE) {
-                lines += 1;
-            } else if (memory.getLine(false, coords, direction) == Line.X) {
-                xs += 1;
-            }
-        }
-
-        if (lines == 2 || xs == 3) {
-            for (CardinalDirection direction : CardinalDirection.values()) {
-                memory.setLine(false, Line.X, coords, direction, false);
-            }
-        } else if (xs == 2 && lines == 1) {
-            for (CardinalDirection direction : CardinalDirection.values()) {
-                memory.setLine(false, Line.LINE, coords, direction, false);
-            }
-        }
-    }
+//    public static void fillLinesOnPoint(Memory memory, Coords coords) {
+//        int xs = 0;
+//        int lines = 0;
+//        for (CardinalDirection direction : CardinalDirection.values()) {
+//            if (memory.getLine(false, coords, direction) == Line.LINE) {
+//                lines += 1;
+//            } else if (memory.getLine(false, coords, direction) == Line.X) {
+//                xs += 1;
+//            }
+//        }
+//
+//        if (lines == 2 || xs == 3) {
+//            for (CardinalDirection direction : CardinalDirection.values()) {
+//                memory.setLine(false, Line.X, coords, direction, false);
+//            }
+//        } else if (xs == 2 && lines == 1) {
+//            for (CardinalDirection direction : CardinalDirection.values()) {
+//                memory.setLine(false, Line.LINE, coords, direction, false);
+//            }
+//        }
+//    }
 //    public static void linesToCorners(Memory memory, Coords coords, DiagonalDirection direction) {
 //        Line lineOne = memory.getLine(false, coords, direction.getCardinalDirections()[0]);
 //        Line lineTwo = memory.getLine(false, coords, direction.getCardinalDirections()[1]);
@@ -75,36 +75,36 @@ public class PointActions {
 //            memory.setCorner(false, Corner.NOT_TWO, coords, direction.getCounterClockwise(), false);
 //        }
 //    }
-    public static void cornersToLines(Memory memory, Coords coords, DiagonalDirection direction) {
-        Corner corner = memory.getCorner(false, coords, direction);
-        Line lineOne = memory.getLine(false, coords, direction.getCardinalDirections()[0]);
-        Line lineTwo = memory.getLine(false, coords, direction.getCardinalDirections()[1]);
-
-        if (corner != Corner.ANY) {
-            switch (corner) {
-                case ONE -> {
-                    memory.setLine(false, lineTwo.getOpposite(), coords, direction.getCardinalDirections()[0], false);
-                    memory.setLine(false, lineOne.getOpposite(), coords, direction.getCardinalDirections()[1], false);
-                }
-                case NOT_ONE -> {
-                    memory.setLine(false, lineTwo, coords, direction.getCardinalDirections()[0], false);
-                    memory.setLine(false, lineOne, coords, direction.getCardinalDirections()[1], false);
-                }
-                case NOT_TWO -> {
-                    if (lineOne == Line.LINE || lineTwo == Line.LINE) {
-                        memory.setLine(false, Line.X, coords, direction.getCardinalDirections()[0], false);
-                        memory.setLine(false, Line.X, coords, direction.getCardinalDirections()[1], false);
-                    }
-                }
-                case NOT_ZERO -> {
-                    if (lineOne == Line.X || lineTwo == Line.X) {
-                        memory.setLine(false, Line.LINE, coords, direction.getCardinalDirections()[0], false);
-                        memory.setLine(false, Line.LINE, coords, direction.getCardinalDirections()[1], false);
-                    }
-                }
-            }
-        }
-    }
+//    public static void cornersToLines(Memory memory, Coords coords, DiagonalDirection direction) {
+//        Corner corner = memory.getCorner(false, coords, direction);
+//        Line lineOne = memory.getLine(false, coords, direction.getCardinalDirections()[0]);
+//        Line lineTwo = memory.getLine(false, coords, direction.getCardinalDirections()[1]);
+//
+//        if (corner != Corner.ANY) {
+//            switch (corner) {
+//                case ONE -> {
+//                    memory.setLine(false, lineTwo.getOpposite(), coords, direction.getCardinalDirections()[0], false);
+//                    memory.setLine(false, lineOne.getOpposite(), coords, direction.getCardinalDirections()[1], false);
+//                }
+//                case NOT_ONE -> {
+//                    memory.setLine(false, lineTwo, coords, direction.getCardinalDirections()[0], false);
+//                    memory.setLine(false, lineOne, coords, direction.getCardinalDirections()[1], false);
+//                }
+//                case NOT_TWO -> {
+//                    if (lineOne == Line.LINE || lineTwo == Line.LINE) {
+//                        memory.setLine(false, Line.X, coords, direction.getCardinalDirections()[0], false);
+//                        memory.setLine(false, Line.X, coords, direction.getCardinalDirections()[1], false);
+//                    }
+//                }
+//                case NOT_ZERO -> {
+//                    if (lineOne == Line.X || lineTwo == Line.X) {
+//                        memory.setLine(false, Line.LINE, coords, direction.getCardinalDirections()[0], false);
+//                        memory.setLine(false, Line.LINE, coords, direction.getCardinalDirections()[1], false);
+//                    }
+//                }
+//            }
+//        }
+//    }
     public static void differentCornerHighlight(Memory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
             if (memory.getCorner(false, coords, direction) != Corner.ONE) return;

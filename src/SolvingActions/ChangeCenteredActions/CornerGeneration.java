@@ -6,12 +6,16 @@ import Memory.Coords;
 import Memory.Memory;
 
 public class CornerGeneration {
-    public static void addCorner(Memory memory, Coords coords, DiagonalDirection direction) {
+    public static void addCorner(Memory memory, Coords coords, DiagonalDirection direction)
+        throws RuntimeException
+    {
         Corner originalCorner = memory.getCorner(true, coords, direction);
         Corner corner = originalCorner;
 
 //        neighbors
         Number squareNum = memory.getNumber(coords);
+        Number oppositeAdjacentNumOne = memory.getNumber(coords.addDirection(direction.getCardinalDirections()[0].getOpposite()));
+        Number oppositeAdjacentNumTwo = memory.getNumber(coords.addDirection(direction.getCardinalDirections()[1].getOpposite()));
         Corner acrossSquare = memory.getCorner(true, coords, direction.getOpposite());
         Corner adjacentSquareOne = memory.getCorner(true, coords, direction.getClockwise());
         Corner adjacentSquareTwo = memory.getCorner(true, coords, direction.getCounterClockwise());
@@ -26,15 +30,21 @@ public class CornerGeneration {
         Corner adjacentPointTwo = memory.getCorner(true, coords.addDirection(direction.getCardinalDirections()[1]), direction.getCounterClockwise());
 
 //        constraints
-        corner = corner.combine(number(squareNum));
-        corner = corner.combine(acrossSquare(squareNum, acrossSquare));
+        try {
+            corner = corner.combine(acrossSquare(squareNum, acrossSquare));
+            corner = corner.combine(acrossPoint(acrossPoint));
+        } catch (Exception e) {
+            throw new RuntimeException("No solution");
+        }
         corner = corner.combine(adjacentSquare(squareNum, adjacentSquareOne, adjacentSquareTwo));
         corner = corner.combine(entireSquare(acrossSquare, adjacentSquareOne, adjacentSquareTwo));
         corner = corner.combine(definition(lineOne, lineTwo));
         corner = corner.combine(twoBetweenIdenticalHighlights(squareNum, northHighlight, southHighlight, eastHighlight, westHighlight));
-        corner = corner.combine(acrossPoint(acrossPoint));
         corner = corner.combine(adjacentPoint(adjacentPointOne, adjacentPointTwo));
         corner = corner.combine(entirePoint(acrossPoint, adjacentPointOne, adjacentPointTwo));
+//        only run first time
+        corner = corner.combine(number(squareNum));
+        corner = corner.combine(diagonalThrees(oppositeAdjacentNumOne, oppositeAdjacentNumTwo));
 
         if(originalCorner != corner) {
             memory.setCorner(true, corner, coords, direction, false);
@@ -48,10 +58,16 @@ public class CornerGeneration {
             default -> Corner.ANY;
         };
     }
-    public static Corner acrossSquare(Number number, Corner corner) {
+    public static Corner acrossSquare(Number number, Corner corner)
+        throws RuntimeException
+    {
         if (number == Number.EMPTY) return Corner.ANY;
         int goal = number.value;
-        return corner.addTo(goal);
+        try {
+            return corner.addTo(goal);
+        } catch (Exception e) {
+            throw new RuntimeException("No solution");
+        }
     }
     public static Corner adjacentSquare(Number number, Corner adjacentOne, Corner adjacentTwo) {
         if (number == Number.TWO) {
@@ -103,11 +119,17 @@ public class CornerGeneration {
         }
         return Corner.ANY;
     }
-    public static Corner acrossPoint(Corner corner) {
+    public static Corner acrossPoint(Corner corner)
+        throws RuntimeException
+    {
         boolean zero = corner.zero || corner.two;
         boolean one = corner.one;
         boolean two = corner.zero;
-        return Corner.getCorner(zero, one, two);
+        try {
+            return Corner.getCorner(zero, one, two);
+        } catch (Exception e) {
+            throw new RuntimeException("No solution");
+        }
     }
     public static Corner adjacentPoint(Corner adjacentOne, Corner adjacentTwo) {
         if (!adjacentOne.one || !adjacentTwo.one) return Corner.NOT_TWO;
@@ -115,6 +137,10 @@ public class CornerGeneration {
     }
     public static Corner entirePoint(Corner across, Corner adjacentOne, Corner adjacentTwo) {
         if (!across.two && (!adjacentOne.zero || !adjacentTwo.zero)) return Corner.NOT_ZERO;
+        return Corner.ANY;
+    }
+    public static Corner diagonalThrees(Number oppositeAdjacentNumOne, Number oppositeAdjacentNumTwo) {
+        if (oppositeAdjacentNumOne == Number.THREE && oppositeAdjacentNumTwo == Number.THREE) return Corner.NOT_TWO;
         return Corner.ANY;
     }
 }

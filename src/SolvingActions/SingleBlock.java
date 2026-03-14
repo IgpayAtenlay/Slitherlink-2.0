@@ -12,13 +12,13 @@ public class SingleBlock {
 //            populateCornersOne(memory, coords);
 //            populateCornersThree(memory, coords);
 
-            useCornerOne(memory, coords);
+//            useCornerOne(memory, coords);
 //            cornersAcrossTwo(memory, coords);
-            useCornerThree(memory, coords);
+//            useCornerThree(memory, coords);
 
-            fillSidesUsingNumbers(memory, coords);
+//            fillSidesUsingNumbers(memory, coords);
 //            fillCornersOnSquare(memory, coords);
-            fourSameCornerToTotalXSquare(memory, coords);
+//            fourSameCornerToTotalXSquare(memory, coords);
 
             addLogicZero(memory, coords);
             addLogicOne(memory, coords);
@@ -41,29 +41,29 @@ public class SingleBlock {
 //            }
 //        }
 //    }
-    public static void fillSidesUsingNumbers(Memory memory, Coords coords) {
-        if (memory.getNumber(coords) != Number.EMPTY) {
-            int xs = 0;
-            int lines = 0;
-            for (CardinalDirection direction : CardinalDirection.values()) {
-                if (memory.getLine(true, coords, direction) == Line.LINE) {
-                    lines++;
-                } else if (memory.getLine(true, coords, direction) == Line.X) {
-                    xs++;
-                }
-            }
-
-            if (lines == memory.getNumber(coords).value) {
-                for (CardinalDirection direction : CardinalDirection.values()) {
-                    memory.setLine(true, Line.X, coords, direction, false);
-                }
-            } else if (xs == 4 - memory.getNumber(coords).value) {
-                for (CardinalDirection direction : CardinalDirection.values()) {
-                    memory.setLine(true, Line.LINE, coords, direction, false);
-                }
-            }
-        }
-    }
+//    public static void fillSidesUsingNumbers(Memory memory, Coords coords) {
+//        if (memory.getNumber(coords) != Number.EMPTY) {
+//            int xs = 0;
+//            int lines = 0;
+//            for (CardinalDirection direction : CardinalDirection.values()) {
+//                if (memory.getLine(true, coords, direction) == Line.LINE) {
+//                    lines++;
+//                } else if (memory.getLine(true, coords, direction) == Line.X) {
+//                    xs++;
+//                }
+//            }
+//
+//            if (lines == memory.getNumber(coords).value) {
+//                for (CardinalDirection direction : CardinalDirection.values()) {
+//                    memory.setLine(true, Line.X, coords, direction, false);
+//                }
+//            } else if (xs == 4 - memory.getNumber(coords).value) {
+//                for (CardinalDirection direction : CardinalDirection.values()) {
+//                    memory.setLine(true, Line.LINE, coords, direction, false);
+//                }
+//            }
+//        }
+//    }
 //    public static void fillCornersOnSquare(Memory memory, Coords coords) {
 //        int one = 0;
 //        int notOne = 0;
@@ -93,24 +93,24 @@ public class SingleBlock {
 //            }
 //        }
 //    }
-    public static void useCornerOne(Memory memory, Coords coords) {
-        if (memory.getNumber(coords) == Number.ONE) {
-            for (DiagonalDirection direction : DiagonalDirection.values()) {
-                switch (memory.getCorner(true, coords, direction)) {
-                    case ONE, NOT_ZERO -> {
-                        memory.setLine(true, Line.X, coords, direction.getCardinalDirections()[0].getOpposite(), false);
-                        memory.setLine(true, Line.X, coords, direction.getCardinalDirections()[1].getOpposite(), false);
-//                        memory.setCorner(true, Corner.ONE, coords, direction, false);
-                    }
-                    case NOT_ONE -> {
-                        memory.setLine(true, Line.X, coords, direction.getCardinalDirections()[0], false);
-                        memory.setLine(true, Line.X, coords, direction.getCardinalDirections()[1], false);
-//                        memory.setCorner(true, Corner.ONE, coords, direction.getOpposite(), false);
-                    }
-                }
-            }
-        }
-    }
+//    public static void useCornerOne(Memory memory, Coords coords) {
+//        if (memory.getNumber(coords) == Number.ONE) {
+//            for (DiagonalDirection direction : DiagonalDirection.values()) {
+//                switch (memory.getCorner(true, coords, direction)) {
+//                    case ONE, NOT_ZERO -> {
+//                        memory.setLine(true, Line.X, coords, direction.getCardinalDirections()[0].getOpposite(), false);
+//                        memory.setLine(true, Line.X, coords, direction.getCardinalDirections()[1].getOpposite(), false);
+////                        memory.setCorner(true, Corner.ONE, coords, direction, false);
+//                    }
+//                    case NOT_ONE -> {
+//                        memory.setLine(true, Line.X, coords, direction.getCardinalDirections()[0], false);
+//                        memory.setLine(true, Line.X, coords, direction.getCardinalDirections()[1], false);
+////                        memory.setCorner(true, Corner.ONE, coords, direction.getOpposite(), false);
+//                    }
+//                }
+//            }
+//        }
+//    }
 //    public static void cornersAcrossTwo(Memory memory, Coords coords) {
 //        if (memory.getNumber(coords) == Number.TWO) {
 //            for (DiagonalDirection direction : DiagonalDirection.values()) {
@@ -133,38 +133,38 @@ public class SingleBlock {
 //            }
 //        }
 //    }
-    public static void useCornerThree(Memory memory, Coords coords) {
-        if (memory.getNumber(coords) == Number.THREE) {
-            for (DiagonalDirection direction : DiagonalDirection.values()) {
-                switch (memory.getCorner(true, coords, direction)) {
-                    case ONE, NOT_TWO -> {
-                        memory.setLine(true, Line.LINE, coords, direction.getCardinalDirections()[0].getOpposite(), false);
-                        memory.setLine(true, Line.LINE, coords, direction.getCardinalDirections()[1].getOpposite(), false);
-//                        memory.setCorner(true, Corner.NOT_ONE, coords, direction.getOpposite(), false);
-//                        memory.setCorner(true, Corner.ONE, coords, direction, false);
-                    }
-                    case NOT_ONE -> {
-                        memory.setLine(true, Line.LINE, coords, direction.getCardinalDirections()[0], false);
-                        memory.setLine(true, Line.LINE, coords, direction.getCardinalDirections()[1], false);
-//                        memory.setCorner(true, Corner.ONE, coords, direction.getOpposite(), false);
-                    }
-                }
-            }
-        }
-    }
-    public static void fourSameCornerToTotalXSquare(Memory memory, Coords coords) {
-        if (memory.getNumber(coords) == Number.EMPTY) {
-            for (DiagonalDirection direction : DiagonalDirection.values()) {
-                if (memory.getCorner(true, coords, direction) != Corner.NOT_ONE) {
-                    return;
-                }
-            }
-
-            for (CardinalDirection direction : CardinalDirection.values()) {
-                memory.setLine(true, Line.X, coords, direction, false);
-            }
-        }
-    }
+//    public static void useCornerThree(Memory memory, Coords coords) {
+//        if (memory.getNumber(coords) == Number.THREE) {
+//            for (DiagonalDirection direction : DiagonalDirection.values()) {
+//                switch (memory.getCorner(true, coords, direction)) {
+//                    case ONE, NOT_TWO -> {
+//                        memory.setLine(true, Line.LINE, coords, direction.getCardinalDirections()[0].getOpposite(), false);
+//                        memory.setLine(true, Line.LINE, coords, direction.getCardinalDirections()[1].getOpposite(), false);
+////                        memory.setCorner(true, Corner.NOT_ONE, coords, direction.getOpposite(), false);
+////                        memory.setCorner(true, Corner.ONE, coords, direction, false);
+//                    }
+//                    case NOT_ONE -> {
+//                        memory.setLine(true, Line.LINE, coords, direction.getCardinalDirections()[0], false);
+//                        memory.setLine(true, Line.LINE, coords, direction.getCardinalDirections()[1], false);
+////                        memory.setCorner(true, Corner.ONE, coords, direction.getOpposite(), false);
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    public static void fourSameCornerToTotalXSquare(Memory memory, Coords coords) {
+//        if (memory.getNumber(coords) == Number.EMPTY) {
+//            for (DiagonalDirection direction : DiagonalDirection.values()) {
+//                if (memory.getCorner(true, coords, direction) != Corner.NOT_ONE) {
+//                    return;
+//                }
+//            }
+//
+//            for (CardinalDirection direction : CardinalDirection.values()) {
+//                memory.setLine(true, Line.X, coords, direction, false);
+//            }
+//        }
+//    }
     public static void addLogicZero(Memory memory, Coords coords) {
         if (memory.getNumber(coords) == Number.EMPTY) {
             for (CardinalDirection direction : CardinalDirection.values()) {

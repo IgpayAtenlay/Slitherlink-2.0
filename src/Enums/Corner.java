@@ -17,14 +17,22 @@ public enum Corner {
     public boolean atLeastOne() {
         return !this.zero;
     }
-    public Corner addTo(int value) {
+    public Corner addTo(int value)
+        throws RuntimeException
+    {
         return switch (value) {
-            case 0 -> this == ZERO ? ZERO : null;
+            case 0 -> {
+                if (this == ZERO) {
+                    yield ZERO;
+                } else {
+                    throw new RuntimeException("Can't add corners to " + value);
+                }
+            }
             case 1 -> switch (this) {
                 case ZERO, NOT_ONE -> ONE;
                 case ONE, NOT_ZERO -> ZERO;
                 case NOT_TWO, ANY -> NOT_TWO;
-                case TWO -> null;
+                case TWO -> throw new RuntimeException("Can't add corners to " + value);
             };
             case 2 -> switch (this) {
                 case ZERO -> TWO;
@@ -36,22 +44,37 @@ public enum Corner {
                 case ANY -> ANY;
             };
             case 3 -> switch (this) {
-                case ZERO -> null;
+                case ZERO -> throw new RuntimeException("Can't add corners to " + value);
                 case ONE, NOT_TWO -> TWO;
                 case TWO, NOT_ONE -> ONE;
                 case NOT_ZERO, ANY -> NOT_ZERO;
             };
-            case 4 -> this == TWO ? TWO : null;
-            default -> null;
+            case 4 -> {
+                if (this == TWO) {
+                    yield TWO;
+                } else {
+                    throw new RuntimeException("Can't add corners to " + value);
+                }
+            }
+            default -> throw new RuntimeException("Can't add corners to " + value);
         };
     }
-    public Corner combine(Corner corner) {
+    public Corner combine(Corner corner)
+        throws RuntimeException
+    {
         boolean zero = this.zero && corner.zero;
         boolean one = this.one && corner.one;
         boolean two = this.two && corner.two;
-        return getCorner(zero, one, two);
+        try {
+            return getCorner(zero, one, two);
+        } catch (Exception e) {
+            throw new RuntimeException("Corner with no options");
+        }
+
     }
-    public static Corner getCorner(boolean zero, boolean one, boolean two) {
+    public static Corner getCorner(boolean zero, boolean one, boolean two)
+        throws RuntimeException
+    {
         if (zero) {
             if (one) {
                 if (two) {
@@ -77,7 +100,7 @@ public enum Corner {
                 if (two) {
                     return TWO;
                 } else {
-                    return null;
+                    throw new RuntimeException("Corner with no options");
                 }
             }
         }
