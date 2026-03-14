@@ -8,7 +8,9 @@ import Memory.Memory;
 public class CornerGeneration {
     public static void addCorner(Memory memory, Coords coords, DiagonalDirection direction) {
         Corner originalCorner = memory.getCorner(true, coords, direction);
+        Corner corner = originalCorner;
 
+//        neighbors
         Number squareNum = memory.getNumber(coords);
         Corner acrossSquare = memory.getCorner(true, coords, direction.getOpposite());
         Corner adjacentSquareOne = memory.getCorner(true, coords, direction.getClockwise());
@@ -23,8 +25,7 @@ public class CornerGeneration {
         Corner adjacentPointOne = memory.getCorner(true, coords.addDirection(direction.getCardinalDirections()[0]), direction.getClockwise());
         Corner adjacentPointTwo = memory.getCorner(true, coords.addDirection(direction.getCardinalDirections()[1]), direction.getCounterClockwise());
 
-        Corner corner = originalCorner;
-
+//        constraints
         corner = corner.combine(number(squareNum));
         corner = corner.combine(acrossSquare(squareNum, acrossSquare));
         corner = corner.combine(adjacentSquare(squareNum, adjacentSquareOne, adjacentSquareTwo));
