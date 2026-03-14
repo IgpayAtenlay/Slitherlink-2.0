@@ -9,7 +9,7 @@ public class AdjacentBlocks {
     static public void run(Memory memory) {
         for (Coords coords : memory.getDimentions().allSquareCoords()) {
             doubleThrees(memory, coords);
-            twoBetweenIdenticalHighlights(memory, coords);
+//            twoBetweenIdenticalHighlights(memory, coords);
             lineExtendsHighlight(memory, coords);
             separateHighlightsWithLines(memory, coords);
         }
@@ -52,20 +52,20 @@ public class AdjacentBlocks {
             }
         }
     }
-    static public void twoBetweenIdenticalHighlights(Memory memory, Coords coords) {
-        if (memory.getNumber(coords) == Number.TWO) {
-            for (CardinalDirection direction : new CardinalDirection[] {CardinalDirection.EAST, CardinalDirection.SOUTH}) {
-                Highlight highlightDirectionOne = memory.getHighlight(coords.addDirection(direction));
-                Highlight highlightDirectionTwo = memory.getHighlight(coords.addDirection(direction.getOpposite()));
-                if (
-                        highlightDirectionOne == highlightDirectionTwo &&
-                        highlightDirectionOne != Highlight.EMPTY
-                ) {
-                    for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
-                        memory.setCorner(true, Corner.DIFFERENT, coords, diagonalDirection, false);
-                    }
-                }
-            }
-        }
-    }
+//    static public void twoBetweenIdenticalHighlights(Memory memory, Coords coords) {
+//        if (memory.getNumber(coords) == Number.TWO) {
+//            for (CardinalDirection direction : new CardinalDirection[] {CardinalDirection.EAST, CardinalDirection.SOUTH}) {
+//                Highlight highlightDirectionOne = memory.getHighlight(coords.addDirection(direction));
+//                Highlight highlightDirectionTwo = memory.getHighlight(coords.addDirection(direction.getOpposite()));
+//                if (
+//                        highlightDirectionOne == highlightDirectionTwo &&
+//                        highlightDirectionOne != Highlight.EMPTY
+//                ) {
+//                    for (DiagonalDirection diagonalDirection : DiagonalDirection.values()) {
+//                        memory.setCorner(true, Corner.ONE, coords, diagonalDirection, false);
+//                    }
+//                }
+//            }
+//        }
+//    }
 }

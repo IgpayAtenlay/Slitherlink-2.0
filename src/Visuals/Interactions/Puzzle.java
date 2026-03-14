@@ -26,7 +26,7 @@ public class Puzzle {
     private Line recentLine = Line.EMPTY;
     private Highlight recentHighlight = Highlight.EMPTY;
     private Number recentNumber = Number.EMPTY;
-    private Corner recentCorner = Corner.EMPTY;
+    private Corner recentCorner = Corner.ANY;
     private int autoSolveStep = 0;
 
     public Puzzle(MemorySet memorySet, Visuals.Panel.Puzzle panel) {
@@ -103,16 +103,16 @@ public class Puzzle {
             }
             default -> {
                 Corner currentCorner = switch (keyCode) {
-                    case KeyEvent.VK_W -> Corner.SAME;
-                    case KeyEvent.VK_S -> Corner.DIFFERENT;
-                    case KeyEvent.VK_A -> Corner.MAX_ONE;
-                    case KeyEvent.VK_D -> Corner.MIN_ONE;
-                    default -> Corner.EMPTY;
+                    case KeyEvent.VK_W -> Corner.NOT_ONE;
+                    case KeyEvent.VK_S -> Corner.ONE;
+                    case KeyEvent.VK_A -> Corner.NOT_TWO;
+                    case KeyEvent.VK_D -> Corner.NOT_ZERO;
+                    default -> Corner.ANY;
                 };
-                if (currentCorner == Corner.EMPTY) return;
+                if (currentCorner == Corner.ANY) return;
                 if (initial) {
                     if (memorySet.getVisible().getCorner(true, squareIndex, cornerDirection) == currentCorner) {
-                        recentCorner = Corner.EMPTY;
+                        recentCorner = Corner.ANY;
                     } else {
                         recentCorner = currentCorner;
                     }

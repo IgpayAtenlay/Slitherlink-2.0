@@ -9,9 +9,9 @@ public class PointActions {
         for (Coords coords : memory.getDimentions().allPointCoords()) {
             fillLinesOnPoint(memory, coords);
             for (DiagonalDirection direction : DiagonalDirection.values()) {
-                linesToCorners(memory, coords, direction);
-                cornersAcrossPoint(memory, coords, direction);
-                fillSameCornerPoint(memory, coords, direction);
+//                linesToCorners(memory, coords, direction);
+//                cornersAcrossPoint(memory, coords, direction);
+//                fillSameCornerPoint(memory, coords, direction);
                 cornersToLines(memory, coords, direction);
             }
             differentCornerHighlight(memory, coords);
@@ -39,64 +39,64 @@ public class PointActions {
             }
         }
     }
-    public static void linesToCorners(Memory memory, Coords coords, DiagonalDirection direction) {
-        Line lineOne = memory.getLine(false, coords, direction.getCardinalDirections()[0]);
-        Line lineTwo = memory.getLine(false, coords, direction.getCardinalDirections()[1]);
-        if (lineOne != Line.EMPTY && lineTwo != Line.EMPTY) {
-            if (lineOne == lineTwo) {
-                memory.setCorner(false, Corner.SAME, coords, direction, false);
-            } else if (lineOne.getOpposite() == lineTwo) {
-                memory.setCorner(false, Corner.DIFFERENT, coords, direction, false);
-            }
-        } else if (lineOne == Line.LINE || lineTwo == Line.LINE) {
-            memory.setCorner(false, Corner.MIN_ONE, coords, direction, false);
-        } else if (lineOne == Line.X || lineTwo == Line.X) {
-            memory.setCorner(false, Corner.MAX_ONE, coords, direction, false);
-        }
-    }
-    public static void cornersAcrossPoint(Memory memory, Coords coords, DiagonalDirection direction) {
-        Corner corner = memory.getCorner(false, coords, direction);
-        switch (corner) {
-            case SAME, DIFFERENT -> memory.setCorner(false, corner, coords, direction.getOpposite(), false);
-            case MIN_ONE -> memory.setCorner(false, Corner.MAX_ONE, coords, direction.getOpposite(), false);
-            case MAX_ONE -> {
-                if (
-                    memory.getCorner(false, coords, direction.getClockwise()).atLeastOne() ||
-                    memory.getCorner(false, coords, direction.getCounterClockwise()).atLeastOne()
-                ) {
-                    memory.setCorner(false, Corner.MIN_ONE, coords, direction.getOpposite(), false);
-                }
-            }
-        }
-    }
-    public static void fillSameCornerPoint(Memory memory, Coords coords, DiagonalDirection direction) {
-        if (memory.getCorner(false, coords, direction) == Corner.SAME) {
-            memory.setCorner(false, Corner.MAX_ONE, coords, direction.getClockwise(), false);
-            memory.setCorner(false, Corner.MAX_ONE, coords, direction.getCounterClockwise(), false);
-        }
-    }
+//    public static void linesToCorners(Memory memory, Coords coords, DiagonalDirection direction) {
+//        Line lineOne = memory.getLine(false, coords, direction.getCardinalDirections()[0]);
+//        Line lineTwo = memory.getLine(false, coords, direction.getCardinalDirections()[1]);
+//        if (lineOne != Line.EMPTY && lineTwo != Line.EMPTY) {
+//            if (lineOne == lineTwo) {
+//                memory.setCorner(false, Corner.NOT_ONE, coords, direction, false);
+//            } else if (lineOne.getOpposite() == lineTwo) {
+//                memory.setCorner(false, Corner.ONE, coords, direction, false);
+//            }
+//        } else if (lineOne == Line.LINE || lineTwo == Line.LINE) {
+//            memory.setCorner(false, Corner.NOT_ZERO, coords, direction, false);
+//        } else if (lineOne == Line.X || lineTwo == Line.X) {
+//            memory.setCorner(false, Corner.NOT_TWO, coords, direction, false);
+//        }
+//    }
+//    public static void cornersAcrossPoint(Memory memory, Coords coords, DiagonalDirection direction) {
+//        Corner corner = memory.getCorner(false, coords, direction);
+//        switch (corner) {
+//            case NOT_ONE, ONE -> memory.setCorner(false, corner, coords, direction.getOpposite(), false);
+//            case NOT_ZERO -> memory.setCorner(false, Corner.NOT_TWO, coords, direction.getOpposite(), false);
+//            case NOT_TWO -> {
+//                if (
+//                    memory.getCorner(false, coords, direction.getClockwise()).atLeastOne() ||
+//                    memory.getCorner(false, coords, direction.getCounterClockwise()).atLeastOne()
+//                ) {
+//                    memory.setCorner(false, Corner.NOT_ZERO, coords, direction.getOpposite(), false);
+//                }
+//            }
+//        }
+//    }
+//    public static void fillSameCornerPoint(Memory memory, Coords coords, DiagonalDirection direction) {
+//        if (memory.getCorner(false, coords, direction) == Corner.NOT_ONE) {
+//            memory.setCorner(false, Corner.NOT_TWO, coords, direction.getClockwise(), false);
+//            memory.setCorner(false, Corner.NOT_TWO, coords, direction.getCounterClockwise(), false);
+//        }
+//    }
     public static void cornersToLines(Memory memory, Coords coords, DiagonalDirection direction) {
         Corner corner = memory.getCorner(false, coords, direction);
         Line lineOne = memory.getLine(false, coords, direction.getCardinalDirections()[0]);
         Line lineTwo = memory.getLine(false, coords, direction.getCardinalDirections()[1]);
 
-        if (corner != Corner.EMPTY) {
+        if (corner != Corner.ANY) {
             switch (corner) {
-                case DIFFERENT -> {
+                case ONE -> {
                     memory.setLine(false, lineTwo.getOpposite(), coords, direction.getCardinalDirections()[0], false);
                     memory.setLine(false, lineOne.getOpposite(), coords, direction.getCardinalDirections()[1], false);
                 }
-                case SAME -> {
+                case NOT_ONE -> {
                     memory.setLine(false, lineTwo, coords, direction.getCardinalDirections()[0], false);
                     memory.setLine(false, lineOne, coords, direction.getCardinalDirections()[1], false);
                 }
-                case MAX_ONE -> {
+                case NOT_TWO -> {
                     if (lineOne == Line.LINE || lineTwo == Line.LINE) {
                         memory.setLine(false, Line.X, coords, direction.getCardinalDirections()[0], false);
                         memory.setLine(false, Line.X, coords, direction.getCardinalDirections()[1], false);
                     }
                 }
-                case MIN_ONE -> {
+                case NOT_ZERO -> {
                     if (lineOne == Line.X || lineTwo == Line.X) {
                         memory.setLine(false, Line.LINE, coords, direction.getCardinalDirections()[0], false);
                         memory.setLine(false, Line.LINE, coords, direction.getCardinalDirections()[1], false);
@@ -107,7 +107,7 @@ public class PointActions {
     }
     public static void differentCornerHighlight(Memory memory, Coords coords) {
         for (DiagonalDirection direction : DiagonalDirection.values()) {
-            if (memory.getCorner(false, coords, direction) != Corner.DIFFERENT) return;
+            if (memory.getCorner(false, coords, direction) != Corner.ONE) return;
         }
 
         for (DiagonalDirection direction : DiagonalDirection.values()) {

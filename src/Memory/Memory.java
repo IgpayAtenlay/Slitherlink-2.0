@@ -56,7 +56,7 @@ public class Memory {
                 new Stack<>()
         );
         Arrays.fill(lines, Line.EMPTY);
-        Arrays.fill(corners, Corner.EMPTY);
+        Arrays.fill(corners, Corner.ANY);
         Arrays.fill(highlights, Highlight.EMPTY);
         Arrays.fill(numbers, Number.EMPTY);
     }
@@ -149,7 +149,7 @@ public class Memory {
     public Corner getCorner(boolean square, Coords coords, DiagonalDirection direction) {
         int i = Indexes.diagonal(square, coords, direction, dimentions);
         if (i < 0 || i >= corners.length) {
-            return Corner.SAME;
+            return Corner.NOT_ONE;
         } else {
             return corners[i];
         }
@@ -160,16 +160,15 @@ public class Memory {
             return;
         }
         if (corners[i] != corner) {
-            if (corners[i] == Corner.EMPTY ||
-                    override ||
-                    ((corners[i] == Corner.MIN_ONE || corners[i] == Corner.MAX_ONE) && (corner == Corner.DIFFERENT || corner == Corner.SAME))
-            ) {
-//            System.out.println("changing diagonal " + i + " to " + diagonal);
+            if (override) {
                 change(new CornerChange(corner, corners[i], i));
                 corners[i] = corner;
-            } else if ((corners[i] == Corner.MIN_ONE && corner == Corner.MAX_ONE) || (corner == Corner.MIN_ONE && corners[i] == Corner.MAX_ONE)) {
-                change(new CornerChange(Corner.DIFFERENT, corners[i], i));
-                corners[i] = Corner.DIFFERENT;
+            } else {
+                corner = corner.combine(corners[i]);
+                if (corner != null) {
+                    change(new CornerChange(corner, corners[i], i));
+                    corners[i] = corner;
+                }
             }
         }
     }

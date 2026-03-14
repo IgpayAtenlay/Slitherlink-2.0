@@ -302,17 +302,17 @@ public class Puzzle extends JPanel {
                     }
 
                     switch (corner) {
-                        case DIFFERENT -> {
+                        case ONE -> {
                             g.drawLine(start.x, start.y, end.x, end.y);
                         }
-                        case SAME -> {
+                        case NOT_ONE -> {
                             g.drawLine(start.x, start.y, start.x, end.y);
                             g.drawLine(start.x, end.y, end.x, end.y);
                         }
-                        case MIN_ONE -> {
+                        case NOT_ZERO -> {
                             g.drawLine(start.x, end.y, end.x, start.y);
                         }
-                        case MAX_ONE -> {
+                        case NOT_TWO -> {
                             g.drawOval(start.x, end.y, 2, 2);
                             g.drawOval(end.x, start.y, 2, 2);
                         }
