@@ -7,7 +7,7 @@ import Memory.Loop;
 import Memory.Memory;
 
 public class LineGeneration {
-    public static void addLine(Memory memory, Coords coords, CardinalDirection direction)
+    public static boolean addLine(Memory memory, Coords coords, CardinalDirection direction)
         throws RuntimeException
     {
         Line line = Line.EMPTY;
@@ -58,6 +58,9 @@ public class LineGeneration {
 
         if(line != Line.EMPTY) {
             memory.setLine(true, line, coords, direction, false);
+            return true;
+        } else {
+            return false;
         }
     }
 

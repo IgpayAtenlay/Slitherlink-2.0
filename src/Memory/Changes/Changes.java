@@ -1,12 +1,10 @@
 package Memory.Changes;
 
-public class Changes {
+public abstract class Changes {
     public final int index;
 
     protected Changes(int index) {
         this.index = index;
     }
-    public Changes copy() {
-        return new Changes(index);
-    }
+    public abstract Changes copy();
 }

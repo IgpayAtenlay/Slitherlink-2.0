@@ -5,7 +5,7 @@ import Memory.Coords;
 import Memory.Memory;
 
 public class HighlightGeneration {
-    public static void addHighlight(Memory memory, Coords coords) {
+    public static boolean addHighlight(Memory memory, Coords coords) {
         Highlight highlight = Highlight.EMPTY;
 
 //        neighbors
@@ -34,6 +34,9 @@ public class HighlightGeneration {
 
         if(highlight != Highlight.EMPTY) {
             memory.setHighlight(highlight, coords, false);
+            return true;
+        } else {
+            return false;
         }
     }
 

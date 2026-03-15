@@ -1,4 +1,4 @@
-package SolvingActions;
+package SolvingActions.Obsolete;
 
 import Enums.*;
 import Memory.Coords;

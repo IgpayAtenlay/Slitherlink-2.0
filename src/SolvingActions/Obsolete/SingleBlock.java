@@ -1,4 +1,4 @@
-package SolvingActions;
+package SolvingActions.Obsolete;
 
 import Memory.Coords;
 import Memory.Memory;

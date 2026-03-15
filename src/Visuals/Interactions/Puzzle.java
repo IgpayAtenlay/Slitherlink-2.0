@@ -8,7 +8,7 @@ import Memory.Coords;
 import Memory.Memory;
 import Memory.MemorySet;
 import PuzzleLoading.MemoryToJsonFile;
-import SolvingActions.AdjacentBlocks;
+import SolvingActions.Obsolete.AdjacentBlocks;
 import SolvingActions.Control;
 
 import javax.swing.*;

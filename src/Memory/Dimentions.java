@@ -34,4 +34,22 @@ public class Dimentions {
         }
         return coordsList;
     }
+    public ArrayList<Coords> allHorizontalLineCoords() {
+        ArrayList<Coords> coordsList = new ArrayList<>();
+        for (int x = 0; x < xSize; x++) {
+            for (int y = 0; y < ySize + 1; y++) {
+                coordsList.add(new Coords(x, y));
+            }
+        }
+        return coordsList;
+    }
+    public ArrayList<Coords> allVerticalLineCoords() {
+        ArrayList<Coords> coordsList = new ArrayList<>();
+        for (int x = 0; x < xSize + 1; x++) {
+            for (int y = 0; y < ySize; y++) {
+                coordsList.add(new Coords(x, y));
+            }
+        }
+        return coordsList;
+    }
 }

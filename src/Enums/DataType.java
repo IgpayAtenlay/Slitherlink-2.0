@@ -4,5 +4,5 @@ public enum DataType {
     NUMBER,
     LINE,
     HIGHLIGHT,
-    DIAGONAL
+    CORNER
 }

@@ -6,7 +6,7 @@ import Memory.Coords;
 import Memory.Memory;
 
 public class CornerGeneration {
-    public static void addCorner(Memory memory, Coords coords, DiagonalDirection direction)
+    public static boolean addCorner(Memory memory, Coords coords, DiagonalDirection direction)
         throws RuntimeException
     {
         Corner originalCorner = memory.getCorner(true, coords, direction);
@@ -51,6 +51,9 @@ public class CornerGeneration {
 
         if(originalCorner != corner) {
             memory.setCorner(true, corner, coords, direction, false);
+            return true;
+        } else {
+            return false;
         }
     }
     public static Corner number(Number number) {

@@ -1,6 +1,7 @@
 package SolvingActions;
 
 import Memory.Memory;
+import SolvingActions.Obsolete.*;
 
 public class Control {
     public static void autoSolve(Memory memory, boolean guessAndCheck) {
