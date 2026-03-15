@@ -108,4 +108,10 @@ public enum Corner {
     public boolean even() {
         return (zero || two) && !one;
     }
+    public boolean oneOption() {
+        return switch (this) {
+            case ZERO, ONE, TWO -> true;
+            default -> false;
+        };
+    }
 }

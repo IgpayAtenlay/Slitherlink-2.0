@@ -32,17 +32,8 @@ public class Control {
         }
     }
     public static void changeItem(Item item, Memory memory) {
-        boolean changeMade = false;
-        if (item instanceof CornerItem) {
-            changeMade = CornerGeneration.addCorner(memory, item.coords, ((CornerItem) item).direction);
-        } else if (item instanceof LineItem) {
-            changeMade = LineGeneration.addLine(memory, item.coords, ((LineItem) item).direction);
-        } else if (item instanceof HighlightItem) {
-            changeMade = HighlightGeneration.addHighlight(memory, item.coords);
-        }
+        boolean changeMade = item.add(memory);
         if (!changeMade) return;
-//        ChainChanges.chainChanges(item, memory);
+        ConstraintPropagation.constraintPropagation(item, memory);
     }
-
-
 }
