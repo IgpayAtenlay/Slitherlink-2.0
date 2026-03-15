@@ -27,32 +27,20 @@ public class HighlightGeneration {
         }
 
 //        constraints
-        highlight = highlight.combine(definition(adjacentLines, adjacentHighlights));
-        highlight = highlight.combine(corner(diagonalHighlights, outsideCornerOne, outsideCornerTwo));
+        for (int i = 0; i < 4; i++) {
+            highlight = highlight.combine(definition(adjacentLines[i], adjacentHighlights[i]));
+            highlight = highlight.combine(corner(diagonalHighlights[i], outsideCornerOne[i], outsideCornerTwo[i]));
+        }
 
         if(highlight != Highlight.EMPTY) {
             memory.setHighlight(highlight, coords, false);
         }
     }
 
-    public static Highlight definition(Line[] adjacentLines, Highlight[] adjacentHighlights) {
-        Highlight highlight = Highlight.EMPTY;
-        for (int i = 0; i < adjacentLines.length; i++) {
-            highlight = highlight.combine(definition(adjacentLines[i], adjacentHighlights[i]));
-        }
-        return highlight;
-    }
     public static Highlight definition(Line line, Highlight highlight) {
         if (line == Line.LINE) return highlight.getOpposite();
         if (line == Line.X) return highlight;
         return Highlight.EMPTY;
-    }
-    public static Highlight corner(Highlight[] diagonalHighlights, Corner[] outsideCornerOne, Corner[] outsideCornerTwo) {
-        Highlight highlight = Highlight.EMPTY;
-        for(int i = 0; i < diagonalHighlights.length; i++) {
-            highlight = highlight.combine(corner(diagonalHighlights[i], outsideCornerOne[i], outsideCornerTwo[i]));
-        }
-        return highlight;
     }
     public static Highlight corner(Highlight diagonalHighlight, Corner outsideCornerOne, Corner outsideCornerTwo) {
         if (outsideCornerOne == Corner.ONE && outsideCornerTwo == Corner.ONE) {
