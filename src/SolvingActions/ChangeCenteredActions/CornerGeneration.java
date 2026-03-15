@@ -39,7 +39,10 @@ public class CornerGeneration {
         corner = corner.combine(adjacentSquare(squareNum, adjacentSquareOne, adjacentSquareTwo));
         corner = corner.combine(entireSquare(acrossSquare, adjacentSquareOne, adjacentSquareTwo));
         corner = corner.combine(definition(lineOne, lineTwo));
-        corner = corner.combine(twoBetweenIdenticalHighlights(squareNum, northHighlight, southHighlight, eastHighlight, westHighlight));
+        corner = corner.combine(twoBetweenIdenticalHighlights(squareNum, northHighlight, southHighlight));
+        corner = corner.combine(twoBetweenIdenticalHighlights(squareNum, eastHighlight, westHighlight));
+        corner = corner.combine(onesCornersBetweenIdenticalHighlights(adjacentSquareOne, adjacentSquareTwo, northHighlight, southHighlight));
+        corner = corner.combine(onesCornersBetweenIdenticalHighlights(adjacentSquareOne, adjacentSquareTwo, eastHighlight, westHighlight));
         corner = corner.combine(adjacentPoint(adjacentPointOne, adjacentPointTwo));
         corner = corner.combine(entirePoint(acrossPoint, adjacentPointOne, adjacentPointTwo));
 //        only run first time
@@ -78,10 +81,13 @@ public class CornerGeneration {
         return Corner.ANY;
     }
     public static Corner entireSquare(Corner across, Corner adjacentOne, Corner adjacentTwo) {
+        if (adjacentOne == Corner.ONE && adjacentTwo == Corner.ONE)  {
+            return Corner.getCorner(across.two,  across.one, across.zero);
+        }
+
         int numEven = (across.even() ? 1 : 0) + (adjacentOne.even() ? 1 : 0) + (adjacentTwo.even() ? 1 : 0);
         int numOdd = (across == Corner.ONE ? 1 : 0) + (adjacentOne == Corner.ONE ? 1 : 0) + (adjacentTwo == Corner.ONE ? 1 : 0);
 
-        if (numOdd == 3) return Corner.ONE;
         if (numEven == 1 && numOdd == 2) return Corner.NOT_ONE;
         if (numEven == 2 && numOdd == 1) return Corner.ONE;
         if (numEven == 3) return Corner.ZERO;
@@ -113,9 +119,15 @@ public class CornerGeneration {
             };
         };
     }
-    public static Corner twoBetweenIdenticalHighlights(Number number, Highlight north, Highlight south, Highlight east, Highlight west) {
+    public static Corner twoBetweenIdenticalHighlights(Number number, Highlight highlight, Highlight highlightAcross) {
         if (number == Number.TWO) {
-            if (north == south || east == west) return Corner.ONE;
+            if (highlight == highlightAcross && highlight != Highlight.EMPTY) return Corner.ONE;
+        }
+        return Corner.ANY;
+    }
+    public static Corner onesCornersBetweenIdenticalHighlights(Corner adjacentOne, Corner adjacentTwo, Highlight highlight, Highlight highlightAcross) {
+        if (adjacentOne == Corner.ONE && adjacentTwo == Corner.ONE) {
+            if (highlight == highlightAcross && highlight != Highlight.EMPTY) return Corner.ONE;
         }
         return Corner.ANY;
     }

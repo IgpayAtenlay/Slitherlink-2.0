@@ -1,7 +1,5 @@
 package SolvingActions;
 
-import Enums.Number;
-import Enums.*;
 import Memory.Coords;
 import Memory.Memory;
 
@@ -20,10 +18,10 @@ public class SingleBlock {
 //            fillCornersOnSquare(memory, coords);
 //            fourSameCornerToTotalXSquare(memory, coords);
 
-            addLogicZero(memory, coords);
-            addLogicOne(memory, coords);
-            addLogicTwo(memory, coords);
-            addLogicThree(memory, coords);
+//            addLogicZero(memory, coords);
+//            addLogicOne(memory, coords);
+//            addLogicTwo(memory, coords);
+//            addLogicThree(memory, coords);
         }
     }
 
@@ -165,50 +163,50 @@ public class SingleBlock {
 //            }
 //        }
 //    }
-    public static void addLogicZero(Memory memory, Coords coords) {
-        if (memory.getNumber(coords) == Number.EMPTY) {
-            for (CardinalDirection direction : CardinalDirection.values()) {
-                if (memory.getLine(true, coords, direction) != Line.X) return;
-            }
-            memory.setNumber(Number.ZERO, coords, false);
-        }
-    }
-    public static void addLogicOne(Memory memory, Coords coords) {
-        if (memory.getNumber(coords) == Number.EMPTY) {
-            for (DiagonalDirection direction : DiagonalDirection.values()) {
-                if (memory.getCorner(true, coords, direction) == Corner.ONE &&
-                        memory.getLine(true, coords, direction.getCardinalDirections()[0].getOpposite()) == Line.X &&
-                        memory.getLine(true, coords, direction.getCardinalDirections()[1].getOpposite()) == Line.X
-                ) {
-                    memory.setNumber(Number.ONE, coords, false);
-                    return;
-                }
-            }
-        }
-    }
-    public static void addLogicTwo(Memory memory, Coords coords) {
-        if (memory.getNumber(coords) == Number.EMPTY) {
-            for (DiagonalDirection direction : new DiagonalDirection[]{DiagonalDirection.NORTHEAST, DiagonalDirection.SOUTHEAST}) {
-                if (memory.getCorner(true, coords, direction) == Corner.ONE &&
-                        memory.getCorner(true, coords, direction.getOpposite()) == Corner.ONE
-                ) {
-                    memory.setNumber(Number.TWO, coords, false);
-                    return;
-                }
-            }
-        }
-    }
-    public static void addLogicThree(Memory memory, Coords coords) {
-        if (memory.getNumber(coords) == Number.EMPTY) {
-            for (DiagonalDirection direction : DiagonalDirection.values()) {
-                if (memory.getCorner(true, coords, direction) == Corner.ONE &&
-                        memory.getLine(true, coords, direction.getCardinalDirections()[0].getOpposite()) == Line.LINE &&
-                        memory.getLine(true, coords, direction.getCardinalDirections()[1].getOpposite()) == Line.LINE
-                ) {
-                    memory.setNumber(Number.THREE, coords, false);
-                    return;
-                }
-            }
-        }
-    }
+//    public static void addLogicZero(Memory memory, Coords coords) {
+//        if (memory.getNumber(coords) == Number.EMPTY) {
+//            for (CardinalDirection direction : CardinalDirection.values()) {
+//                if (memory.getLine(true, coords, direction) != Line.X) return;
+//            }
+//            memory.setNumber(Number.ZERO, coords, false);
+//        }
+//    }
+//    public static void addLogicOne(Memory memory, Coords coords) {
+//        if (memory.getNumber(coords) == Number.EMPTY) {
+//            for (DiagonalDirection direction : DiagonalDirection.values()) {
+//                if (memory.getCorner(true, coords, direction) == Corner.ONE &&
+//                        memory.getLine(true, coords, direction.getCardinalDirections()[0].getOpposite()) == Line.X &&
+//                        memory.getLine(true, coords, direction.getCardinalDirections()[1].getOpposite()) == Line.X
+//                ) {
+//                    memory.setNumber(Number.ONE, coords, false);
+//                    return;
+//                }
+//            }
+//        }
+//    }
+//    public static void addLogicTwo(Memory memory, Coords coords) {
+//        if (memory.getNumber(coords) == Number.EMPTY) {
+//            for (DiagonalDirection direction : new DiagonalDirection[]{DiagonalDirection.NORTHEAST, DiagonalDirection.SOUTHEAST}) {
+//                if (memory.getCorner(true, coords, direction) == Corner.ONE &&
+//                        memory.getCorner(true, coords, direction.getOpposite()) == Corner.ONE
+//                ) {
+//                    memory.setNumber(Number.TWO, coords, false);
+//                    return;
+//                }
+//            }
+//        }
+//    }
+//    public static void addLogicThree(Memory memory, Coords coords) {
+//        if (memory.getNumber(coords) == Number.EMPTY) {
+//            for (DiagonalDirection direction : DiagonalDirection.values()) {
+//                if (memory.getCorner(true, coords, direction) == Corner.ONE &&
+//                        memory.getLine(true, coords, direction.getCardinalDirections()[0].getOpposite()) == Line.LINE &&
+//                        memory.getLine(true, coords, direction.getCardinalDirections()[1].getOpposite()) == Line.LINE
+//                ) {
+//                    memory.setNumber(Number.THREE, coords, false);
+//                    return;
+//                }
+//            }
+//        }
+//    }
 }

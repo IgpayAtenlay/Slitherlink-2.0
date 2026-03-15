@@ -1,8 +1,5 @@
 package SolvingActions;
 
-import Enums.CardinalDirection;
-import Enums.Highlight;
-import Enums.Line;
 import Memory.Coords;
 import Memory.Memory;
 
@@ -11,7 +8,7 @@ public class AdjacentBlocks {
         for (Coords coords : memory.getDimentions().allSquareCoords()) {
 //            doubleThrees(memory, coords);
 //            twoBetweenIdenticalHighlights(memory, coords);
-            lineExtendsHighlight(memory, coords);
+//            lineExtendsHighlight(memory, coords);
 //            separateHighlightsWithLines(memory, coords);
         }
     }
@@ -27,19 +24,19 @@ public class AdjacentBlocks {
 //            }
 //        }
 //    }
-    static public void lineExtendsHighlight(Memory memory, Coords coords) {
-        if (memory.getHighlight(coords) == Highlight.EMPTY) {
-            for (CardinalDirection direction : CardinalDirection.values()) {
-                Highlight adjacentHighlight = memory.getHighlight(coords.addDirection(direction));
-                Line line = memory.getLine(true, coords, direction);
-                if (line == Line.LINE) {
-                    memory.setHighlight(adjacentHighlight.getOpposite(), coords, false);
-                } else if (line == Line.X) {
-                    memory.setHighlight(adjacentHighlight, coords, false);
-                }
-            }
-        }
-    }
+//    static public void lineExtendsHighlight(Memory memory, Coords coords) {
+//        if (memory.getHighlight(coords) == Highlight.EMPTY) {
+//            for (CardinalDirection direction : CardinalDirection.values()) {
+//                Highlight adjacentHighlight = memory.getHighlight(coords.addDirection(direction));
+//                Line line = memory.getLine(true, coords, direction);
+//                if (line == Line.LINE) {
+//                    memory.setHighlight(adjacentHighlight.getOpposite(), coords, false);
+//                } else if (line == Line.X) {
+//                    memory.setHighlight(adjacentHighlight, coords, false);
+//                }
+//            }
+//        }
+//    }
 //    static public void separateHighlightsWithLines(Memory memory, Coords coords) {
 //        Highlight currentHighlight = memory.getHighlight(coords);
 //        if (currentHighlight != Highlight.EMPTY) {

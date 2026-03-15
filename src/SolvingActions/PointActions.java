@@ -14,7 +14,7 @@ public class PointActions {
 //                fillSameCornerPoint(memory, coords, direction);
 //                cornersToLines(memory, coords, direction);
             }
-            differentCornerHighlight(memory, coords);
+//            differentCornerHighlight(memory, coords);
         }
     }
 
@@ -105,14 +105,14 @@ public class PointActions {
 //            }
 //        }
 //    }
-    public static void differentCornerHighlight(Memory memory, Coords coords) {
-        for (DiagonalDirection direction : DiagonalDirection.values()) {
-            if (memory.getCorner(false, coords, direction) != Corner.ONE) return;
-        }
-
-        for (DiagonalDirection direction : DiagonalDirection.values()) {
-            Highlight highlight = memory.getHighlight(coords.pointToSquare(direction));
-            memory.setHighlight(highlight.getOpposite(), coords.pointToSquare(direction.getOpposite()), false);
-        }
-    }
+//    public static void differentCornerHighlight(Memory memory, Coords coords) {
+//        for (DiagonalDirection direction : DiagonalDirection.values()) {
+//            if (memory.getCorner(false, coords, direction) != Corner.ONE) return;
+//        }
+//
+//        for (DiagonalDirection direction : DiagonalDirection.values()) {
+//            Highlight highlight = memory.getHighlight(coords.pointToSquare(direction));
+//            memory.setHighlight(highlight.getOpposite(), coords.pointToSquare(direction.getOpposite()), false);
+//        }
+//    }
 }

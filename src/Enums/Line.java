@@ -31,12 +31,8 @@ public enum Line {
         }
     }
     public Line combine(Line line) {
-        if (this == EMPTY) {
-            return line;
-        }
-        if (line == EMPTY) {
-            return this;
-        }
+        if (this == EMPTY) return line;
+        if (line == EMPTY) return this;
         if (this == line) return this;
         throw new RuntimeException("Can't combine lines");
     }
