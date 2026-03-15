@@ -42,4 +42,30 @@ public enum CardinalDirection {
             case WEST -> new DiagonalDirection[] {DiagonalDirection.SOUTHWEST, DiagonalDirection.NORTHWEST};
         };
     }
+    public DiagonalDirection getDiagonalDirection(CardinalDirection directionTwo)
+        throws RuntimeException
+    {
+        return switch (this) {
+            case NORTH -> switch (directionTwo) {
+                case EAST -> DiagonalDirection.NORTHEAST;
+                case WEST -> DiagonalDirection.NORTHWEST;
+                default -> throw new RuntimeException("Bad directions");
+            };
+            case EAST -> switch (directionTwo) {
+                case NORTH -> DiagonalDirection.NORTHEAST;
+                case SOUTH -> DiagonalDirection.SOUTHEAST;
+                default -> throw new RuntimeException("Bad directions");
+            };
+            case SOUTH -> switch (directionTwo) {
+                case EAST -> DiagonalDirection.SOUTHEAST;
+                case WEST -> DiagonalDirection.SOUTHWEST;
+                default -> throw new RuntimeException("Bad directions");
+            };
+            case WEST -> switch (directionTwo) {
+                case NORTH -> DiagonalDirection.NORTHWEST;
+                case SOUTH -> DiagonalDirection.SOUTHWEST;
+                default -> throw new RuntimeException("Bad directions");
+            };
+        };
+    }
 }

@@ -1,9 +1,6 @@
 package SolvingActions.ChangeCenteredActions.Items;
 
-import Enums.CardinalDirection;
-import Enums.DiagonalDirection;
-import Enums.Highlight;
-import Enums.Line;
+import Enums.*;
 import Memory.Coords;
 import Memory.Memory;
 import SolvingActions.ChangeCenteredActions.CornerGeneration;
@@ -13,13 +10,18 @@ import java.util.ArrayList;
 public class CornerItem extends Item {
     public final DiagonalDirection direction;
     public CornerItem(Coords coords, DiagonalDirection direction) {
-        super(coords);
+        super(coords, DataType.CORNER);
         this.direction = direction;
     }
 
     @Override
-    public boolean add(Memory memory) {
+    public boolean executeAll(Memory memory) {
         return CornerGeneration.addCorner(memory, coords, direction);
+    }
+
+    @Override
+    public boolean executeTargeted(Memory memory, Item item) {
+        return false;
     }
 
     @Override

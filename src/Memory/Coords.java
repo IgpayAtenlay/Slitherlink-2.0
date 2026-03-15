@@ -60,6 +60,26 @@ public class Coords {
             case NORTHWEST -> new Coords(this.x - 1, this.y - 1);
         };
     }
+    public CardinalDirection inDirection(Coords coords) {
+        int xDif = coords.x  - this.x;
+        int yDif = coords.y - this.y;
+        if (yDif == 0) {
+            if (xDif == 1) {
+                return CardinalDirection.EAST;
+            } else if (xDif == -1) {
+                return CardinalDirection.WEST;
+            }
+        }
+        if (xDif == 0) {
+            if (yDif == 1) {
+                return CardinalDirection.SOUTH;
+            } else if (yDif == -1) {
+                return CardinalDirection.NORTH;
+            }
+        }
+
+        throw new RuntimeException("Not adjacent coordinates");
+    }
 
     @Override
     public boolean equals(Object o) {

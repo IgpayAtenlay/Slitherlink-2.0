@@ -1,9 +1,6 @@
 package SolvingActions.ChangeCenteredActions.Items;
 
-import Enums.CardinalDirection;
-import Enums.DiagonalDirection;
-import Enums.Highlight;
-import Enums.Line;
+import Enums.*;
 import Memory.Coords;
 import Memory.Memory;
 import SolvingActions.ChangeCenteredActions.HighlightGeneration;
@@ -12,12 +9,17 @@ import java.util.ArrayList;
 
 public class HighlightItem extends Item {
     public HighlightItem(Coords coords) {
-        super(coords);
+        super(coords, DataType.HIGHLIGHT);
     }
 
     @Override
-    public boolean add(Memory memory) {
+    public boolean executeAll(Memory memory) {
         return HighlightGeneration.addHighlight(memory, coords);
+    }
+
+    @Override
+    public boolean executeTargeted(Memory memory, Item item) {
+        return false;
     }
 
     @Override

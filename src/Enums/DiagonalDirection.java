@@ -42,4 +42,14 @@ public enum DiagonalDirection {
             case NORTHWEST -> new CardinalDirection[] {CardinalDirection.WEST, CardinalDirection.NORTH};
         };
     }
+    public CardinalDirection getCardinalDirection(CardinalDirection direction)
+        throws RuntimeException
+    {
+        if (getCardinalDirections()[0] == direction) {
+            return getCardinalDirections()[1];
+        } else if (getCardinalDirections()[1] == direction) {
+            return getCardinalDirections()[0];
+        }
+        throw new RuntimeException("Cardinal direction part of diagonal direction");
+    }
 }

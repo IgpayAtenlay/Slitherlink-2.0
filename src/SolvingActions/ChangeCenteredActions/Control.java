@@ -32,7 +32,7 @@ public class Control {
         }
     }
     public static void changeItem(Item item, Memory memory) {
-        boolean changeMade = item.add(memory);
+        boolean changeMade = item.executeAll(memory);
         if (!changeMade) return;
         ConstraintPropagation.constraintPropagation(item, memory);
     }

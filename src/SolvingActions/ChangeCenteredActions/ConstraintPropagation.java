@@ -13,8 +13,7 @@ public class ConstraintPropagation {
         while (targets.size() > 0) {
             Item previousItem = targets.remove();
             for (Item currentItem : previousItem.getNeighbors(memory)) {
-//                change to only target relevent rules
-                boolean changeMade = currentItem.add(memory);
+                boolean changeMade = currentItem.executeTargeted(memory, previousItem);
                 if (changeMade) targets.add(currentItem);
             }
         }
