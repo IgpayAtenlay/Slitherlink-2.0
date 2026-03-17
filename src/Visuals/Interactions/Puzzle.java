@@ -8,7 +8,9 @@ import Memory.Coords;
 import Memory.Memory;
 import Memory.MemorySet;
 import PuzzleLoading.MemoryToJsonFile;
+import SolvingActions.ChangeCenteredActions.Control2;
 import SolvingActions.Obsolete.AdjacentBlocks;
+
 import SolvingActions.Control;
 
 import javax.swing.*;
@@ -174,7 +176,7 @@ public class Puzzle {
         Memory visible = memorySet.getVisible();
         Memory memory = visible.copy();
 
-        Control.autoSolve(memory, false);
+        Control2.autoSolve(memory);
 
         for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
             for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {

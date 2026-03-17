@@ -60,7 +60,23 @@ public class Coords {
             case NORTHWEST -> new Coords(this.x - 1, this.y - 1);
         };
     }
-    public CardinalDirection inDirection(Coords coords) {
+    public boolean isAdjacent(Coords coords) {
+        int xDif = coords.x  - this.x;
+        int yDif = coords.y - this.y;
+        if (yDif == 0) {
+            if (xDif == 1 || xDif == -1) {
+                return true;
+            }
+        }
+        if (xDif == 0) {
+            if (yDif == 1 || yDif ==  -1) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    public CardinalDirection whichCardinalDirection(Coords coords) {
         int xDif = coords.x  - this.x;
         int yDif = coords.y - this.y;
         if (yDif == 0) {
@@ -79,6 +95,26 @@ public class Coords {
         }
 
         throw new RuntimeException("Not adjacent coordinates");
+    }
+    public DiagonalDirection whichDiagonalDirection(Coords coords) {
+        int xDif = coords.x  - this.x;
+        int yDif = coords.y - this.y;
+        if (yDif == 1) {
+            if (xDif == 1) {
+                return DiagonalDirection.SOUTHEAST;
+            } else if (xDif == -1) {
+                return DiagonalDirection.SOUTHWEST;
+            }
+        }
+        if (yDif == -1) {
+            if (xDif == 1) {
+                return DiagonalDirection.NORTHEAST;
+            } else if (xDif == -1) {
+                return DiagonalDirection.NORTHWEST;
+            }
+        }
+
+        throw new RuntimeException("Not diagonal coordinates");
     }
 
     @Override

@@ -141,7 +141,11 @@ public class JsonConverter {
             case "corners": {
                 Corner[] corners = new Corner[split.length];
                 for (int i = 0; i < split.length; i++) {
-                    corners[i] = Corner.valueOf(split[i]);
+                    try {
+                        corners[i] = Corner.valueOf(split[i]);
+                    } catch (Exception e) {
+                        corners[i] = Corner.ANY;
+                    }
                 }
                 return corners;
             }

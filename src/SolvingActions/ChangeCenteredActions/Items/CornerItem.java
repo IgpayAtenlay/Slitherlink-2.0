@@ -1,5 +1,6 @@
 package SolvingActions.ChangeCenteredActions.Items;
 
+import Enums.Number;
 import Enums.*;
 import Memory.Coords;
 import Memory.Memory;
@@ -21,7 +22,70 @@ public class CornerItem extends Item {
 
     @Override
     public boolean executeTargeted(Memory memory, Item item) {
-        return false;
+        Corner corner = Corner.ANY;
+        switch (item.dataType) {
+            case LINE -> {
+                Line sourceLine = memory.getLine(true, item.coords, ((LineItem)item).direction);
+                Line otherLine;
+                if (this.coords.equals(item.coords)) {
+                    otherLine = memory.getLine(true, this.coords, this.direction.getOtherCardinalDirection(((LineItem)item).direction));
+                } else {
+                    otherLine = memory.getLine(true, this.coords, this.direction.getOtherCardinalDirection(((LineItem)item).direction.getOpposite()));
+                }
+                corner = corner.combine(CornerGeneration.definition(sourceLine, otherLine));
+            }
+            case CORNER -> {
+                boolean isAcross = this.direction.getOpposite() == ((CornerItem) item).direction;
+
+                if (this.coords.equals(item.coords)) {
+                    Number number = memory.getNumber(this.coords);
+                    Corner across = memory.getCorner(true, this.coords, this.direction.getOpposite());
+                    Corner adjacentOne = memory.getCorner(true, this.coords, this.direction.getClockwise());
+                    Corner adjacentTwo = memory.getCorner(true, this.coords, this.direction.getCounterClockwise());
+                    if (isAcross) {
+                        corner = corner.combine(CornerGeneration.acrossSquare(number, across));
+                    } else {
+                        Highlight northHighlight = memory.getHighlight(coords.addDirection(CardinalDirection.NORTH));
+                        Highlight southHighlight = memory.getHighlight(coords.addDirection(CardinalDirection.SOUTH));
+                        Highlight eastHighlight = memory.getHighlight(coords.addDirection(CardinalDirection.EAST));
+                        Highlight westHighlight = memory.getHighlight(coords.addDirection(CardinalDirection.WEST));
+
+                        corner = corner.combine(CornerGeneration.adjacentSquare(number, adjacentOne, adjacentTwo));
+                        corner = corner.combine(CornerGeneration.onesCornersBetweenIdenticalHighlights(adjacentOne, adjacentTwo, northHighlight, southHighlight));
+                        corner = corner.combine(CornerGeneration.onesCornersBetweenIdenticalHighlights(adjacentOne, adjacentTwo, eastHighlight, westHighlight));
+
+                    }
+                    corner = corner.combine(CornerGeneration.entireSquare(across, adjacentOne, adjacentTwo));
+                } else {
+                    Corner across = memory.getCorner(true, this.coords.addDirection(this.direction), this.direction.getOpposite());
+                    Corner adjacentOne = memory.getCorner(true, this.coords.addDirection(this.direction.getCardinalDirections()[0]), this.direction.getClockwise());
+                    Corner adjacentTwo = memory.getCorner(true, this.coords.addDirection(this.direction.getCardinalDirections()[1]), this.direction.getCounterClockwise());
+                    if (isAcross) {
+                        corner = corner.combine(CornerGeneration.acrossPoint(across));
+                    } else {
+                        corner = corner.combine(CornerGeneration.adjacentPoint(adjacentOne, adjacentTwo));
+                    }
+                    corner = corner.combine(CornerGeneration.entirePoint(across, adjacentOne, adjacentTwo));
+                }
+            }
+            case HIGHLIGHT -> {
+                Highlight sourceHighlight = memory.getHighlight(item.coords);
+                Highlight oppositeHighlight = memory.getHighlight(this.coords.addDirection(this.coords.whichCardinalDirection(item.coords).getOpposite()));
+                Number number = memory.getNumber(this.coords);
+                Corner adjacentOne = memory.getCorner(true, this.coords, this.direction.getClockwise());
+                Corner adjacentTwo = memory.getCorner(true, this.coords, this.direction.getCounterClockwise());
+
+                corner = corner.combine(CornerGeneration.twoBetweenIdenticalHighlights(number, sourceHighlight, oppositeHighlight));
+                corner = corner.combine(CornerGeneration.onesCornersBetweenIdenticalHighlights(adjacentOne, adjacentTwo, sourceHighlight, oppositeHighlight));
+            }
+        }
+
+        if(corner != Corner.ANY) {
+            memory.setCorner(true, corner, this.coords, this.direction, false);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

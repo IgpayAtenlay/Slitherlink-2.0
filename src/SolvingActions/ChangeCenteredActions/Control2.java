@@ -9,12 +9,15 @@ import SolvingActions.ChangeCenteredActions.Items.HighlightItem;
 import SolvingActions.ChangeCenteredActions.Items.Item;
 import SolvingActions.ChangeCenteredActions.Items.LineItem;
 
-public class Control {
+public class Control2 {
     public static void autoSolve(Memory memory) {
         int changes;
+        int numLoops = 0;
         do {
             changes = memory.getNumChanges();
             iterateAllItems(memory);
+            numLoops++;
+            System.out.println(numLoops);
         } while (changes != memory.getNumChanges());
     }
     public static void iterateAllItems(Memory memory) {
