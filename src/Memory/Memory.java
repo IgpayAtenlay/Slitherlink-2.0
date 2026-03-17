@@ -164,10 +164,13 @@ public class Memory {
                 change(new CornerChange(corner, corners[i], i));
                 corners[i] = corner;
             } else {
-                corner = corner.combine(corners[i]);
-                if (corner != null) {
-                    change(new CornerChange(corner, corners[i], i));
-                    corners[i] = corner;
+                try {
+                    corner = corner.combine(corners[i]);
+                    if (corners[i] != corner) {
+                        change(new CornerChange(corner, corners[i], i));
+                        corners[i] = corner;
+                    }
+                } catch (Exception ignored) {
                 }
             }
         }
