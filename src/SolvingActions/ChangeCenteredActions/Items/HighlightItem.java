@@ -102,4 +102,9 @@ public class HighlightItem extends Item {
 
         return result;
     }
+
+    @Override
+    public String toString() {
+        return coords.toString() + " " + dataType;
+    }
 }

@@ -175,6 +175,13 @@ public class Memory {
             }
         }
     }
+    public boolean cornerInsidePuzzle(boolean square, Coords coords) {
+        if (square) {
+            return dimentions.containsSquare(coords);
+        } else {
+            throw new RuntimeException("Not implimented");
+        }
+    }
     public Highlight getHighlight(Coords coords) {
         int x = coords.x;
         int y = coords.y;

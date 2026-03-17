@@ -22,7 +22,8 @@ public class CornerItem extends Item {
 
     @Override
     public boolean executeTargeted(Memory memory, Item item) {
-        Corner corner = Corner.ANY;
+        Corner origionalCorner = memory.getCorner(true, this.coords, this.direction);
+        Corner corner = origionalCorner;
         switch (item.dataType) {
             case LINE -> {
                 Line sourceLine = memory.getLine(true, item.coords, ((LineItem)item).direction);
@@ -80,7 +81,7 @@ public class CornerItem extends Item {
             }
         }
 
-        if(corner != Corner.ANY) {
+        if(corner != origionalCorner) {
             memory.setCorner(true, corner, this.coords, this.direction, false);
             return true;
         } else {
@@ -132,5 +133,10 @@ public class CornerItem extends Item {
         }
 
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return coords.toString() + " " + direction + " " + dataType;
     }
 }

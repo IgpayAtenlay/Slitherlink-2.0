@@ -8,7 +8,8 @@ import Memory.Coords;
 import Memory.Memory;
 import Memory.MemorySet;
 import PuzzleLoading.MemoryToJsonFile;
-import SolvingActions.Control;
+import SolvingActions.ChangeCenteredActions.ConstraintPropagation;
+import SolvingActions.ChangeCenteredActions.Control2;
 import SolvingActions.Obsolete.AdjacentBlocks;
 
 import javax.swing.*;
@@ -174,7 +175,11 @@ public class Puzzle {
         Memory visible = memorySet.getVisible();
         Memory memory = visible.copy();
 
-        Control.autoSolve(memory, false);
+        try {
+            Control2.autoSolve(visible);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
         for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
             for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
@@ -187,7 +192,12 @@ public class Puzzle {
         panel.repaint();
     }
     public void autoSolveOneStep() {
-        autoSolveStep = Control.oneRoundAutosolve(memorySet.getVisible(), false, autoSolveStep);
+//        autoSolveStep = Control.oneRoundAutosolve(memorySet.getVisible(), false, autoSolveStep);
+        boolean success = ConstraintPropagation.iterateTarget(memorySet.getVisible());
+        if (!success) {
+            Control2.iterateNextItem(memorySet.getVisible());
+            ConstraintPropagation.iterateTarget(memorySet.getVisible());
+        }
         panel.repaint();
     }
     public void checkForErrors() {

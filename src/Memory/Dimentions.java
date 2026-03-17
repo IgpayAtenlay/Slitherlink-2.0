@@ -52,4 +52,7 @@ public class Dimentions {
         }
         return coordsList;
     }
+    public boolean containsSquare(Coords coords) {
+        return coords.x >= 0 && coords.x < xSize && coords.y >= 0 && coords.y < ySize;
+    }
 }
