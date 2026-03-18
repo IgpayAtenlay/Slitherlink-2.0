@@ -174,7 +174,10 @@ public class Puzzle {
         Memory visible = memorySet.getVisible();
         Memory memory = visible.copy();
 
+//        long startTime = System.currentTimeMillis();
         Control.autoSolve(memory, false);
+//        long endTime = System.currentTimeMillis();
+//        System.out.printf("GridCentered, %.3f\n", ((float)(endTime - startTime) / 1000));
 
         for (int y = 0; y < memory.getDimentions().ySize + 1; y++) {
             for (int x = 0; x < memory.getDimentions().xSize + 1; x++) {
