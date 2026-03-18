@@ -35,10 +35,10 @@ public class Coords {
     public Coords pointToSquare(DiagonalDirection direction) {
         int x = switch (direction) {
             case NORTHEAST, SOUTHEAST -> this.x;
-            case SOUTHWEST, NORTHWEST -> this.x + 1;
+            case SOUTHWEST, NORTHWEST -> this.x - 1;
         };
         int y = switch (direction) {
-            case NORTHEAST, NORTHWEST -> this.y + 1;
+            case NORTHEAST, NORTHWEST -> this.y - 1;
             case SOUTHEAST, SOUTHWEST -> this.y;
         };
 
