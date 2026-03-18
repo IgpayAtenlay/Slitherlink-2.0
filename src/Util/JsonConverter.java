@@ -4,9 +4,9 @@ import Enums.Corner;
 import Enums.Highlight;
 import Enums.Line;
 import Enums.Number;
+import Memory.Dimentions;
 import Memory.Loop;
 import Memory.Memory;
-import Memory.Dimentions;
 import Memory.MemorySet;
 
 import java.util.ArrayList;
@@ -120,7 +120,11 @@ public class JsonConverter {
             case "lines": {
                 Line[] lines = new Line[split.length];
                 for (int i = 0; i < split.length; i++) {
-                    lines[i] = Line.valueOf(split[i]);
+                    try {
+                        lines[i] = Line.valueOf(split[i]);
+                    } catch (Exception e) {
+                        lines[i] = Line.EMPTY;
+                    }
                 }
                 return lines;
             }

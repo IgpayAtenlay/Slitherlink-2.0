@@ -9,14 +9,12 @@ public class ConstraintPropagation {
     public static boolean iterateTarget(Memory memory, Queue<Item> targets) {
         if (targets.size() == 0) return false;
         Item previousItem = targets.remove();
-        System.out.println(previousItem);
         boolean atLeastOneChange = false;
         for (Item currentItem : previousItem.getNeighbors(memory)) {
             boolean changeMade = currentItem.executeTargeted(memory, previousItem);
             if (changeMade) {
                 atLeastOneChange = true;
                 targets.add(currentItem);
-                System.out.println("change made: " + currentItem);
             };
         }
         return atLeastOneChange;

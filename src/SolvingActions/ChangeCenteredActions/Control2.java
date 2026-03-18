@@ -18,8 +18,6 @@ public class Control2 {
         int index = 0;
         int numLoops = 0;
         do {
-            System.out.println("new loop");
-            System.out.println(numLoops);
             changes = memory.getNumChanges();
             ArrayDeque<Item> targets = new ArrayDeque<>();
             index = queueNextItem(memory, index, targets);
@@ -66,7 +64,6 @@ public class Control2 {
     public static boolean queueItem(Item item, Memory memory, Queue<Item> targets) {
         boolean changeMade = item.executeAll(memory);
         if (!changeMade) return false;
-//        System.out.println("change???");
         targets.add(item);
         return ConstraintPropagation.iterateTarget(memory, targets);
     }

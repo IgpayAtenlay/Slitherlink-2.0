@@ -10,6 +10,7 @@ import Memory.MemorySet;
 import PuzzleLoading.MemoryToJsonFile;
 import SolvingActions.ChangeCenteredActions.ConstraintPropagation;
 import SolvingActions.ChangeCenteredActions.Control2;
+import SolvingActions.ChangeCenteredActions.ForwardChecking;
 import SolvingActions.ChangeCenteredActions.Items.Item;
 import SolvingActions.Obsolete.AdjacentBlocks;
 
@@ -181,7 +182,7 @@ public class Puzzle {
         Memory memory = visible.copy();
 
         try {
-            Control2.autoSolve(visible);
+            ForwardChecking.runForwardChecking(visible);
         } catch (Exception e) {
             System.out.println(e);
         }
