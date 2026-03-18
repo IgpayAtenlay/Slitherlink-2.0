@@ -9,66 +9,50 @@ import SolvingActions.ChangeCenteredActions.Items.HighlightItem;
 import SolvingActions.ChangeCenteredActions.Items.Item;
 import SolvingActions.ChangeCenteredActions.Items.LineItem;
 
+import java.util.ArrayDeque;
+import java.util.Queue;
+
 public class Control2 {
-    static int currentIndex = 0;
-    static boolean hitZero = false;
     public static void autoSolve(Memory memory) {
         int changes;
+        int index = 0;
         int numLoops = 0;
         do {
             System.out.println("new loop");
-            changes = memory.getNumChanges();
-            iterateAllItems(memory);
-            numLoops++;
             System.out.println(numLoops);
+            changes = memory.getNumChanges();
+            ArrayDeque<Item> targets = new ArrayDeque<>();
+            index = queueNextItem(memory, index, targets);
+            while(targets.size() > 0) {
+                ConstraintPropagation.iterateTarget(memory, targets);
+            }
+            numLoops++;
         } while (changes != memory.getNumChanges());
     }
-    public static void iterateAllItems(Memory memory) {
-        for (Coords coords : memory.getDimentions().allSquareCoords()) {
-            changeItem(new HighlightItem(coords), memory);
-            for (DiagonalDirection direction : DiagonalDirection.values()) {
-                changeItem(new CornerItem(coords, direction), memory);
-                return;
-            }
-        }
-        for (Coords coords : memory.getDimentions().allHorizontalLineCoords()) {
-            changeItem(new LineItem(coords, CardinalDirection.NORTH), memory);
-        }
-        for (Coords coords : memory.getDimentions().allVerticalLineCoords()) {
-            changeItem(new LineItem(coords, CardinalDirection.WEST), memory);
-        }
-    }
-    public static void iterateNextItem(Memory memory) {
-        int index = currentIndex;
+    public static int queueNextItem(Memory memory, int startingIndex, Queue<Item> targets) {
+        int currentIndex = startingIndex;
         boolean success = false;
-        while (!success) {
-            if (currentIndex == 0) {
-                if (hitZero) {
-                    hitZero = false;
-                    return;
-                } else {
-                    hitZero = true;
-                }
-            }
-            if (index < memory.getDimentions().allSquareCoords().size()) {
-                Coords coords = memory.getDimentions().allSquareCoords().get(index);
-                success = changeItem(new HighlightItem(coords), memory);
+        do {
+            int functionalIndex = currentIndex;
+            if (functionalIndex < memory.getDimentions().allSquareCoords().size()) {
+                Coords coords = memory.getDimentions().allSquareCoords().get(functionalIndex);
+                success = queueItem(new HighlightItem(coords), memory, targets);
             } else {
-                index -= memory.getDimentions().allSquareCoords().size();
-                if (index < memory.getDimentions().allSquareCoords().size() * 4) {
-                    Coords coords = memory.getDimentions().allSquareCoords().get(index / 4);
-                    DiagonalDirection direction = DiagonalDirection.values()[index % 4];
-                    success = changeItem(new CornerItem(coords, direction), memory);
+                functionalIndex -= memory.getDimentions().allSquareCoords().size();
+                if (functionalIndex < memory.getDimentions().allSquareCoords().size() * 4) {
+                    Coords coords = memory.getDimentions().allSquareCoords().get(functionalIndex / 4);
+                    DiagonalDirection direction = DiagonalDirection.values()[functionalIndex % 4];
+                    success = queueItem(new CornerItem(coords, direction), memory, targets);
                 } else {
-                    index -= memory.getDimentions().allSquareCoords().size() * 4;
-                    if (index<memory.getDimentions().allHorizontalLineCoords().size()) {
-                        Coords coords = memory.getDimentions().allHorizontalLineCoords().get(index);
-                        success = changeItem(new LineItem(coords, CardinalDirection.NORTH), memory);
+                    functionalIndex -= memory.getDimentions().allSquareCoords().size() * 4;
+                    if (functionalIndex<memory.getDimentions().allHorizontalLineCoords().size()) {
+                        Coords coords = memory.getDimentions().allHorizontalLineCoords().get(functionalIndex);
+                        success = queueItem(new LineItem(coords, CardinalDirection.NORTH), memory, targets);
                     } else {
-                        index -= memory.getDimentions().allHorizontalLineCoords().size();
-                        if (index < memory.getDimentions().allVerticalLineCoords().size()) {
-                            Coords coords = memory.getDimentions().allVerticalLineCoords().get(index);
-                            success = changeItem(new LineItem(coords, CardinalDirection.WEST), memory);
+                        functionalIndex -= memory.getDimentions().allHorizontalLineCoords().size();
+                        if (functionalIndex < memory.getDimentions().allVerticalLineCoords().size()) {
+                            Coords coords = memory.getDimentions().allVerticalLineCoords().get(functionalIndex);
+                            success = queueItem(new LineItem(coords, CardinalDirection.WEST), memory, targets);
                         } else {
                             currentIndex = -1;
                         }
@@ -76,14 +60,14 @@ public class Control2 {
                 }
             }
             currentIndex++;
-            index = currentIndex;
-        }
+        } while (!success && currentIndex != startingIndex);
+        return currentIndex;
     }
-    public static boolean changeItem(Item item, Memory memory) {
+    public static boolean queueItem(Item item, Memory memory, Queue<Item> targets) {
         boolean changeMade = item.executeAll(memory);
         if (!changeMade) return false;
-        System.out.println("change???");
-        ConstraintPropagation.constraintPropagation(item, memory);
-        return true;
+//        System.out.println("change???");
+        targets.add(item);
+        return ConstraintPropagation.iterateTarget(memory, targets);
     }
 }

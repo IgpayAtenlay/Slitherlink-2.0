@@ -27,7 +27,7 @@ public class LineItem extends Item {
                 if (this.coords.equals(item.coords)) {
                     corner = memory.getCorner(true, this.coords, this.direction.getDiagonalDirection(((LineItem)item).direction));
                 } else {
-                    corner = memory.getCorner(true, item.coords, this.direction.getOpposite().getDiagonalDirection(((LineItem)item).direction));
+                    corner = memory.getCorner(true, this.coords, this.direction.getDiagonalDirection(((LineItem)item).direction.getOpposite()));
                 }
                 line = line.combine(LineGeneration.cornerDefinition(corner, otherLine));
             }
@@ -54,7 +54,7 @@ public class LineItem extends Item {
         }
 
         if(line != Line.EMPTY) {
-            memory.setLine(true, line, coords, direction, false);
+            memory.setLine(true, line, this.coords, this.direction, false);
             return true;
         } else {
             return false;

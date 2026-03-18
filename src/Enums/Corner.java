@@ -22,7 +22,7 @@ public enum Corner {
     {
         return switch (value) {
             case 0 -> {
-                if (this == ZERO) {
+                if (this.zero) {
                     yield ZERO;
                 } else {
                     throw new RuntimeException("Can't add corners to " + value);
@@ -50,7 +50,7 @@ public enum Corner {
                 case NOT_ZERO, ANY -> NOT_ZERO;
             };
             case 4 -> {
-                if (this == TWO) {
+                if (this.two) {
                     yield TWO;
                 } else {
                     throw new RuntimeException("Can't add corners to " + value);

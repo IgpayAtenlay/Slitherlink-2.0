@@ -10,6 +10,7 @@ import Memory.MemorySet;
 import PuzzleLoading.MemoryToJsonFile;
 import SolvingActions.ChangeCenteredActions.ConstraintPropagation;
 import SolvingActions.ChangeCenteredActions.Control2;
+import SolvingActions.ChangeCenteredActions.Items.Item;
 import SolvingActions.Obsolete.AdjacentBlocks;
 
 import javax.swing.*;
@@ -19,6 +20,8 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayDeque;
+import java.util.Queue;
 
 
 public class Puzzle {
@@ -28,11 +31,13 @@ public class Puzzle {
     private Highlight recentHighlight = Highlight.EMPTY;
     private Number recentNumber = Number.EMPTY;
     private Corner recentCorner = Corner.ANY;
+    private Queue<Item> targets;
     private int autoSolveStep = 0;
 
     public Puzzle(MemorySet memorySet, Visuals.Panel.Puzzle panel) {
         this.memorySet = memorySet;
         this.panel = panel;
+        targets = new ArrayDeque<>();
     }
 
     public void click(MouseEvent e) {
@@ -193,10 +198,10 @@ public class Puzzle {
     }
     public void autoSolveOneStep() {
 //        autoSolveStep = Control.oneRoundAutosolve(memorySet.getVisible(), false, autoSolveStep);
-        boolean success = ConstraintPropagation.iterateTarget(memorySet.getVisible());
-        if (!success) {
-            Control2.iterateNextItem(memorySet.getVisible());
-            ConstraintPropagation.iterateTarget(memorySet.getVisible());
+        if (targets.size() > 0) {
+            ConstraintPropagation.iterateTarget(memorySet.getVisible(), targets);
+        } else {
+            autoSolveStep = Control2.queueNextItem(memorySet.getVisible(), autoSolveStep, targets);
         }
         panel.repaint();
     }

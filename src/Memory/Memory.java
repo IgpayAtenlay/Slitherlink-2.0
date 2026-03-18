@@ -149,7 +149,7 @@ public class Memory {
     public Corner getCorner(boolean square, Coords coords, DiagonalDirection direction) {
         int i = Indexes.diagonal(square, coords, direction, dimentions);
         if (i < 0 || i >= corners.length) {
-            return Corner.NOT_ONE;
+            return Corner.ZERO;
         } else {
             return corners[i];
         }
