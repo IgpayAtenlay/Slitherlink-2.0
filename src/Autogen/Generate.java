@@ -15,9 +15,9 @@ public class Generate {
             }
         }
 //        long startTime = System.currentTimeMillis();
-        TrimNumbers.trim(memorySet.getStart());
+        int numsLeft = TrimNumbers.trimAll(memorySet.getStart());
 //        long endTime = System.currentTimeMillis();
-//        System.out.printf("oldVersion, %d\n", endTime - startTime);
+//        System.out.printf("threaded40, %d, %d\n", endTime - startTime, numsLeft);
         memorySet.reset();
     }
 }
