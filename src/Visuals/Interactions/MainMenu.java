@@ -57,8 +57,10 @@ public class MainMenu {
         frame.switchPanel(new Puzzle(memorySet, frame));
     }
     public void generatePuzzle(int xSize, int ySize) {
-        MemorySet memorySet = new MemorySet(new Dimentions(xSize, ySize));
-        Generate.generate(memorySet);
+//        for (int i = 0; i < 30; i++) {
+            MemorySet memorySet = new MemorySet(new Dimentions(xSize, ySize));
+            Generate.generate(memorySet);
+//        }
 
         frame.switchPanel(new Puzzle(memorySet, frame));
     }

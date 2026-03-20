@@ -14,7 +14,10 @@ public class Generate {
                 memorySet.getStart().setNumber(memorySet.getCalculation().getNumber(currentCoord), currentCoord, true);
             }
         }
+//        long startTime = System.currentTimeMillis();
         TrimNumbers.trim(memorySet.getStart());
+//        long endTime = System.currentTimeMillis();
+//        System.out.printf("oldVersion, %d\n", endTime - startTime);
         memorySet.reset();
     }
 }
