@@ -25,4 +25,32 @@ public class TrimNumbers {
             }
         }
     }
+
+    public static ArrayList<Coords> trim(Memory puzzle, ArrayList<Coords> toRemove, int numToRemove) {
+        ArrayList<Coords> notRemoved = new ArrayList<>();
+
+        while (toRemove.size() > 0) {
+            numToRemove = Math.min(numToRemove, toRemove.size());
+            ArrayList<Coords> currentlyTesting = new ArrayList<>();
+            Memory testPuzzle = puzzle.copy();
+            for (int i = 0; i < numToRemove; i++) {
+                int testIndex = (int) (Math.random() * toRemove.size());
+                Coords testCoords = toRemove.get(testIndex);
+                toRemove.remove(testIndex);
+                currentlyTesting.add(testCoords);
+                testPuzzle.setNumber(Number.EMPTY, testCoords, true);
+            }
+
+            Control.autoSolve(testPuzzle, false);
+
+            if (Complete.isComplete(testPuzzle)) {
+                for (Coords coord : currentlyTesting) {
+                    puzzle.setNumber(Number.EMPTY, coord, true);
+                }
+            } else {
+                notRemoved.addAll(currentlyTesting);
+            }
+        }
+        return notRemoved;
+    }
 }
