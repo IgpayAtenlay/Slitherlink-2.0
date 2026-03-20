@@ -18,13 +18,10 @@ public class TrimNumbers {
     public static int trimAll(Memory puzzle) {
         ArrayList<Coords> coords = puzzle.getDimentions().allSquareCoords();
 
-        coords = add(puzzle, coords, 1);
-        int remainingCoords = coords.size();
-        coords = findRemovableCoords(puzzle, coords);
-        remainingCoords -= coords.size();
-        coords = trimAll(puzzle, coords, 1);
-        remainingCoords +=  coords.size();
-        return remainingCoords;
+        int totalCoords = coords.size();
+        coords = add(puzzle, coords, Math.max(1, totalCoords / 40));
+        coords = checkThenTrim(puzzle, coords, Math.max(1, totalCoords / 13));
+        return coords.size();
     }
 
     public static ArrayList<Coords> add(Memory puzzle, ArrayList<Coords> canBeAdded, int numToAdd) {
@@ -98,33 +95,27 @@ public class TrimNumbers {
         }
         return notRemoved;
     }
-    public static ArrayList<Coords> checkThenTrim(Memory puzzle, ArrayList<Coords> toRemove, int numToRemove, int repsPerCheck) {
+    public static ArrayList<Coords> checkThenTrim(Memory puzzle, ArrayList<Coords> toRemove, int repsPerCheck) {
         ArrayList<Coords> notRemoved = new ArrayList<>();
 
-        while (toRemove.size()  > 0) {
+        while (toRemove.size() > 0) {
+            toRemove = findRemovableCoords(puzzle, toRemove);
             for (int i = 0; i < repsPerCheck && toRemove.size() > 0; i++) {
-                numToRemove = Math.min(numToRemove, toRemove.size());
-                ArrayList<Coords> currentlyTesting = new ArrayList<>();
+                int testIndex = (int) (Math.random() * toRemove.size());
+                Coords testCoords = toRemove.get(testIndex);
+                toRemove.remove(testIndex);
+
                 Memory testPuzzle = puzzle.copy();
-                for (int j = 0; j < numToRemove; j++) {
-                    int testIndex = (int) (Math.random() * toRemove.size());
-                    Coords testCoords = toRemove.get(testIndex);
-                    toRemove.remove(testIndex);
-                    currentlyTesting.add(testCoords);
-                    testPuzzle.setNumber(Number.EMPTY, testCoords, true);
-                }
+                testPuzzle.setNumber(Number.EMPTY, testCoords, true);
 
                 Control.autoSolve(testPuzzle, false);
 
                 if (Complete.isComplete(testPuzzle)) {
-                    for (Coords coord : currentlyTesting) {
-                        puzzle.setNumber(Number.EMPTY, coord, true);
-                    }
+                    puzzle.setNumber(Number.EMPTY, testCoords, true);
                 } else {
-                    notRemoved.addAll(currentlyTesting);
+                    notRemoved.add(testCoords);
                 }
             }
-            toRemove = findRemovableCoords(puzzle, toRemove);
         }
 
         return notRemoved;

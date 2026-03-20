@@ -17,7 +17,7 @@ public class Generate {
 //        long startTime = System.currentTimeMillis();
         int numsLeft = TrimNumbers.trimAll(memorySet.getStart());
 //        long endTime = System.currentTimeMillis();
-//        System.out.printf("threaded40, %d, %d\n", endTime - startTime, numsLeft);
+//        System.out.printf("add40Thread13, %d\n", endTime - startTime);
         memorySet.reset();
     }
 }
