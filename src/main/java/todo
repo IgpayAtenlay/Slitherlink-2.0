@@ -1,0 +1,29 @@
+LOGIC
+some solving actions only run once
+solving actions based on item being changed
+focus on probable and empty items
+try to get rid of logic numbers (or determine it's impossible/too terrible)
+
+UI
+make blind friendly - test with Momom
+change "show solution" to toggle temporarily showing the solution like "Check Accuracy" does (have these be mutually exclusive states)
+have "check accuracy" auto solve puzzle before showing
+add "hint" button that highlights square with next possible line/x
+
+REFACTORING
+
+split solving actions into better (and more) classes
+clean up guess and check, trapped, util, and visuals
+in solving actions, rename coords to make clear whether they are square or point coords
+
+TECH DEBT
+
+add generic "changes" which capture the entire puzzle - for use with reset and items like autosolve steps
+make loop successfully track deleted lines
+fix loop errors
+
+TESTING
+add tests
+
+BUGS
+20x20 puzzles don't generate correctly
